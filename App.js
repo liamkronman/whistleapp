@@ -1,16 +1,7 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { Provider, StatusBar } from 'react-native';
+import { initializeApp } from './src/redux/actions/app.actions.js';
 
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
 
 
 // import type {Node} from 'react';
