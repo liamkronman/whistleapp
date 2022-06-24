@@ -1,8 +1,19 @@
 import React from 'react';
-import { Provider, StatusBar } from 'react-native';
-import { initializeApp } from './src/redux/actions/app.actions.js';
+import { StatusBar } from 'react-native';
+import { Provider } from 'react-redux';
+import AppRoute from './src/routing/navigator';
+import { store } from './src/redux/store';
 
-
+export default function App(){
+  return (
+    <>
+      <Provider store={store}>
+        <AppRoute />
+        <StatusBar style="auto" />
+      </Provider>
+    </>
+  )
+}
 
 // import type {Node} from 'react';
 // import {
