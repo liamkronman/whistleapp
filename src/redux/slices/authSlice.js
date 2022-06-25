@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
     isLoggedIn: false,
     phoneNumber: null,
-    username: null
+    username: null,
+    accessToken: null,
 }
 
 const authSlice = createSlice({
@@ -11,15 +13,17 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setSignIn: (state, action) => {
+            state.isLoggedIn = true;
             state.phoneNumber = action.payload.phoneNumber;
-            state.isLoggedIn = action.payload.isLoggedIn;
             state.username = action.payload.username;
+            state.accessToken = action.payload.accessToken;
         },
         setSignOut: (state) => {
+            state.isLoggedIn = false;
             state.phoneNumber = null;
             state.username = null;
-            state.isLoggedIn = false;
-        }
+            state.accessToken = null;
+        },
     }
 });
 
@@ -30,3 +34,13 @@ export const selectPhoneNumber = (state) => state.userAuth.phoneNumber;
 export const selectUsername = (state) => state.userAuth.username;
 
 export default authSlice.reducer;
+
+export function login(user) {
+    return async function loginThunk(dispatch, getState) {
+        const resp = await axios.post('https://trywhistle.app/api/auth/signin', {
+            username: user.username,
+            password: user.password,
+        });
+        dispatch(setSignIn(resp.data));
+    }
+}

@@ -9,17 +9,17 @@ import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import SignUp from "../auth/SignUp";
 
-const SignupStack = createNativeStackNavigator(
-    {
-        Username: UsernameInput,
-        PhoneNumber: PhoneNumberInput,
-        Password: PasswordInput,
-    },
-    {
-        headerMode: 'none',
-        initialRouteName: 'Username',
-    }
-);
+// const SignupStack = createNativeStackNavigator(
+//     {
+//         Username: UsernameInput,
+//         PhoneNumber: PhoneNumberInput,
+//         Password: PasswordInput,
+//     },
+//     {
+//         headerMode: 'none',
+//         initialRouteName: 'Username',
+//     }
+// );
 
 const AuthStack = createNativeStackNavigator();
 
