@@ -6,6 +6,7 @@ const initialState = {
     phoneNumber: null,
     username: null,
     accessToken: null,
+    message: null,
 }
 
 const authSlice = createSlice({
@@ -32,6 +33,8 @@ export const { setSignIn, setSignOut } = authSlice.actions;
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectPhoneNumber = (state) => state.userAuth.phoneNumber;
 export const selectUsername = (state) => state.userAuth.username;
+export const selectAccessToken = (state) => state.userAuth.accessToken;
+export const selectMessage = (state) => state.userAuth.message;
 
 export default authSlice.reducer;
 
@@ -41,6 +44,7 @@ export function login(user) {
             username: user.username,
             password: user.password,
         });
-        dispatch(setSignIn(resp.data));
+        if (resp.status === 200)
+            dispatch(setSignIn(resp.data));
     }
 }
