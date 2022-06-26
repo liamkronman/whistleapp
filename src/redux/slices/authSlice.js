@@ -24,11 +24,15 @@ const authSlice = createSlice({
             state.phoneNumber = null;
             state.username = null;
             state.accessToken = null;
+            state.message = null;
         },
+        setMessage: (state, action) => {
+            state.message = action.payload.message;
+        }
     }
 });
 
-export const { setSignIn, setSignOut } = authSlice.actions;
+export const { setSignIn, setSignOut, setMessage } = authSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectPhoneNumber = (state) => state.userAuth.phoneNumber;
@@ -43,8 +47,12 @@ export function login(user) {
         const resp = await axios.post('https://trywhistle.app/api/auth/signin', {
             username: user.username,
             password: user.password,
-        });
-        if (resp.status === 200)
+        })
+        .then(() => {
             dispatch(setSignIn(resp.data));
+        })
+        .catch(err => {
+            dispatch(setMessage(err.response.data));
+        })
     }
 }

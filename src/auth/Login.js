@@ -7,7 +7,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const [username, updateUsername] = React.useState("");
     const [password, updatePassword] = React.useState("");
-    const [isLoading , setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const message = useSelector(selectMessage);
 
@@ -32,7 +32,7 @@ const Login = () => {
             <TextInput editable length={40} value={username} placeholder="Enter your username..." onChangeText={updateUsername} autoFocus={true} />
             <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Enter your password..." onChangeText={updatePassword} />
             {
-                isLoading
+                isLoading && !(message)
                 ? <View style={styles.btn}>
                     <ActivityIndicator size="small" color="#ffffff" />
                 </View>
@@ -61,6 +61,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        fontSize: 20
+    },
+    errorText: {
+        color: 'red',
         fontSize: 20
     }
 })
