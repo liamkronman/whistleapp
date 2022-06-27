@@ -7,6 +7,7 @@ const initialState = {
     username: null,
     accessToken: null,
     loginMessage: null,
+    signupMessage: null
 }
 
 const authSlice = createSlice({
@@ -35,13 +36,14 @@ const authSlice = createSlice({
     }
 });
 
-export const { setSignIn, setSignOut, setMessage } = authSlice.actions;
+export const { setSignIn, setSignOut, setLoginMessage, setSignupMessage } = authSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectPhoneNumber = (state) => state.userAuth.phoneNumber;
 export const selectUsername = (state) => state.userAuth.username;
 export const selectAccessToken = (state) => state.userAuth.accessToken;
-export const selectMessage = (state) => state.userAuth.message;
+export const selectLoginMessage = (state) => state.userAuth.loginMessage;
+export const selectSignupMessage = (state) => state.useAuth.signupMessage;
 
 export default authSlice.reducer;
 
@@ -72,7 +74,7 @@ export function signup(user) {
             dispatch(loginThunk)
         })
         .catch(err => {
-            dipatch(setSignupMessage("Something went wrong. Try again."))
+            dispatch(setSignupMessage("Something went wrong. Try again."))
         })
     }
 }
