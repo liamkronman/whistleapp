@@ -6,7 +6,7 @@ const initialState = {
     phoneNumber: null,
     username: null,
     accessToken: null,
-    message: null,
+    loginMessage: null,
 }
 
 const authSlice = createSlice({
@@ -24,10 +24,13 @@ const authSlice = createSlice({
             state.phoneNumber = null;
             state.username = null;
             state.accessToken = null;
-            state.message = null;
+            state.loginMessage = null;
         },
-        setMessage: (state, action) => {
-            state.message = action.payload.message;
+        setLoginMessage: (state, action) => {
+            state.loginMessage = action.payload.message;
+        },
+        setSignupMessage: (state, action) => {
+            state.signupMessage = action.payload.message;
         }
     }
 });
@@ -52,7 +55,24 @@ export function login(user) {
             dispatch(setSignIn(resp.data));
         })
         .catch(err => {
-            dispatch(setMessage(err.response.data));
+            dispatch(setLoginMessage(err.response.data));
+        })
+    }
+}
+
+export function signup(user) {
+    return async function signupThunk(dispatch, getState) {
+        const resp = await axios.post('https://trywhistle.app/api/auth/signup', {
+            username: user.username,
+            phoneNumber: user.phoneNumber,
+            password: user.password
+        })
+        .then(() => {
+            const loginThunk = login(user)
+            dispatch(loginThunk)
+        })
+        .catch(err => {
+            dipatch(setSignupMessage("Something went wrong. Try again."))
         })
     }
 }

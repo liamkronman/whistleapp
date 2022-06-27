@@ -1,28 +1,47 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { setSignIn } from '../redux/slices/authSlice';
+import { signup } from '../redux/slices/authSlice';
 
 const SignUp = () => {
     const dispatch = useDispatch();
+    const [message, updateMessage] = React.useState("");
+    const [username, updateUsername] = React.useState("");
+    const [phoneNumber, updatePhoneNumber] = React.useState("");
+    const [password, updatePassword] = React.useState("");
+    const [confirmPassword, updateConfirmPassword] = React.useState("");
 
     const handleSignUp = () => {
-        const user = {
-            isLoggedIn: true,
-            phoneNumber: '9177569151',
-            username: 'lkronhubbard'
-        };
-
-        dispatch(setSignIn(user));
+        if (confirmPassword === password) {
+            const user = {
+                isLoggedIn: true,
+                phoneNumber: '9177569151',
+                username: 'lkronhubbard'
+            };
+            
+            const signupThunk = signup(user)
+            dispatch(signupThunk);
+        } else {
+            updateMessage("Passwords do not match.");
+            updatePassword("");
+            updateConfirmPassword("");
+        }
     }
 
     return (
         <View style={styles.container}>
-            <Text style={{ marginBottom: 20, fontSize: 15 }}>Login Screen</Text>
+            {
+                message
+                ? <Text style={styles.errorText}>{message}</Text>
+                : <></>
+            }
+            <TextInput editable length={40} value={username} placeholder="Set a username..." onChangeText={updateUsername} autoFocus={true} />
+            <TextInput editable length={40} value={phoneNumber} keyboardType="numeric" placeholder="1234567890" onChangeText={updatePhoneNumber} />
+            <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Set a password..." onChangeText={updatePassword} />
+            <TextInput secureTextEntry={true} editable length={40} value={confirmPassword} placeholder="Re-enter password..." onChangeText={updateConfirmPassword} />
             <TouchableOpacity onPress={handleSignUp} style={styles.btn}>
                 <Text style={styles.text}>Sign In</Text>
             </TouchableOpacity>
-
         </View>
     )
 }
@@ -44,6 +63,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        fontSize: 20
+    },
+    errorText: {
+        color: 'red',
         fontSize: 20
     }
 })

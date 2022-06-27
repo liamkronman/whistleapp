@@ -1,15 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, selectMessage } from '../redux/slices/authSlice';
+import { login, selectLoginMessage } from '../redux/slices/authSlice';
+import SignUp from "./SignUp";
 
-const Login = () => {
+const Login = ({navigation}) => {
     const dispatch = useDispatch();
     const [username, updateUsername] = React.useState("");
     const [password, updatePassword] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(false);
 
-    const message = useSelector(selectMessage);
+    const message = useSelector(selectLoginMessage);
 
     const handleLogin = () => {
         setIsLoading(true);
@@ -40,6 +41,9 @@ const Login = () => {
                     <Text style={styles.text}>Sign In</Text>
                 </TouchableOpacity>
             }
+            <TouchableOpacity onPress={() => navigation.navigate(SignUp)} style={{paddingBottom: 10}}>
+                <Text>Or sign up</Text>
+            </TouchableOpacity>
         </View>
     )
 }
