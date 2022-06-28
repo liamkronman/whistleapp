@@ -14,20 +14,22 @@ const SignUp = () => {
     const signupMessage = useSelector(selectSignupMessage);
 
     const handleSignUp = () => {
-        updateMessage("");
-        if (confirmPassword === password) {
-            setIsLoading(true);
-            const user = {
-                username: username,
-                password: password
-            };
-            
-            const signupThunk = signup(user)
-            dispatch(signupThunk);
-        } else {
-            updateMessage("Passwords do not match.");
-            updatePassword("");
-            updateConfirmPassword("");
+        if (username && password && confirmPassword) {
+            if (confirmPassword === password) {
+                updateMessage("");
+                setIsLoading(true);
+                const user = {
+                    username: username,
+                    password: password
+                };
+                
+                const signupThunk = signup(user)
+                dispatch(signupThunk);
+            } else {
+                updateMessage("Passwords do not match.");
+                updatePassword("");
+                updateConfirmPassword("");
+            }
         }
     }
 

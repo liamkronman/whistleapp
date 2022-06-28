@@ -13,14 +13,16 @@ const Login = ({navigation}) => {
     const message = useSelector(selectLoginMessage);
 
     const handleLogin = () => {
-        setIsLoading(true);
-        const user = {
-            username: username,
-            password: password
-        };
+        if (username && password) {
+            setIsLoading(true);
+            const user = {
+                username: username,
+                password: password
+            };
 
-        const loginThunk = login(user);
-        dispatch(loginThunk);
+            const loginThunk = login(user);
+            dispatch(loginThunk);
+        }
     }
 
     return (
