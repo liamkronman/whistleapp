@@ -31,7 +31,7 @@ const Login = ({navigation}) => {
                     ? <Text style={styles.errorText}>{message}</Text>
                     : <></>
                 }
-                <TextInput editable length={40} value={username} placeholder="Enter your username..." onChangeText={updateUsername} />
+                <TextInput editable length={40} value={username} placeholder="Enter your username..." onChangeText={updateUsername} autoFocus={true}/>
                 <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Enter your password..." onChangeText={updatePassword} />
                 {
                     isLoading && !(message)

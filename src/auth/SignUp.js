@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { signup } from '../redux/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup, selectSignupMessage } from '../redux/slices/authSlice';
 
 const SignUp = () => {
     const dispatch = useDispatch();
@@ -11,7 +11,10 @@ const SignUp = () => {
     const [confirmPassword, updateConfirmPassword] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(false);
 
+    const signupMessage = useSelector(selectSignupMessage);
+
     const handleSignUp = () => {
+        updateMessage("");
         if (confirmPassword === password) {
             setIsLoading(true);
             const user = {
@@ -34,13 +37,15 @@ const SignUp = () => {
                 {
                     message
                     ? <Text style={styles.errorText}>{message}</Text>
+                    : signupMessage
+                    ? <Text style={styles.errorText}>{signupMessage}</Text>
                     : <></>
                 }
                 <TextInput editable length={40} value={username} placeholder="Set a username..." onChangeText={updateUsername} autoFocus={true}/>
                 <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Set a password..." onChangeText={updatePassword} />
                 <TextInput secureTextEntry={true} editable length={40} value={confirmPassword} placeholder="Re-enter password..." onChangeText={updateConfirmPassword} />
                 {
-                    isLoading && !(message)
+                    isLoading && !(message) && !(signupMessage)
                     ? <View style={styles.btn}>
                         <ActivityIndicator size="small" color="#ffffff" />
                     </View>

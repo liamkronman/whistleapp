@@ -40,7 +40,7 @@ export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectUsername = (state) => state.userAuth.username;
 export const selectAccessToken = (state) => state.userAuth.accessToken;
 export const selectLoginMessage = (state) => state.userAuth.loginMessage;
-export const selectSignupMessage = (state) => state.useAuth.signupMessage;
+export const selectSignupMessage = (state) => state.userAuth.signupMessage;
 
 export default authSlice.reducer;
 
@@ -51,7 +51,6 @@ export function login(user) {
             "password": user.password,
         })
         .then(resp => {
-            console.log("resp: ", resp)
             dispatch(setSignIn(resp.data));
         })
         .catch(err => {
@@ -72,7 +71,7 @@ export function signup(user) {
             dispatch(loginThunk)
         })
         .catch(err => {
-            dispatch(setSignupMessage("Something went wrong. Try again."))
+            dispatch(setSignupMessage(err.response.data))
         })
     }
 }
