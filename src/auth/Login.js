@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoginMessage } from '../redux/slices/authSlice';
 import SignUp from "./SignUp";
@@ -24,27 +24,29 @@ const Login = ({navigation}) => {
     }
 
     return (
-        <View style={styles.container}>
-            {
-                message
-                ? <Text style={styles.errorText}>{message}</Text>
-                : <></>
-            }
-            <TextInput editable length={40} value={username} placeholder="Enter your username..." onChangeText={updateUsername} autoFocus={true} />
-            <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Enter your password..." onChangeText={updatePassword} />
-            {
-                isLoading && !(message)
-                ? <View style={styles.btn}>
-                    <ActivityIndicator size="small" color="#ffffff" />
-                </View>
-                : <TouchableOpacity onPress={handleLogin} style={styles.btn}>
-                    <Text style={styles.text}>Sign In</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                {
+                    message
+                    ? <Text style={styles.errorText}>{message}</Text>
+                    : <></>
+                }
+                <TextInput editable length={40} value={username} placeholder="Enter your username..." onChangeText={updateUsername} />
+                <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Enter your password..." onChangeText={updatePassword} />
+                {
+                    isLoading && !(message)
+                    ? <View style={styles.btn}>
+                        <ActivityIndicator size="small" color="#ffffff" />
+                    </View>
+                    : <TouchableOpacity onPress={handleLogin} style={styles.btn}>
+                        <Text style={styles.text}>Sign In</Text>
+                    </TouchableOpacity>
+                }
+                <TouchableOpacity onPress={() => navigation.navigate(SignUp)} style={{paddingBottom: 10}}>
+                    <Text>Or sign up</Text>
                 </TouchableOpacity>
-            }
-            <TouchableOpacity onPress={() => navigation.navigate(SignUp)} style={{paddingBottom: 10}}>
-                <Text>Or sign up</Text>
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 

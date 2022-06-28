@@ -3,7 +3,6 @@ import axios from "axios";
 
 const initialState = {
     isLoggedIn: false,
-    phoneNumber: null,
     username: null,
     accessToken: null,
     loginMessage: null,
@@ -16,16 +15,15 @@ const authSlice = createSlice({
     reducers: {
         setSignIn: (state, action) => {
             state.isLoggedIn = true;
-            state.phoneNumber = action.payload.phoneNumber;
             state.username = action.payload.username;
             state.accessToken = action.payload.accessToken;
         },
         setSignOut: (state) => {
             state.isLoggedIn = false;
-            state.phoneNumber = null;
             state.username = null;
             state.accessToken = null;
             state.loginMessage = null;
+            state.signupMessage = null;
         },
         setLoginMessage: (state, action) => {
             state.loginMessage = action.payload.message;
@@ -39,7 +37,6 @@ const authSlice = createSlice({
 export const { setSignIn, setSignOut, setLoginMessage, setSignupMessage } = authSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
-export const selectPhoneNumber = (state) => state.userAuth.phoneNumber;
 export const selectUsername = (state) => state.userAuth.username;
 export const selectAccessToken = (state) => state.userAuth.accessToken;
 export const selectLoginMessage = (state) => state.userAuth.loginMessage;
@@ -49,11 +46,12 @@ export default authSlice.reducer;
 
 export function login(user) {
     return async function loginThunk(dispatch, getState) {
-        const resp = await axios.post('https://trywhistle.app/api/auth/signin', {
-            username: user.username,
-            password: user.password,
+        axios.post('https://trywhistle.app/api/auth/signin', {
+            "username": user.username,
+            "password": user.password,
         })
-        .then(() => {
+        .then(resp => {
+            console.log("resp: ", resp)
             dispatch(setSignIn(resp.data));
         })
         .catch(err => {
@@ -64,12 +62,12 @@ export function login(user) {
 
 export function signup(user) {
     return async function signupThunk(dispatch, getState) {
-        const resp = await axios.post('https://trywhistle.app/api/auth/signup', {
-            username: user.username,
-            phoneNumber: user.phoneNumber,
-            password: user.password
+        console.log(user)
+        axios.post('https://trywhistle.app/api/auth/signup', {
+            "username": user.username,
+            "password": user.password
         })
-        .then(() => {
+        .then(resp => {
             const loginThunk = login(user)
             dispatch(loginThunk)
         })

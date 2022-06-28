@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { signup } from '../redux/slices/authSlice';
 
@@ -7,16 +7,16 @@ const SignUp = () => {
     const dispatch = useDispatch();
     const [message, updateMessage] = React.useState("");
     const [username, updateUsername] = React.useState("");
-    const [phoneNumber, updatePhoneNumber] = React.useState("");
     const [password, updatePassword] = React.useState("");
     const [confirmPassword, updateConfirmPassword] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const handleSignUp = () => {
         if (confirmPassword === password) {
+            setIsLoading(true);
             const user = {
-                isLoggedIn: true,
-                phoneNumber: '9177569151',
-                username: 'lkronhubbard'
+                username: username,
+                password: password
             };
             
             const signupThunk = signup(user)
@@ -29,20 +29,27 @@ const SignUp = () => {
     }
 
     return (
-        <View style={styles.container}>
-            {
-                message
-                ? <Text style={styles.errorText}>{message}</Text>
-                : <></>
-            }
-            <TextInput editable length={40} value={username} placeholder="Set a username..." onChangeText={updateUsername} autoFocus={true} />
-            <TextInput editable length={40} value={phoneNumber} keyboardType="numeric" placeholder="1234567890" onChangeText={updatePhoneNumber} />
-            <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Set a password..." onChangeText={updatePassword} />
-            <TextInput secureTextEntry={true} editable length={40} value={confirmPassword} placeholder="Re-enter password..." onChangeText={updateConfirmPassword} />
-            <TouchableOpacity onPress={handleSignUp} style={styles.btn}>
-                <Text style={styles.text}>Sign In</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                {
+                    message
+                    ? <Text style={styles.errorText}>{message}</Text>
+                    : <></>
+                }
+                <TextInput editable length={40} value={username} placeholder="Set a username..." onChangeText={updateUsername} autoFocus={true}/>
+                <TextInput secureTextEntry={true} editable length={40} value={password} placeholder="Set a password..." onChangeText={updatePassword} />
+                <TextInput secureTextEntry={true} editable length={40} value={confirmPassword} placeholder="Re-enter password..." onChangeText={updateConfirmPassword} />
+                {
+                    isLoading && !(message)
+                    ? <View style={styles.btn}>
+                        <ActivityIndicator size="small" color="#ffffff" />
+                    </View>
+                    : <TouchableOpacity onPress={handleSignUp} style={styles.btn}>
+                        <Text style={styles.text}>Sign Up</Text>
+                    </TouchableOpacity>
+                }
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 
