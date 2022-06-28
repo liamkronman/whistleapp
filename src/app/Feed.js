@@ -1,24 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { fetchAuth } from '../redux/slices/authSlice';
+import { setSignOut } from '../redux/slices/authSlice';
 
 const Feed = () => {
     const dispatch = useDispatch();
 
-    const handleLogin = () => {
-        const user = {
-            isLoggedIn: true,
-            phoneNumber: '9177569151',
-            username: 'lkronhubbard'
-        };
-
-        dispatch(fetchAuth);
+    const handleLogout = () => {
+        dispatch(setSignOut);
     }
 
     return (
         <View style={styles.container}>
             <Text style={{ marginBottom: 20, fontSize: 15 }}>Welcome!</Text>
+            <TouchableOpacity onPress={handleLogout} style={styles.btn}>
+                <Text style={styles.text}>Log out</Text>
+            </TouchableOpacity>
         </View>
     )
 }

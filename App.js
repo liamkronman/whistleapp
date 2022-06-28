@@ -3,13 +3,19 @@ import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import AppRoute from './src/routing/navigator';
 import { store } from './src/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+
+let persistor = persistStore(store);
 
 export default function App(){
   return (
     <>
       <Provider store={store}>
-        <AppRoute />
-        <StatusBar style="auto" />
+        <PersistGate loading={null} persistor={persistor}>
+          <AppRoute />
+          <StatusBar style="auto" />
+        </PersistGate>
       </Provider>
     </>
   )
