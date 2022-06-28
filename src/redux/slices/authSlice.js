@@ -19,7 +19,6 @@ const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
         },
         setSignOut: (state) => {
-            console.log("setSignout called")
             state.isLoggedIn = false;
             state.username = null;
             state.accessToken = null;

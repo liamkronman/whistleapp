@@ -7,7 +7,7 @@ const Feed = () => {
     const dispatch = useDispatch();
 
     const handleLogout = () => {
-        dispatch(setSignOut);
+        dispatch(setSignOut());
     }
 
     return (
