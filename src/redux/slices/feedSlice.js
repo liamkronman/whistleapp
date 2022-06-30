@@ -33,3 +33,27 @@ export const selectWhistles = (state) => state.userFeed.whistles;
 export const selectCurrentWhistle = (state) => state.userFeed.currentWhistle;
 
 export default feedSlice.reducer;
+
+export function getWhistlesThunk(dispatch, getState) {
+    const whistles = getState().userFeed.whistles;
+    let lastWhistleId = null;
+
+    if (whistles.length > 0) {
+        lastWhistleId = whistles[whistles.length - 1].id;
+    }
+
+    axios.get("https://trywhistle.app/api/app/getwhistles", {
+        lastId: lastWhistleId,
+    }, {
+        headers: {
+            "x-access-token": getState().userAuth.accessToken,
+        }
+    })
+    .then(resp => {
+        console.log(resp)
+       dispatch(addWhistles(resp.data));
+    })
+    .catch(err => {
+        console.log(err);
+    });
+};
