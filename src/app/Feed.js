@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { render } from 'react-dom';
@@ -67,6 +67,7 @@ const Feed = () => {
         return (
             <View style={styles.whistleContainer}>
                 <Text style={styles.whistleText}>{whistle.item.title}</Text>
+                <Button title={whistle.item.author} />
                 <Text style={styles.whistleText}>{whistle.item.background}</Text>
                 <Text style={styles.whistleText}>{whistle.item.context}</Text>
                 <Text style={styles.whistleText}>{whistle.item.option1}</Text>
@@ -87,6 +88,8 @@ const Feed = () => {
                     renderItem={renderWhistle}
                     keyExtractor={(whistle) => whistle.id}
                     extraData={currWhistleIndex}
+                    pagingEnabled
+                    decelerationRate={"normal"}
                     />
             }
         </>
@@ -122,6 +125,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+        height: Dimensions.get('window').height - 170,
     },
     whistleText: {
         color: 'black',
