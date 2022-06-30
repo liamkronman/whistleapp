@@ -16,6 +16,7 @@ const Feed = () => {
             <TouchableOpacity onPress={handleLogout} style={styles.btn}>
                 <Text style={styles.text}>Log out</Text>
             </TouchableOpacity>
+            
         </View>
     )
 }

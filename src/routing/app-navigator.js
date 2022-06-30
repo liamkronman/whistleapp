@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Feed from '../app/Feed';
+import Publish from '../app/Publish'
 
-const AppStack = createNativeStackNavigator();
+const AppTabs = createBottomTabNavigator();
 
 const AppNavigator = () => {
     return (
-        <AppStack.Navigator initialRouteName='Feed'>
-            <AppStack.Screen name="Feed" component={Feed} />
-        </AppStack.Navigator>
+        <AppTabs.Navigator initialRouteName='Feed'>
+            <AppTabs.Screen name="Feed" component={Feed} />
+            <AppTabs.Screen name="Publish" component={Publish} />
+        </AppTabs.Navigator>
     )
 }
 
