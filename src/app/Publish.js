@@ -19,10 +19,11 @@ const Publish = () => {
 
     const [isLoading, updateIsLoading] = React.useState(false);
     const [message, updateMessage] = React.useState("");
+    const [isSuccessful, updateIsSuccessful] = React.useState(false);
     
     const jwtToken = useSelector(selectAccessToken);
 
-    const onChange = (event, selectedDate) => {
+    const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
         setDate(currentDate);
@@ -59,7 +60,7 @@ const Publish = () => {
                 }
             })
             .then(resp => {
-                console.log(resp);
+                updateIsSuccessful(true);
             })
             .catch(err => {
                 updateMessage(err);
@@ -70,74 +71,84 @@ const Publish = () => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={styles.container}>
-                <Text style={{ marginBottom: 20, fontSize: 15 }}>Blow a Whistle!</Text>
-                {
-                    message
-                    ? <Text style={styles.errorText}>{message}</Text>
-                    : <></>
-                }
-
-                <Text style={styles.text}>
-                    Whistle Title
-                </Text> 
-                <TextInput placeholder="What Should I Do About My Ex???" value={title} onChangeText={updateTitle} />
-
-                <Text style={styles.text}>
-                    Your Background
-                </Text>
-                <TextInput placeholder="Dated this girl for 5 years and then she brutally breaks up with me" value={background} onChangeText={updateBackground} />
-                
-                <Text style={styles.text}>
-                    The Context
-                </Text>
-                <TextInput multiline={true} value={context} onChangeText={updateContext} placeholder="Your story. What should I do??" /> 
-                
-                <Text style={styles.text}>
-                    Option #1
-                </Text>
-                <TextInput value={option1} onChangeText={updateOption1} placeholder="Option 1" />
-
-                <Text style={styles.text}>
-                    Option #2
-                </Text>
-                <TextInput value={option2} onChangeText={updateOption2} placeholder="Option 2" />
-
-                <Text style={styles.text}>
-                    When to Expire
-                </Text>
-                <View>
-                    <View>
-                        <Button onPress={showDatepicker} title="Show date picker!" />
-                    </View>
-                    <View>
-                        <Button onPress={showTimepicker} title="Show time picker!" />
-                    </View>
-                    <Text>selected: {date.toLocaleString()}</Text>
-                    {show && (
-                        <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        onChange={onChange}
-                        />
-                    )}
+        <>
+            {
+                isSuccessful
+                ? <View>
+                    <Text style={styles.text}>
+                        Successful posting!
+                    </Text>
                 </View>
+                : <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <View style={styles.container}>
+                        <Text style={{ marginBottom: 20, fontSize: 15 }}>Blow a Whistle!</Text>
+                        {
+                            message
+                            ? <Text style={styles.errorText}>{message}</Text>
+                            : <></>
+                        }
 
-                {
-                    isLoading && !(message)
-                    ? <View style={styles.btn}>
-                        <ActivityIndicator size="small" color="#ffffff" />
+                        <Text style={styles.text}>
+                            Whistle Title
+                        </Text> 
+                        <TextInput placeholder="What Should I Do About My Ex???" value={title} onChangeText={updateTitle} />
+
+                        <Text style={styles.text}>
+                            Your Background
+                        </Text>
+                        <TextInput placeholder="Dated this girl for 5 years and then she brutally breaks up with me" value={background} onChangeText={updateBackground} />
+                        
+                        <Text style={styles.text}>
+                            The Context
+                        </Text>
+                        <TextInput multiline={true} value={context} onChangeText={updateContext} placeholder="Your story. What should I do??" /> 
+                        
+                        <Text style={styles.text}>
+                            Option #1
+                        </Text>
+                        <TextInput value={option1} onChangeText={updateOption1} placeholder="Option 1" />
+
+                        <Text style={styles.text}>
+                            Option #2
+                        </Text>
+                        <TextInput value={option2} onChangeText={updateOption2} placeholder="Option 2" />
+
+                        <Text style={styles.text}>
+                            When to Expire
+                        </Text>
+                        <View>
+                            <View>
+                                <Button onPress={showDatepicker} title="Show date picker!" />
+                            </View>
+                            <View>
+                                <Button onPress={showTimepicker} title="Show time picker!" />
+                            </View>
+                            <Text>selected: {date.toLocaleString()}</Text>
+                            {show && (
+                                <DateTimePicker
+                                testID="dateTimePicker"
+                                value={date}
+                                mode={mode}
+                                is24Hour={true}
+                                onChange={onChangeDate}
+                                />
+                            )}
+                        </View>
+
+                        {
+                            isLoading && !(message)
+                            ? <View style={styles.btn}>
+                                <ActivityIndicator size="small" color="#ffffff" />
+                            </View>
+                            : <TouchableOpacity onPress={handlePublish} style={styles.btn}>
+                                <Text style={styles.btnText}>Publish</Text>
+                            </TouchableOpacity>
+                        }
                     </View>
-                    : <TouchableOpacity onPress={handlePublish} style={styles.btn}>
-                        <Text style={styles.btnText}>Publish</Text>
-                    </TouchableOpacity>
-                }
-            </View>
-        </TouchableWithoutFeedback>
-    )
+                </TouchableWithoutFeedback>
+            }
+        </>
+    );
 }
 
 export default Publish;
