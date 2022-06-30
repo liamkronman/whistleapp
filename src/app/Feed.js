@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 const Feed = () => {
     return (
         <View style={styles.container}>
-            <Text style={{ marginBottom: 20, fontSize: 15 }}>Welcome!</Text>  
+            <Text style={{ marginBottom: 20, fontSize: 15 }}>Welcome!</Text>
         </View>
     )
 }

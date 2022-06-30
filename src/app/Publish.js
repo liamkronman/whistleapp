@@ -51,7 +51,10 @@ const Publish = () => {
                 "title": title,
                 "background": background,
                 "context": context,
-                "options": [option1, option2],
+                "options": {
+                    option1: 0, 
+                    option2: 0,
+                },
                 "closeDateTime": date,
             },
             {
