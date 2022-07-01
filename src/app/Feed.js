@@ -65,9 +65,6 @@ const Feed = () => {
     };
 
     return (
-
-        // make flatlist that takes whistles as data and increments currWhistleIndex each time a new element is scrolled to
-
         <>
             {
                 isLoading
