@@ -3,16 +3,6 @@ import axios from "axios";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
-import { render } from 'react-dom';
-// import { PagerView } from 'react-native-pager-view';
-// import styled from 'react-native-styled-components';
-
-
-// const { height } = Dimensions.get('window');
-
-// const Container = styled(PagerView)`
-//     height: ${height}px;
-// `;
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -52,18 +42,16 @@ const Feed = () => {
         .catch(err => console.log(err));
     }, []);
 
-    React.useEffect(() => {
-        if (currWhistleIndex >= whistles.length - 3 && whistles.length >= 5) {
-            let lastWhistleId = whistles[whistles.length - 1].id;
-            getWhistles(lastWhistleId)
-            .then(newWhistles => {
-                updateWhistles(whistles => [...whistles, ...newWhistles.data.whistles]);
-            })
-        }
-    }, [currWhistleIndex]);
+    function getMoreWhistles() {
+        let lastWhistleId = whistles[whistles.length - 1].id;
+        getWhistles(lastWhistleId)
+        .then(newWhistles => {
+            updateWhistles(whistles => [...whistles, ...newWhistles.data.whistles]);
+        })
+        .catch(err => console.log(err));
+    }
 
     const renderWhistle = ( whistle ) => {
-        console.log(whistle)
         return (
             <View style={styles.whistleContainer}>
                 <Text style={styles.whistleText}>{whistle.item.title}</Text>
@@ -77,6 +65,9 @@ const Feed = () => {
     };
 
     return (
+
+        // make flatlist that takes whistles as data and increments currWhistleIndex each time a new element is scrolled to
+
         <>
             {
                 isLoading
@@ -87,13 +78,16 @@ const Feed = () => {
                     data={whistles}
                     renderItem={renderWhistle}
                     keyExtractor={(whistle) => whistle.id}
+                    onEndReached={() => {
+                        getMoreWhistles();
+                    }}
                     extraData={currWhistleIndex}
                     pagingEnabled
                     decelerationRate={"normal"}
                     />
             }
         </>
-    )
+    );
 }
 
 export default Feed;
