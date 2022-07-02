@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from "axios";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,13 @@ const Feed = () => {
     const [whistles, updateWhistles] = React.useState([]);
     const [currWhistleIndex, setCurrWhistleIndex] = React.useState(0);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+
+    useEffect(() => {
+        setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+    }, []);
     
     const getWhistles = async (lastWhistleId=null) => {
         if (lastWhistleId) {
@@ -19,15 +26,15 @@ const Feed = () => {
                 },
                 {
                     headers: {
-                    "x-access-token": jwtToken,
-                }
+                        "x-access-token": jwtToken,
+                    }
             });
         } else {
             return await axios.post("https://trywhistle.app/api/app/getwhistles", {},
                 {
                     headers: {
-                    "x-access-token": jwtToken,
-                }
+                        "x-access-token": jwtToken,
+                    }
             });
         }
     };
@@ -51,6 +58,7 @@ const Feed = () => {
         .catch(err => console.log(err));
     }
 
+
     const renderWhistle = ( whistle ) => {
         return (
             <View style={styles.whistleContainer}>
@@ -60,6 +68,7 @@ const Feed = () => {
                 <Text style={styles.whistleText}>{whistle.item.context}</Text>
                 <Text style={styles.whistleText}>{whistle.item.option1}</Text>
                 <Text style={styles.whistleText}>{whistle.item.option2}</Text>
+                <Text style={styles.whistleText}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} minutes, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} seconds left</Text>
             </View>
         )
     };
