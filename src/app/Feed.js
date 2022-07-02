@@ -1,9 +1,30 @@
 import React, { useEffect } from 'react';
 import axios from "axios";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import FlipCard from 'react-native-flip-card';
+
+const PollBar = (props) => {
+    const heightAnim = React.useRef(new Animated.Value(0)).current;
+
+    React.useEffect(() => {
+        Animated.timing(
+            heightAnim,
+            {
+                toValue: 270 * props.percent,
+                duration: 1000,
+                useNativeDriver: false,
+            }
+        ).start();
+    }, [heightAnim])
+
+    return (
+        <Animated.View style={{...props.style, height: heightAnim}}>
+            {props.children}
+        </Animated.View>
+    )
+}
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -63,6 +84,7 @@ const Feed = () => {
 
     const renderWhistle = ( whistle ) => {
         const keys = Object.keys(whistle.item.options);
+        const colors = ['#600080', '#9900cc', '#c61aff', '#d966ff', '#ecb3ff'];
 
         return (
             <FlipCard
@@ -95,7 +117,21 @@ const Feed = () => {
                     </View>
                 </View>
                 <View style={styles.back}>
-                    <View style={styles.whistleContainer}>
+                    <View style={styles.whistleContainerBack}>
+                        <View style={styles.pollBarContainer}>
+                            <Text style={styles.percentage}>{~~(whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}% ({keys[0]})</Text>
+                            <PollBar key={0} percent={whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
+                            <Text style={styles.pollBarText}>
+                                {keys[0]}
+                            </Text> 
+                        </View>
+                        <View style={styles.pollBarContainer}>
+                            <Text style={styles.percentage}>{~~(whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}% ({keys[0]})</Text>
+                            <PollBar key={1} percent={whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
+                            <Text style={styles.pollBarText}>
+                                {keys[1]}
+                            </Text> 
+                        </View>
                     </View>
                 </View>
             </FlipCard>
@@ -156,8 +192,30 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
         height: Dimensions.get('window').height - 170,
     },
+    whistleContainerBack: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+        height: Dimensions.get('window').height - 170,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        paddingTop: 55,
+    },
     whistleText: {
         color: 'black',
         fontSize: 20
-    }
+    },
+    pollBar: {
+        width: 70,
+        height: 300,
+        backgroundColor: 'gray',
+        borderRadius: 10,
+    },
+    pollBarText: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 10,
+    },
 })
