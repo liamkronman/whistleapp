@@ -3,6 +3,7 @@ import axios from "axios";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
+import FlipCard from 'react-native-flip-card';
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const Feed = () => {
     const [currWhistleIndex, setCurrWhistleIndex] = React.useState(0);
     const [isLoading, setIsLoading] = React.useState(true);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+    const [backSides, setBackSides] = React.useState([]);
 
     useEffect(() => {
         setInterval(() => {
@@ -60,16 +62,43 @@ const Feed = () => {
 
 
     const renderWhistle = ( whistle ) => {
+        const keys = Object.keys(whistle.item.options);
+
         return (
-            <View style={styles.whistleContainer}>
-                <Text style={styles.whistleText}>{whistle.item.title}</Text>
-                <Button title={whistle.item.author} />
-                <Text style={styles.whistleText}>{whistle.item.background}</Text>
-                <Text style={styles.whistleText}>{whistle.item.context}</Text>
-                <Text style={styles.whistleText}>{whistle.item.option1}</Text>
-                <Text style={styles.whistleText}>{whistle.item.option2}</Text>
-                <Text style={styles.whistleText}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} minutes, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} seconds left</Text>
-            </View>
+            <FlipCard
+                flipHorizontal={true}
+                friction={1000}
+                flipVertical={false}
+                flip={backSides[whistle.index]}
+                clickable={false}>
+                <View style={styles.face}>
+                    <View style={styles.whistleContainer}>
+                        <Text style={styles.whistleText}>{whistle.item.title}</Text>
+                        <Button title={whistle.item.author} />
+                        <Text style={styles.whistleText}>{whistle.item.background}</Text>
+                        <Text style={styles.whistleText}>{whistle.item.context}</Text>
+                        <Button style={styles.whistleText} title={keys[0]} onPress={() => {
+                            whistle.item.options[keys[0]] += 1;
+                            setBackSides(backSides => {
+                                backSides[whistle.index] = true;
+                                return backSides;
+                            });
+                        }}/>
+                        <Button style={styles.whistleText} title={keys[1]} onPress={() => {
+                            whistle.item.options[keys[1]] += 1;
+                            setBackSides(backSides => {
+                                backSides[whistle.index] = true;
+                                return backSides;
+                            });
+                        }}/>
+                        <Text style={styles.whistleText}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} minutes, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} seconds left</Text>
+                    </View>
+                </View>
+                <View style={styles.back}>
+                    <View style={styles.whistleContainer}>
+                    </View>
+                </View>
+            </FlipCard>
         )
     };
 
