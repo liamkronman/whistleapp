@@ -100,18 +100,40 @@ const Feed = () => {
                         <Text style={styles.whistleText}>{whistle.item.background}</Text>
                         <Text style={styles.whistleText}>{whistle.item.context}</Text>
                         <Button style={styles.whistleText} title={keys[0]} onPress={() => {
-                            whistle.item.options[keys[0]] += 1;
-                            setBackSides(backSides => {
-                                backSides[whistle.index] = true;
-                                return backSides;
-                            });
+                            axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                whistleId: whistle.item.id,
+                                optionSelected: keys[0]
+                            }, {
+                                headers: {
+                                    "x-access-token": jwtToken,
+                                }
+                            })
+                            .then(resp => {
+                                whistle.item.options[keys[0]] += 1;
+                                setBackSides(backSides => {
+                                    backSides[whistle.index] = true;
+                                    return backSides;
+                                });
+                            })
+                            .catch(err => console.log(err));
                         }}/>
                         <Button style={styles.whistleText} title={keys[1]} onPress={() => {
-                            whistle.item.options[keys[1]] += 1;
-                            setBackSides(backSides => {
-                                backSides[whistle.index] = true;
-                                return backSides;
-                            });
+                            axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                whistleId: whistle.item.id,
+                                optionSelected: keys[1]
+                            }, {
+                                headers: {
+                                    "x-access-token": jwtToken,
+                                }
+                            })
+                            .then(resp => {
+                                whistle.item.options[keys[1]] += 1;
+                                setBackSides(backSides => {
+                                    backSides[whistle.index] = true;
+                                    return backSides;
+                                });
+                            })
+                            .catch(err => console.log(err));
                         }}/>
                         <Text style={styles.whistleText}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} minutes, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} seconds left</Text>
                     </View>
