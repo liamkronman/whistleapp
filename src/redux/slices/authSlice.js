@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import FormData from 'form-data';
+import axiosRetry from 'axios-retry';
+
+axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
 
 const initialState = {
     isLoggedIn: false,
@@ -19,7 +22,7 @@ const authSlice = createSlice({
             state.isLoggedIn = true;
             state.username = action.payload.username;
             state.accessToken = action.payload.accessToken;
-            if (action.payload.hasProperty(profilePic))
+            if (action.payload.profilePic)
                 state.profilePic = action.payload.profilePic;
         },
         setSignOut: (state) => {
@@ -57,7 +60,7 @@ export function login(user) {
     return async function loginThunk(dispatch, getState) {
         axios.post('https://trywhistle.app/api/auth/signin', {
             "username": user.username,
-            "password": user.password,
+            "password": user.password
         })
         .then(resp => {
             dispatch(setSignIn(resp.data));

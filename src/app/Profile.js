@@ -28,6 +28,7 @@ const Feed = () => {
                     50
                 )
                 .then(photo => {
+                    console.log()
                     const updateProfilePicThunk = updateProfilePic(accessToken, photo.uri);
                     dispatch(updateProfilePicThunk);
                 })
