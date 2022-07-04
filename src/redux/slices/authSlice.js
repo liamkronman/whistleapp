@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import FormData from 'form-data';
 
 const initialState = {
     isLoggedIn: false,
     username: null,
     accessToken: null,
+    profilePic: null,
     loginMessage: null,
-    signupMessage: null
+    signupMessage: null,
 }
 
 const authSlice = createSlice({
@@ -17,13 +19,19 @@ const authSlice = createSlice({
             state.isLoggedIn = true;
             state.username = action.payload.username;
             state.accessToken = action.payload.accessToken;
+            if (action.payload.hasProperty(profilePic))
+                state.profilePic = action.payload.profilePic;
         },
         setSignOut: (state) => {
             state.isLoggedIn = false;
             state.username = null;
             state.accessToken = null;
+            state.profilePic = null;
             state.loginMessage = null;
             state.signupMessage = null;
+        },
+        setProfilePic: (state, action) => {
+            state.profilePic = action.payload.profilePic;
         },
         setLoginMessage: (state, action) => {
             state.loginMessage = action.payload.message;
@@ -32,9 +40,9 @@ const authSlice = createSlice({
             state.signupMessage = action.payload.message;
         }
     }
-});
+})
 
-export const { setSignIn, setSignOut, setLoginMessage, setSignupMessage } = authSlice.actions;
+export const { setSignIn, setSignOut, setProfilePic, setLoginMessage, setSignupMessage } = authSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectUsername = (state) => state.userAuth.username;
@@ -61,7 +69,6 @@ export function login(user) {
 
 export function signup(user) {
     return async function signupThunk(dispatch, getState) {
-        console.log(user)
         axios.post('https://trywhistle.app/api/auth/signup', {
             "username": user.username,
             "password": user.password
@@ -72,6 +79,20 @@ export function signup(user) {
         })
         .catch(err => {
             dispatch(setSignupMessage(err.response.data))
+        })
+    }
+}
+
+export function updateProfilePic(user) {
+    return async function updateProfilePicThunk(dispatch, getState) {
+        const formData = new FormData();
+        formData.append("image", {
+            name: 'image',
+            type: 'image/png',
+            uri: newProfilePicUri
+        })
+        axios.post('https://trywhistle.app/api/user/updateprofilepic', {
+
         })
     }
 }

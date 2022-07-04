@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { setSignOut } from '../redux/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignOut, selectUsername } from '../redux/slices/authSlice';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
 
 const Feed = () => {
     const dispatch = useDispatch();
+    const username = useSelector(selectUsername);
 
     const handleLogout = () => {
         dispatch(setSignOut());
@@ -12,11 +15,10 @@ const Feed = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={{ marginBottom: 20, fontSize: 15 }}>Welcome!</Text>
+            <Text style={{ marginBottom: 20, fontSize: 15 }}>{username}</Text>
             <TouchableOpacity onPress={handleLogout} style={styles.btn}>
                 <Text style={styles.text}>Log out</Text>
             </TouchableOpacity>
-            
         </View>
     )
 }

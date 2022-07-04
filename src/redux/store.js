@@ -1,6 +1,5 @@
 import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
 import authSlice from './slices/authSlice';
-import feedSlice from './slices/feedSlice';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
@@ -18,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const reducers = combineReducers({
     userAuth: authSlice,
-    userFeed: feedSlice,
 });
 
 const persistConfig = {
