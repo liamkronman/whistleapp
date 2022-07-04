@@ -47,6 +47,7 @@ export const { setSignIn, setSignOut, setProfilePic, setLoginMessage, setSignupM
 export const selectIsLoggedIn = (state) => state.userAuth.isLoggedIn;
 export const selectUsername = (state) => state.userAuth.username;
 export const selectAccessToken = (state) => state.userAuth.accessToken;
+export const selectProfilePic = (state) => state.userAuth.profilePic;
 export const selectLoginMessage = (state) => state.userAuth.loginMessage;
 export const selectSignupMessage = (state) => state.userAuth.signupMessage;
 
@@ -83,7 +84,7 @@ export function signup(user) {
     }
 }
 
-export function updateProfilePic(user) {
+export function updateProfilePic(accessToken, newProfilePicUri) {
     return async function updateProfilePicThunk(dispatch, getState) {
         const formData = new FormData();
         formData.append("image", {
@@ -91,8 +92,19 @@ export function updateProfilePic(user) {
             type: 'image/png',
             uri: newProfilePicUri
         })
-        axios.post('https://trywhistle.app/api/user/updateprofilepic', {
-
+        axios({
+            method: 'post',
+            url: 'https://trywhistle.app/api/user/updateprofilepic',
+            data: formData,
+            headers: {
+                "x-access-token": accessToken
+            }
+        })
+        .then(resp => {
+            dispatch(setProfilePic(resp.data));
+        })
+        .catch(err => {
+            console.log(err.response.data);
         })
     }
 }

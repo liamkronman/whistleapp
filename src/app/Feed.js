@@ -31,7 +31,6 @@ const Feed = () => {
     const jwtToken = useSelector(selectAccessToken);
 
     const [whistles, updateWhistles] = React.useState([]);
-    const [currWhistleIndex, setCurrWhistleIndex] = React.useState(0);
     const [isLoading, setIsLoading] = React.useState(true);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [backSides, setBackSides] = React.useState([]);
@@ -174,7 +173,6 @@ const Feed = () => {
                     onEndReached={() => {
                         getMoreWhistles();
                     }}
-                    extraData={currWhistleIndex}
                     pagingEnabled
                     decelerationRate={"normal"}
                     />
