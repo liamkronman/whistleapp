@@ -95,16 +95,21 @@ export function updateProfilePic(accessToken, newProfilePicUri) {
             type: 'image/png',
             uri: newProfilePicUri
         })
+        console.log("formData: ", formData)
         axios({
             method: 'post',
             url: 'https://trywhistle.app/api/user/updateprofilepic',
             data: formData,
             headers: {
-                "x-access-token": accessToken
+                "x-access-token": accessToken,
+                "Content-Type": 'multipart/form-data',
+                Accept: 'application/json'
             }
         })
         .then(resp => {
-            dispatch(setProfilePic(resp.data));
+            console.log("successful response")
+            console.log(resp.config.data["_parts"])
+            // dispatch(setProfilePic(resp.data));
         })
         .catch(err => {
             console.log(err.response.data);

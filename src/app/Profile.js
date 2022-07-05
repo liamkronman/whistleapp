@@ -17,6 +17,7 @@ const Feed = () => {
 
     const handleUpdateProfilePic = () => {
         launchImageLibrary({mediaType: 'photo'}, (result) => {
+            console.log(result)
             if (result.didCancel) {
                 console.log('User cancelled image picker.');
             } else {
@@ -28,7 +29,7 @@ const Feed = () => {
                     50
                 )
                 .then(photo => {
-                    console.log()
+                    console.log(photo)
                     const updateProfilePicThunk = updateProfilePic(accessToken, photo.uri);
                     dispatch(updateProfilePicThunk);
                 })
