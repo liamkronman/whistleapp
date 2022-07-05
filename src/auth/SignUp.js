@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#ECEEFF',
     },
     btn: {
         backgroundColor: 'blue',
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'WorkSans-Medium'
     },
     errorText: {
         color: 'red',
