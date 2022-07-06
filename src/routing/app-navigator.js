@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, View, Text } from 'react-native'
+import { Image, View, Text } from 'react-native';
+import { Home, Plus, User } from "react-native-feather";
 
 import Feed from '../app/Feed';
 import Publish from '../app/Publish';
@@ -26,34 +27,26 @@ function Header() {
 
 const AppNavigator = () => {
     return (
-        <AppTabs.Navigator initialRouteName='Feed'>
-            <AppTabs.Screen name="Feed" 
-                options={{ 
-                    headerStyle: {
-                        backgroundColor: '#ECEEFF'
-                    },
-                    headerTintColor: 'black',
-                    headerTitle: (props) => <Header {...props} /> 
-                }} 
-                component={Feed} />
-            <AppTabs.Screen name="Publish" 
-                options={{ 
-                    headerStyle: {
-                        backgroundColor: '#ECEEFF'
-                    },
-                    headerTintColor: 'black',
-                    headerTitle: (props) => <Header {...props} /> 
-                }}
-                component={Publish} />
-            <AppTabs.Screen name="Profile"
-                options={{ 
-                    headerStyle: {
-                        backgroundColor: '#ECEEFF'
-                    },
-                    headerTintColor: 'black',
-                    headerTitle: (props) => <Header {...props} /> 
-                }}
-                component={Profile} />
+        <AppTabs.Navigator initialRouteName='Feed' screenOptions={{ 
+            headerStyle: {
+                backgroundColor: '#ECEEFF'
+            },
+            headerTintColor: 'black',
+            tabBarShowLabel: false,
+            tabBarStyle: { backgroundColor: '#ECEEFF', flexDirection: 'row', justifyContent: 'space-between' },
+            tabBarActiveTintColor: '#2249D2',
+            tabBarInactiveTintColor: '#97AAEC',
+            headerTitle: (props) => <Header {...props} /> 
+        }}>
+            <AppTabs.Screen name="Feed" component={Feed} options={{
+                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Home width={34} height={34} {...props} /></View>
+            }} />
+            <AppTabs.Screen name="Publish" component={Publish} options={{
+                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Plus width={34} height={34} {...props} /></View>
+            }} />
+            <AppTabs.Screen name="Profile" component={Profile} options={{
+                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><User width={34} height={34} {...props} /></View>
+            }} />
         </AppTabs.Navigator>
     )
 }
