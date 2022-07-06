@@ -94,47 +94,66 @@ const Feed = () => {
                 clickable={false}>
                 <View style={styles.face}>
                     <View style={styles.whistleContainer}>
-                        <Text style={styles.whistleText}>{whistle.item.title}</Text>
-                        <Button title={whistle.item.author} />
-                        <Text style={styles.whistleText}>{whistle.item.background}</Text>
-                        <Text style={styles.whistleText}>{whistle.item.context}</Text>
-                        <Button style={styles.whistleText} title={keys[0]} onPress={() => {
-                            axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                whistleId: whistle.item.id,
-                                optionSelected: keys[0]
-                            }, {
-                                headers: {
-                                    "x-access-token": jwtToken,
-                                }
-                            })
-                            .then(resp => {
-                                whistle.item.options[keys[0]] += 1;
-                                setBackSides(backSides => {
-                                    backSides[whistle.index] = true;
-                                    return backSides;
-                                });
-                            })
-                            .catch(err => console.log(err));
-                        }}/>
-                        <Button style={styles.whistleText} title={keys[1]} onPress={() => {
-                            axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                whistleId: whistle.item.id,
-                                optionSelected: keys[1]
-                            }, {
-                                headers: {
-                                    "x-access-token": jwtToken,
-                                }
-                            })
-                            .then(resp => {
-                                whistle.item.options[keys[1]] += 1;
-                                setBackSides(backSides => {
-                                    backSides[whistle.index] = true;
-                                    return backSides;
-                                });
-                            })
-                            .catch(err => console.log(err));
-                        }}/>
-                        <Text style={styles.whistleText}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hours, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} minutes, {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} seconds left</Text>
+                        <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column' }}>
+                            <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
+                            </View>
+                            <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
+                                <Text style={styles.whistleAuthor}>{whistle.item.author}: </Text>
+                                <Text style={styles.whistleBackground}>{whistle.item.background}</Text>
+                            </View>
+                            <View style={{ flex: 4.5 }}>
+                                <Text style={styles.whistleContext}>{whistle.item.context}</Text>
+                            </View>
+                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
+                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                        whistleId: whistle.item.id,
+                                        optionSelected: keys[0]
+                                    }, {
+                                        headers: {
+                                            "x-access-token": jwtToken,
+                                        }
+                                    })
+                                    .then(resp => {
+                                        whistle.item.options[keys[0]] += 1;
+                                        setBackSides(backSides => {
+                                            backSides[whistle.index] = true;
+                                            return backSides;
+                                        });
+                                    })
+                                    .catch(err => console.log(err));
+                                }}>
+                                    <Text style={styles.whistleOptionText}>{keys[0]}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
+                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                        whistleId: whistle.item.id,
+                                        optionSelected: keys[1]
+                                    }, {
+                                        headers: {
+                                            "x-access-token": jwtToken,
+                                        }
+                                    })
+                                    .then(resp => {
+                                        whistle.item.options[keys[1]] += 1;
+                                        setBackSides(backSides => {
+                                            backSides[whistle.index] = true;
+                                            return backSides;
+                                        });
+                                    })
+                                    .catch(err => console.log(err));
+                                }}>
+                                    <Text style={styles.whistleOptionText}>{keys[1]}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 20, color: '#4D7AEF', textAlign: 'center' }}>Time left </Text>
+                                <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 18, color: '#E21313', textAlign: 'center' }}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hrs : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} mins : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} secs</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.back}>
@@ -175,6 +194,7 @@ const Feed = () => {
                     }}
                     pagingEnabled
                     decelerationRate={"normal"}
+                    showsVerticalScrollIndicator={false}
                     />
             }
         </View>
@@ -209,18 +229,52 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#ECEEFF',
         height: Dimensions.get('window').height - 170,
     },
     whistleContainerBack: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#ECEEFF',
         height: Dimensions.get('window').height - 170,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         paddingTop: 55,
+    },
+    whistleTitle: {
+        fontFamily: 'WorkSans-Bold',
+        fontSize: 30,
+        color: '#2C65F6',
+        textAlign: 'center'
+    },
+    whistleAuthor: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 18,
+        color: '#8CA9F2'
+    },
+    whistleBackground: {
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 18,
+        color: '#2C65F6'
+    },
+    whistleContext: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 16,
+        color: '#2C65F6'
+    },
+    whistleOptionBtn: {
+        width: 347,
+        height: 62,
+        borderRadius: 6,
+        backgroundColor: '#5B57FA',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    whistleOptionText: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 20,
+        color: 'white'
     },
     whistleText: {
         color: 'black',
