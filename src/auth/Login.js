@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoginMessage } from '../redux/slices/authSlice';
-import SignUp from "./SignUp";
+import { ChevronLeft } from "react-native-feather";
 
 const Login = ({navigation}) => {
     const dispatch = useDispatch();
@@ -30,6 +30,7 @@ const Login = ({navigation}) => {
             <View style={[styles.container, {
                 flexDirection: "column"
             }]}>
+                <ChevronLeft style={{ position: 'absolute', alignSelf: 'flex-start', top: 70, left: 20 }} width={34} height={34} onPress={() => navigation.pop()} />
                 {
                     message
                     ? <Text style={styles.errorText}>{message}</Text>
@@ -53,7 +54,7 @@ const Login = ({navigation}) => {
                             <ActivityIndicator size="small" color="#ffffff" />
                         </View>
                         : <TouchableOpacity onPress={handleLogin} style={styles.submitBtn}>
-                            <Text style={styles.buttonText}>Sign In</Text>
+                            <Text style={styles.buttonText}>I'm back</Text>
                         </TouchableOpacity>
                     }
                 </View>
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 90,
-        paddingBottom: 375,
+        paddingBottom: 385,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#ECEEFF',

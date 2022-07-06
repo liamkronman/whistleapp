@@ -71,7 +71,7 @@ const SignUp = ({ navigation }) => {
                         </TouchableOpacity>
                     }
                     <Text style={styles.loginBtn} onPress={() => navigation.navigate("Login")}>
-                        Not my first time....
+                        Not my first time...
                     </Text>
                 </View>
             </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         color: '#4164BD',
         fontSize: 18,
         fontFamily: 'WorkSans-SemiBold',
-        marginTop: 6
+        marginTop: 14
     },
     errorText: {
         color: 'red',
