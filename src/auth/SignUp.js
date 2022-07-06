@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: 'red',
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'WorkSans-Medium'
     }
 })
