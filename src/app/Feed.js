@@ -160,7 +160,7 @@ const Feed = () => {
     };
 
     return (
-        <>
+        <View style={styles.container}>
             {
                 isLoading
                 ? <View style={styles.loadingContainer}>
@@ -177,7 +177,7 @@ const Feed = () => {
                     decelerationRate={"normal"}
                     />
             }
-        </>
+        </View>
     );
 }
 
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#ECEEFF',
     },
     btn: {
         backgroundColor: 'blue',

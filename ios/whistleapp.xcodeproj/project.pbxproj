@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* whistleappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* whistleappTests.m */; };
+		013F7A5CED0D4C9CB2E79E69 /* GemunuLibre-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 336242BC5BDB4DE89421834A /* GemunuLibre-ExtraLight.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		146615298355477A923A6F5C /* GemunuLibre-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 492E4A47EAD24C4083389A54 /* GemunuLibre-Medium.ttf */; };
 		31D0E42D0E9AD13A01E3E93F /* libPods-whistleapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B30423D64127857A68AA4245 /* libPods-whistleapp.a */; };
-		5D116EE928654BBC00BE44D5 /* GemunuLibre-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D116EE828654BBC00BE44D5 /* GemunuLibre-VariableFont_wght.ttf */; };
+		4007EF8A0E274151B38F43E9 /* GemunuLibre-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7493B28CE8894557BC4343C4 /* GemunuLibre-SemiBold.ttf */; };
 		5D116EEA28654CF400BE44D5 /* GemunuLibre-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D116EE828654BBC00BE44D5 /* GemunuLibre-VariableFont_wght.ttf */; };
 		5DC0BC782874477E00E44A5A /* WorkSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E15029FBC4D346B5A4B1D8E7 /* WorkSans-Black.ttf */; };
 		5DC0BC792874477E00E44A5A /* WorkSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 843A92631AEA49B2A6856CAA /* WorkSans-BlackItalic.ttf */; };
@@ -34,8 +36,13 @@
 		5DC0BC892874477E00E44A5A /* WorkSans-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92605E13A64540EBB955498D /* WorkSans-ThinItalic.ttf */; };
 		5DC0BC8A2874477E00E44A5A /* WorkSans-Italic-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0FA7F1E9DC048269F6C9B50 /* WorkSans-Italic-VariableFont_wght.ttf */; };
 		5DC0BC8B2874477E00E44A5A /* WorkSans-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F38547299AB4584A3C0A6BC /* WorkSans-VariableFont_wght.ttf */; };
+		6FB53167F8A74AA7856C7716 /* GemunuLibre-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F462B3C69CA46AB9093EE66 /* GemunuLibre-ExtraBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		85D0A0A87F28423C9747A9A2 /* GemunuLibre-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66104AE324D54388A41DDE56 /* GemunuLibre-VariableFont_wght.ttf */; };
+		A0DC3C5049BE41F78B652584 /* GemunuLibre-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C6A130F6560462F80254855 /* GemunuLibre-Regular.ttf */; };
 		B4ED907F933436926405F295 /* libPods-whistleapp-whistleappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B7772BF3972A3A3A0900FD7 /* libPods-whistleapp-whistleappTests.a */; };
+		E2F432376B484EBD92BF5C7E /* GemunuLibre-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A6DDDEED34C4ABB87E5ED54 /* GemunuLibre-Light.ttf */; };
+		E3D86FE861CF45348E567CB5 /* GemunuLibre-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 24EF80F9338741D89822CC53 /* GemunuLibre-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +61,10 @@
 		00E356F21AD99517003FC87E /* whistleappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = whistleappTests.m; sourceTree = "<group>"; };
 		07474C110B6A4C18ACA2DF8D /* WorkSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-LightItalic.ttf"; path = "../assets/fonts/WorkSans-LightItalic.ttf"; sourceTree = "<group>"; };
 		0A0E18570AA6477D85324818 /* WorkSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBoldItalic.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		0A6DDDEED34C4ABB87E5ED54 /* GemunuLibre-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-Light.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-Light.ttf"; sourceTree = "<group>"; };
 		0B08BDF0BD1D4DFEA2965827 /* WorkSans-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ThinItalic.ttf"; path = "../assets/fonts/static/WorkSans-ThinItalic.ttf"; sourceTree = "<group>"; };
 		0DC5289113ED487691B5791A /* WorkSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBold.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		0F462B3C69CA46AB9093EE66 /* GemunuLibre-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-ExtraBold.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-ExtraBold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* whistleapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whistleapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = whistleapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = whistleapp/AppDelegate.mm; sourceTree = "<group>"; };
@@ -71,10 +80,14 @@
 		1D9BE18AA93B426B98016F71 /* WorkSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraLight.ttf"; path = "../assets/fonts/WorkSans-ExtraLight.ttf"; sourceTree = "<group>"; };
 		1F38547299AB4584A3C0A6BC /* WorkSans-VariableFont_wght.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-VariableFont_wght.ttf"; path = "../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		227440344699405A91189848 /* WorkSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBold.ttf"; path = "../assets/fonts/WorkSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		24EF80F9338741D89822CC53 /* GemunuLibre-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-Bold.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-Bold.ttf"; sourceTree = "<group>"; };
 		2FCF0DC8CEA4440E95F9BC3A /* WorkSans-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Thin.ttf"; path = "../assets/fonts/static/WorkSans-Thin.ttf"; sourceTree = "<group>"; };
 		3225A6FF9364488AAE4630CE /* WorkSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Black.ttf"; path = "../assets/fonts/static/WorkSans-Black.ttf"; sourceTree = "<group>"; };
+		336242BC5BDB4DE89421834A /* GemunuLibre-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-ExtraLight.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-ExtraLight.ttf"; sourceTree = "<group>"; };
 		352402F0863A4A29AD26685B /* WorkSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BoldItalic.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		3BD874E21FB74A2182BCE8FA /* WorkSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Light.ttf"; path = "../assets/fonts/static/WorkSans-Light.ttf"; sourceTree = "<group>"; };
+		492E4A47EAD24C4083389A54 /* GemunuLibre-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-Medium.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-Medium.ttf"; sourceTree = "<group>"; };
+		4C6A130F6560462F80254855 /* GemunuLibre-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-Regular.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-Regular.ttf"; sourceTree = "<group>"; };
 		50DE307C0F5446A5A27D6B9C /* WorkSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBold.ttf"; path = "../assets/fonts/static/WorkSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		53C05C8590ED4E36B8707380 /* WorkSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Italic.ttf"; path = "../assets/fonts/static/WorkSans-Italic.ttf"; sourceTree = "<group>"; };
 		53FEA30B77F54207821FCE9E /* WorkSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Regular.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -84,7 +97,9 @@
 		5D116EE828654BBC00BE44D5 /* GemunuLibre-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GemunuLibre-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		613923313F5F40048182750F /* WorkSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BlackItalic.ttf"; path = "../assets/fonts/WorkSans-BlackItalic.ttf"; sourceTree = "<group>"; };
 		65DA4F3907954AF1B02E6C2E /* WorkSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Light.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-Light.ttf"; sourceTree = "<group>"; };
+		66104AE324D54388A41DDE56 /* GemunuLibre-VariableFont_wght.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-VariableFont_wght.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/GemunuLibre-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		6917230AD02D4D369F1AF2E3 /* WorkSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Italic.ttf"; path = "../assets/fonts/WorkSans-Italic.ttf"; sourceTree = "<group>"; };
+		7493B28CE8894557BC4343C4 /* GemunuLibre-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-SemiBold.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/static/GemunuLibre-SemiBold.ttf"; sourceTree = "<group>"; };
 		78B6D7DB13FA4AF08A60401B /* WorkSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBoldItalic.ttf"; path = "../assets/fonts/WorkSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = whistleapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		843A92631AEA49B2A6856CAA /* WorkSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BlackItalic.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -289,6 +304,14 @@
 				B623AA400A144D66A04E67ED /* WorkSans-SemiBoldItalic.ttf */,
 				8AC215025A2A44149F82C2EB /* WorkSans-Thin.ttf */,
 				19B91EF4D3BA464C9EBFBD57 /* WorkSans-ThinItalic.ttf */,
+				66104AE324D54388A41DDE56 /* GemunuLibre-VariableFont_wght.ttf */,
+				24EF80F9338741D89822CC53 /* GemunuLibre-Bold.ttf */,
+				0F462B3C69CA46AB9093EE66 /* GemunuLibre-ExtraBold.ttf */,
+				336242BC5BDB4DE89421834A /* GemunuLibre-ExtraLight.ttf */,
+				0A6DDDEED34C4ABB87E5ED54 /* GemunuLibre-Light.ttf */,
+				492E4A47EAD24C4083389A54 /* GemunuLibre-Medium.ttf */,
+				4C6A130F6560462F80254855 /* GemunuLibre-Regular.ttf */,
+				7493B28CE8894557BC4343C4 /* GemunuLibre-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -421,7 +444,14 @@
 				5DC0BC8B2874477E00E44A5A /* WorkSans-VariableFont_wght.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				5D116EE928654BBC00BE44D5 /* GemunuLibre-VariableFont_wght.ttf in Resources */,
+				85D0A0A87F28423C9747A9A2 /* GemunuLibre-VariableFont_wght.ttf in Resources */,
+				E3D86FE861CF45348E567CB5 /* GemunuLibre-Bold.ttf in Resources */,
+				6FB53167F8A74AA7856C7716 /* GemunuLibre-ExtraBold.ttf in Resources */,
+				013F7A5CED0D4C9CB2E79E69 /* GemunuLibre-ExtraLight.ttf in Resources */,
+				E2F432376B484EBD92BF5C7E /* GemunuLibre-Light.ttf in Resources */,
+				146615298355477A923A6F5C /* GemunuLibre-Medium.ttf in Resources */,
+				A0DC3C5049BE41F78B652584 /* GemunuLibre-Regular.ttf in Resources */,
+				4007EF8A0E274151B38F43E9 /* GemunuLibre-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

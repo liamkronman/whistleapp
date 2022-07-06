@@ -60,6 +60,14 @@
 		<string>WorkSans-ThinItalic.ttf</string>
 		<string>WorkSans-Italic-VariableFont_wght.ttf</string>
 		<string>WorkSans-VariableFont_wght.ttf</string>
+		<string>GemunuLibre-VariableFont_wght.ttf</string>
+		<string>GemunuLibre-Bold.ttf</string>
+		<string>GemunuLibre-ExtraBold.ttf</string>
+		<string>GemunuLibre-ExtraLight.ttf</string>
+		<string>GemunuLibre-Light.ttf</string>
+		<string>GemunuLibre-Medium.ttf</string>
+		<string>GemunuLibre-Regular.ttf</string>
+		<string>GemunuLibre-SemiBold.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
