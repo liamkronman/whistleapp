@@ -12,7 +12,7 @@ const PollBar = (props) => {
         Animated.timing(
             heightAnim,
             {
-                toValue: 270 * props.percent,
+                toValue: 350 * props.percent,
                 duration: 1000,
                 useNativeDriver: false,
             }
@@ -158,19 +158,42 @@ const Feed = () => {
                 </View>
                 <View style={styles.back}>
                     <View style={styles.whistleContainerBack}>
-                        <View style={styles.pollBarContainer}>
-                            <Text style={styles.percentage}>{~~(whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}% ({keys[0]})</Text>
-                            <PollBar key={0} percent={whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
-                            <Text style={styles.pollBarText}>
-                                {keys[0]}
-                            </Text> 
-                        </View>
-                        <View style={styles.pollBarContainer}>
-                            <Text style={styles.percentage}>{~~(whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}% ({keys[0]})</Text>
-                            <PollBar key={1} percent={whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
-                            <Text style={styles.pollBarText}>
-                                {keys[1]}
-                            </Text> 
+                        <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column', justifyContent: 'center' }}>
+                            <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
+                            </View>
+                            <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
+                                <Text style={styles.whistleAuthor}>{whistle.item.author}</Text>
+                            </View>
+                            <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center' }}>
+                                <View style={styles.pollBarContainer}>
+                                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                                        <Text style={styles.percentage}>{whistle.item.options[keys[0]]} Votes ({~~(whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}%)</Text>
+                                    </View>
+                                    <View style={{ flex: 5, justifyContent: 'flex-end' }}>
+                                        <PollBar key={0} percent={whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
+                                    </View>
+                                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                                        <Text style={styles.pollBarText}>
+                                            {keys[0]}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <View style={styles.pollBarContainer}>
+                                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                                        <Text style={styles.percentage}>{whistle.item.options[keys[1]]} Votes ({~~(whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}%)</Text>
+                                    </View>
+                                    <View style={{ flex: 5, justifyContent: 'flex-end' }}>
+                                        <PollBar key={1} percent={whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
+                                    </View>
+                                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                                        <Text style={styles.pollBarText}>
+                                            {keys[1]}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{ flex: 1 }}></View>
                         </View>
                     </View>
                 </View>
@@ -238,9 +261,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#ECEEFF',
         height: Dimensions.get('window').height - 170,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        paddingTop: 55,
     },
     whistleTitle: {
         fontFamily: 'WorkSans-Bold',
@@ -280,16 +300,28 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20
     },
+    pollBarContainer: {
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: 150,
+        flexDirection: 'column'
+    },
+    percentage: {
+        fontFamily: 'WorkSans-Medium',
+        fontSize: 16,
+        color: '#2C65F6'
+    },
     pollBar: {
         width: 70,
-        height: 300,
-        backgroundColor: 'gray',
+        height: 350,
+        backgroundColor: '#5B57FA',
         borderRadius: 10,
     },
     pollBarText: {
         color: 'black',
         fontSize: 20,
         textAlign: 'center',
-        marginTop: 10,
+        fontFamily: 'WorkSans-SemiBold',
+        color: '#2C65F6'
     },
 })
