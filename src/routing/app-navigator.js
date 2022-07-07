@@ -33,19 +33,19 @@ const AppNavigator = () => {
             },
             headerTintColor: 'black',
             tabBarShowLabel: false,
-            tabBarStyle: { backgroundColor: '#ECEEFF', flexDirection: 'row', justifyContent: 'space-between' },
+            tabBarStyle: { backgroundColor: '#ECEEFF' },
             tabBarActiveTintColor: '#2249D2',
             tabBarInactiveTintColor: '#97AAEC',
             headerTitle: (props) => <Header {...props} /> 
         }}>
             <AppTabs.Screen name="Feed" component={Feed} options={{
-                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Home width={34} height={34} {...props} /></View>
+                tabBarIcon: (tabInfo) => <Home width={32} height={32} color={tabInfo.color} />
             }} />
             <AppTabs.Screen name="Publish" component={Publish} options={{
-                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Plus width={34} height={34} {...props} /></View>
+                tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
             }} />
             <AppTabs.Screen name="Profile" component={Profile} options={{
-                tabBarButton: props => <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><User width={34} height={34} {...props} /></View>
+                tabBarIcon: (tabInfo) => <User width={32} height={32} color={tabInfo.color} />
             }} />
         </AppTabs.Navigator>
     )
