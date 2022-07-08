@@ -84,6 +84,11 @@ const Feed = () => {
     const renderWhistle = ( whistle ) => {
         const keys = Object.keys(whistle.item.options);
         const colors = ['#600080', '#9900cc', '#c61aff', '#d966ff', '#ecb3ff'];
+        let totalVotes = 0;
+
+        for (let i = 0; i < keys.length; i++) {
+            totalVotes += whistle.item.options[keys[i]];
+        }
 
         return (
             <FlipCard
@@ -148,6 +153,9 @@ const Feed = () => {
                                 }}>
                                     <Text style={styles.whistleOptionText}>{keys[1]}</Text>
                                 </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 22, color:'#2C65F6' }}>{totalVotes} Votes</Text>
                             </View>
                             <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 20, color: '#4D7AEF', textAlign: 'center' }}>Time left </Text>
@@ -280,8 +288,8 @@ const styles = StyleSheet.create({
     },
     whistleContext: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 16,
-        color: '#2C65F6'
+        fontSize: 14,
+        color: 'black'
     },
     whistleOptionBtn: {
         width: 347,
@@ -293,12 +301,8 @@ const styles = StyleSheet.create({
     },
     whistleOptionText: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 20,
+        fontSize: 19,
         color: 'white'
-    },
-    whistleText: {
-        color: 'black',
-        fontSize: 20
     },
     pollBarContainer: {
         alignItems: 'center',
