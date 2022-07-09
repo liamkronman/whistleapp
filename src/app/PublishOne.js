@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Button, Dimensions, Switch } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard, Dimensions, Switch } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTitle, selectAnonymous, selectBackground, setTitleAndBackground } from '../redux/slices/publishSlice';
 import PublishTwo from './PublishTwo';
@@ -22,7 +22,7 @@ const PublishOne = ({ navigation }) => {
                 title,
                 background
             }
-            dispatch(setTitleAndBackground(info));
+            dispatch(setTitleAndBackground(info))
             navigation.navigate(PublishTwo);
         }
     }
@@ -47,9 +47,9 @@ const PublishOne = ({ navigation }) => {
                     <View style={{ flex: 0.3, alignItems: 'center', justifyContent: 'flex-start' }}>
                         <Text style={styles.pageCounter}>(1/4)</Text>
                     </View>
-                    <View style={{ flex: 0.8, width: 245, flexDirection: 'row', justifyContent: 'center', alignSelf: 'center' }}>
+                    <View style={{ flex: 0.8, width: 235, flexDirection: 'row', justifyContent: 'center', alignSelf: 'center' }}>
                         <View style={{ flex: 2, alignItems: 'flex-start', justifyContent: 'center' }}>
-                            <Text style={styles.inputTitle}>Post Anonymously</Text>
+                            <Text style={styles.anonymousText}>Post Anonymously</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
                             <Switch
@@ -112,6 +112,11 @@ const styles = StyleSheet.create({
         fontFamily: 'WorkSans-Medium',
         fontSize: 16
     },
+    anonymousText: {
+        fontFamily: 'WorkSans-Medium',
+        fontSize: 17,
+        color: '#2C65F6'
+    },
     anonymousSwitch: {
         transform: [
             { scaleX: 0.8 },
@@ -143,18 +148,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         borderRadius: 8,
         padding: 10,
-    },
-    contextInput: {
-        backgroundColor: '#D8E5FF',
-        color: 'black',
-        width: 353,
-        height: (4.5 / 10.3) * Dimensions.get('window').height - 170,
-        fontFamily: 'WorkSans-Regular',
-        fontSize: 14,
-        borderRadius: 8,
-        padding: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
     },
     choiceInput: {
         color: 'black',

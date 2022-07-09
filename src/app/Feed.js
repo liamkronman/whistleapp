@@ -107,7 +107,7 @@ const Feed = () => {
                                 <Text style={styles.whistleAuthor}>{whistle.item.author}: </Text>
                                 <Text style={styles.whistleBackground}>{whistle.item.background}</Text>
                             </View>
-                            <View style={{ flex: 4.5 }}>
+                            <View style={{ flex: 4.5}}>
                                 <Text style={styles.whistleContext}>{whistle.item.context}</Text>
                             </View>
                             <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
