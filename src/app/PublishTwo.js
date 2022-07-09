@@ -9,11 +9,21 @@ const PublishTwo = ({ navigation }) => {
     const storedContext = useSelector(selectContext);
     const [context, updateContext] = React.useState(storedContext);
 
+    const handlePreviousPress = () => {
+        if (context) {
+            const info = {
+                context
+            };
+            dispatch(setContext(info));
+        }
+        navigation.pop();
+    }
+
     const handleNextPress = () => {
         if (context) {
             const info = {
                 context
-            }
+            };
             dispatch(setContext(info));
             navigation.navigate(PublishThree);
         }
@@ -25,7 +35,7 @@ const PublishTwo = ({ navigation }) => {
                 <View style={{ width: 353, height: Dimensions.get('window').height - 500, flexDirection: 'column' }}>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Text style={styles.btn} onPress={() => navigation.pop()}>Previous</Text>
+                            <Text style={styles.btn} onPress={handlePreviousPress}>Previous</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'center' }}>
                             <Text style={styles.pageCounter}>(2/4)</Text>
