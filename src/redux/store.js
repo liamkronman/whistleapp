@@ -1,5 +1,6 @@
 import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
 import authSlice from './slices/authSlice';
+import publishSlice from './slices/publishSlice';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
@@ -17,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const reducers = combineReducers({
     userAuth: authSlice,
+    whistleDraft: publishSlice,
 });
 
 const persistConfig = {

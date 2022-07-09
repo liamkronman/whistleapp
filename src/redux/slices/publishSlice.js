@@ -32,10 +32,12 @@ const publishSlice = createSlice({
     }
 });
 
-export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime } = authSlice.actions;
+export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime } = publishSlice.actions;
 
 export const selectTitle = (state) => state.whistleDraft.title;
 export const selectBackground = (state) => state.whistleDraft.background;
 export const selectContext = (state) => state.whistleDraft.context;
 export const selectChoices = (state) => state.whistleDraft.choices;
 export const selectExpirationDateTime = (state) => state.whistleDraft.expirationDateTime;
+
+export default publishSlice.reducer;
