@@ -36,9 +36,12 @@ const Feed = () => {
     const [backSides, setBackSides] = React.useState([]);
 
     useEffect(() => {
-        setInterval(() => {
+        const handle = setInterval(() => {
             setCurrentDateTime(new Date());
         }, 1000);
+        return () => {
+            clearInterval(handle);
+        }
     }, []);
     
     const getWhistles = async (lastWhistleId=null) => {
