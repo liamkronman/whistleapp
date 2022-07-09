@@ -10,12 +10,10 @@ const PublishTwo = ({ navigation }) => {
     const [context, updateContext] = React.useState(storedContext);
 
     const handlePreviousPress = () => {
-        if (context) {
-            const info = {
-                context
-            };
-            dispatch(setContext(info));
-        }
+        const info = {
+            context
+        };
+        dispatch(setContext(info));
         navigation.pop();
     }
 
@@ -51,7 +49,7 @@ const PublishTwo = ({ navigation }) => {
                             </Text>
                         </View>
                         <View style={{ flex: 10 }}>
-                            <TextInput multiline={true} value={context} placeholderTextColor="#9D9D9D" style={styles.contextInput} onChangeText={updateContext} placeholder="Describe the context of your situation." />
+                            <TextInput multiline={true} value={context} placeholderTextColor="#9D9D9D" style={styles.contextInput} onChangeText={updateContext} placeholder="Describe the context of your situation." autoFocus={true} />
                         </View>
                     </View>
                 </View>

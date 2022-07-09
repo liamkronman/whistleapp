@@ -149,18 +149,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
     },
-    choiceInput: {
-        color: 'black',
-        width: 353,
-        height: 62,
-        fontFamily: 'WorkSans-Regular',
-        fontSize: 14,
-        borderRadius: 6,
-        padding: 10,
-        borderColor: '#5B57FA',
-        borderWidth: 1,
-        textAlign: 'center'
-    },
     errorText: {
         color: 'red',
         fontSize: 20,
