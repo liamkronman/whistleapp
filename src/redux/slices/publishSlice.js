@@ -5,6 +5,7 @@ import axiosRetry from 'axios-retry';
 axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
 
 const initialState = {
+    anonymous: false,
     title: null,
     background: null,
     context: null,
