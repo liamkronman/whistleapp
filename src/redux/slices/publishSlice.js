@@ -9,7 +9,8 @@ const initialState = {
     background: null,
     context: null,
     choices: null,
-    expirationDateTime: null
+    expirationDateTime: null,
+    errorMessage: null,
 };
 
 const publishSlice = createSlice({
@@ -28,6 +29,17 @@ const publishSlice = createSlice({
         },
         setExpirationDateTime: (state, action) => {
             state.expirationDateTime = action.payload.expirationDateTime;
+        },
+        setErrorMessage: (state, action) => {
+            state.errorMessage = action.payload.error;
+        },
+        clearWhistle: (state) => {
+            state.title = null;
+            state.background = null;
+            state.context = null;
+            state.choices = null;
+            state.expirationDateTime = null;
+            state.errorMessage = null;
         }
     }
 });
@@ -41,3 +53,34 @@ export const selectChoices = (state) => state.whistleDraft.choices;
 export const selectExpirationDateTime = (state) => state.whistleDraft.expirationDateTime;
 
 export default publishSlice.reducer;
+
+export async function blowWhistleThunk(dispatch, getState) {
+    const state = getState();
+    const choices = state.whistleDraft.choices;
+    let options = {}
+    
+    for (let i = 0; i < choices.length; i++) {
+        options[choices[i]] = 0;
+    }
+
+    axios.post("https://trywhistle.app/api/app/makewhistle", 
+        {
+            "title": state.whistleDraft.title,
+            "background": state.whistleDraft.background,
+            "context": state.whistleDraft.context,
+            "options": options,
+            "closeDateTime": state.whistleDraft.expirationDateTime,
+        },
+        {
+            headers: {
+                "x-access-token": state.userAuth.accessToken
+            }
+        }
+    )
+    .then(resp => {
+        dispatch(clearWhistle());
+    })
+    .catch(err => {
+        dispatch(setErrorMesssage(err.response.data));
+    });
+}
