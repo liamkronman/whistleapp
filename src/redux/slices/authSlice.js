@@ -24,6 +24,8 @@ const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             if (action.payload.profilePic)
                 state.profilePic = action.payload.profilePic;
+            state.loginMessage = null;
+            state.signupMessage = null;
         },
         setSignOut: (state) => {
             state.isLoggedIn = false;

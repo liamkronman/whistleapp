@@ -4,7 +4,7 @@ import { Image, View, Text } from 'react-native';
 import { Home, Plus, User } from "react-native-feather";
 
 import Feed from '../app/Feed';
-import Publish from '../app/Publish';
+import PublishNavigator from './publish-navigator';
 import Profile from '../app/Profile';
 
 const AppTabs = createBottomTabNavigator();
@@ -36,12 +36,12 @@ const AppNavigator = () => {
             tabBarStyle: { backgroundColor: '#ECEEFF' },
             tabBarActiveTintColor: '#2249D2',
             tabBarInactiveTintColor: '#97AAEC',
-            headerTitle: (props) => <Header {...props} /> 
+            headerTitle: (props) => <Header {...props} />
         }}>
             <AppTabs.Screen name="Feed" component={Feed} options={{
                 tabBarIcon: (tabInfo) => <Home width={32} height={32} color={tabInfo.color} />
             }} />
-            <AppTabs.Screen name="Publish" component={Publish} options={{
+            <AppTabs.Screen name="Publish" component={PublishNavigator} options={{
                 tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
             }} />
             <AppTabs.Screen name="Profile" component={Profile} options={{

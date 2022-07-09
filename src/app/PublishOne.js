@@ -3,10 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator,
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import PublishTwo from './PublishTwo';
 
 import axios from "axios";
 
-const Publish = ({ navigation }) => {
+const PublishOne = ({ navigation }) => {
     const [title, updateTitle] = React.useState("");
     const [background, updateBackground] = React.useState("");
     const [context, updateContext] = React.useState("");
@@ -137,7 +138,8 @@ const Publish = ({ navigation }) => {
                                     <TextInput style={styles.choiceInput} placeholder="Your second choice" placeholderTextColor="#9D9D9D" value={option2} onChangeText={updateOption2} />
                                 </View>
                             </View>
-                        
+                            
+                            <Button onPress={() => navigation.navigate(PublishTwo)} title="Next" />
                             <Text style={styles.text}>
                                 When to Expire
                             </Text>
@@ -174,7 +176,7 @@ const Publish = ({ navigation }) => {
     );
 }
 
-export default Publish;
+export default PublishOne;
 
 const styles = StyleSheet.create({
     container: {
