@@ -19,6 +19,7 @@ const publishSlice = createSlice({
     initialState,
     reducers: {
         setTitleAndBackground: (state, action) => {
+            console.log(action.payload)
             state.anonymous = action.payload.anonymous;
             state.title = action.payload.title;
             state.background = action.payload.background;

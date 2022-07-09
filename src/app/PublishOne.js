@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Button, Dimensions, Switch } from 'react-native';
-import { useSelector } from 'react-redux';
-import { selectTitle, selectAnonymous, selectBackground } from '../redux/slices/publishSlice';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTitle, selectAnonymous, selectBackground, setTitleAndBackground } from '../redux/slices/publishSlice';
 import PublishTwo from './PublishTwo';
 
 const PublishOne = ({ navigation }) => {
+    const dispatch = useDispatch();
     const storedAnonymous = useSelector(selectAnonymous);
     const storedTitle = useSelector(selectTitle);
     const storedBackground = useSelector(selectBackground);
@@ -14,18 +14,51 @@ const PublishOne = ({ navigation }) => {
     const [title, updateTitle] = React.useState(storedTitle);
     const [background, updateBackground] = React.useState(storedBackground);
     const [message, updateMessage] = React.useState("");
+    
+    const handleNextPress = () => {
+        if (title && background) {
+            const info = {
+                anonymous,
+                title,
+                background
+            }
+            dispatch(setTitleAndBackground(info));
+            navigation.navigate(PublishTwo);
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
-                <View style={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column' }}>
-                    <View style={{ flex : 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={styles.blowAWhistle}>Blow a Whistle!</Text>
-                        {
-                            message
-                            ? <Text style={styles.errorText}>{message}</Text>
-                            : <></>
-                        }
+                <View style={{ width: 353, height: Dimensions.get('window').height - 500, flexDirection: 'column' }}>
+                    {
+                        message
+                        ? <Text style={styles.errorText}>{message}</Text>
+                        : <></>
+                    }
+                    <View style={{ flex : 0.7, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                        <View style={{ flex: 4, alignItems: 'flex-start' }}>
+                            <Text style={styles.blowAWhistle}>Blow a Whistle!</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                            <Text onPress={handleNextPress} style={styles.nextBtn}>Next</Text>
+                        </View>
+                    </View>
+                    <View style={{ flex: 0.3, alignItems: 'center', justifyContent: 'flex-start' }}>
+                        <Text style={styles.pageCounter}>(1/4)</Text>
+                    </View>
+                    <View style={{ flex: 0.8, width: 245, flexDirection: 'row', justifyContent: 'center', alignSelf: 'center' }}>
+                        <View style={{ flex: 2, alignItems: 'flex-start', justifyContent: 'center' }}>
+                            <Text style={styles.inputTitle}>Post Anonymously</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+                            <Switch
+                                style={styles.anonymousSwitch}
+                                trackColor={{ true: '#5B57FA' }}
+                                onValueChange={() => updateAnonymous(previousState => !previousState)} 
+                                value={anonymous}
+                                />
+                        </View>
                     </View>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                         <View style={{ flex: 1 }}>
@@ -33,7 +66,7 @@ const PublishOne = ({ navigation }) => {
                                 Title
                             </Text>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 2 }}>
                             <TextInput placeholder="Something Eye-Catching" placeholderTextColor="#9D9D9D" style={styles.titleInput} value={title} onChangeText={updateTitle} />
                         </View>
                     </View>
@@ -44,63 +77,10 @@ const PublishOne = ({ navigation }) => {
                                 Background
                             </Text>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 2 }}>
                             <TextInput placeholder="Age, gender, geography, etc." placeholderTextColor="#9D9D9D" style={styles.backgroundInput} value={background} onChangeText={updateBackground} />
                         </View>
                     </View>
-                    <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center', flexDirection: 'column' }}>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.inputTitle}>
-                                Story
-                            </Text>
-                        </View>
-                        <View style={{ flex: 4 }}>
-                            <TextInput multiline={true} value={context} placeholderTextColor="#9D9D9D" style={styles.contextInput} onChangeText={updateContext} placeholder="Describe the context of your situation." />
-                        </View>
-                    </View>
-                    <View style={{ flex: 3, alignItems: 'flex-start', justifyContent: 'center', flexDirection: 'column' }}>
-                        <View style={{ flex: 0.5 }}>
-                            <Text style={styles.inputTitle}>
-                                Choices
-                            </Text>
-                        </View>
-                        <View style={{ flex: 2 }}>
-                            <TextInput style={styles.choiceInput} placeholder="Your first choice" placeholderTextColor="#9D9D9D" value={option1} onChangeText={updateOption1} />
-                        </View>
-                        <View style={{ flex: 2 }}>
-                            <TextInput style={styles.choiceInput} placeholder="Your second choice" placeholderTextColor="#9D9D9D" value={option2} onChangeText={updateOption2} />
-                        </View>
-                    </View>
-                    
-                    <Button onPress={() => navigation.navigate(PublishTwo)} title="Next" />
-                    <Text style={styles.text}>
-                        When to Expire
-                    </Text>
-                    <View>
-                        <View>
-                            <Button onPress={showDatepicker} title="Show date picker!" />
-                        </View>
-                        <View>
-                            <Button onPress={showTimepicker} title="Show time picker!" />
-                        </View>
-                        <Text>selected: {date.toLocaleString()}</Text>
-                            <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date}
-                            mode={mode}
-                            is24Hour={true}
-                            onChange={onChangeDate}
-                            />
-                    </View>
-                    {
-                        isLoading && !(message)
-                        ? <View style={styles.btn}>
-                            <ActivityIndicator size="small" color="#ffffff" />
-                        </View>
-                        : <TouchableOpacity onPress={handlePublish} style={styles.btn}>
-                            <Text style={styles.btnText}>Publish</Text>
-                        </TouchableOpacity>
-                    }
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -112,14 +92,31 @@ export default PublishOne;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#ECEEFF',
     },
-    blowAWhistle: { 
+    blowAWhistle: {
         fontFamily: 'WorkSans-Bold', 
-        fontSize: 20, 
+        fontSize: 30, 
         color: '#2C65F6'
+    },
+    nextBtn: {
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 20,
+        color: '#2C65F6',
+        textDecorationLine: 'underline'
+    },
+    pageCounter: {
+        color: '#8CA9F2',
+        fontFamily: 'WorkSans-Medium',
+        fontSize: 16
+    },
+    anonymousSwitch: {
+        transform: [
+            { scaleX: 0.8 },
+            { scaleY: 0.8 }
+        ]
     },
     inputTitle: {
         fontFamily: 'WorkSans-SemiBold',
