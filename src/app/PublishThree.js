@@ -58,7 +58,7 @@ const PublishThree = ({ navigation }) => {
                             </Text>
                         </View>
                         <View style={{ flex: 2 }}>
-                            <TextInput style={styles.choiceInput} placeholder="Your first choice" placeholderTextColor="#9D9D9D" value={option1} onChangeText={updateOption1} />
+                            <TextInput style={styles.choiceInput} placeholder="Your first choice" placeholderTextColor="#9D9D9D" value={option1} onChangeText={updateOption1} autoFocus={true} />
                         </View>
                         <View style={{ flex: 2 }}>
                             <TextInput style={styles.choiceInput} placeholder="Your second choice" placeholderTextColor="#9D9D9D" value={option2} onChangeText={updateOption2} />
