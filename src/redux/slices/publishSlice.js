@@ -19,11 +19,12 @@ const publishSlice = createSlice({
     initialState,
     reducers: {
         setTitleAndBackground: (state, action) => {
+            state.anonymous = action.payload.anonymous;
             state.title = action.payload.title;
-            state.background = action.payload.title;
+            state.background = action.payload.background;
         },
         setContext: (state, action) => {
-            state.context = action.payload.title;
+            state.context = action.payload.context;
         },
         setChoices: (state, action) => {
             state.choices = action.payload.choices;
@@ -47,6 +48,7 @@ const publishSlice = createSlice({
 
 export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime } = publishSlice.actions;
 
+export const selectAnonymous = (state) => state.whistleDraft.anonymous;
 export const selectTitle = (state) => state.whistleDraft.title;
 export const selectBackground = (state) => state.whistleDraft.background;
 export const selectContext = (state) => state.whistleDraft.context;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Button, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
-import { selectAccessToken } from '../redux/slices/authSlice';
+import { selectTitle, selectAnonymous, selectBackground } from '../redux/slices/publishSlice';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PublishTwo from './PublishTwo';
 
