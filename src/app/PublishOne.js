@@ -1,13 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Button, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Button, Dimensions, Switch } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectTitle, selectAnonymous, selectBackground } from '../redux/slices/publishSlice';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import PublishTwo from './PublishTwo';
 
 const PublishOne = ({ navigation }) => {
-    const [title, updateTitle] = React.useState("");
-    const [background, updateBackground] = React.useState("");
+    const storedAnonymous = useSelector(selectAnonymous);
+    const storedTitle = useSelector(selectTitle);
+    const storedBackground = useSelector(selectBackground);
+
+    const [anonymous, updateAnonymous] = React.useState(storedAnonymous);
+    const [title, updateTitle] = React.useState(storedTitle);
+    const [background, updateBackground] = React.useState(storedBackground);
+    const [message, updateMessage] = React.useState("");
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
