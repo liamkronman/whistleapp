@@ -11,10 +11,12 @@ const PublishThree = ({ navigation }) => {
     const [option1, updateOption1] = React.useState("");
     const [option2, updateOption2] = React.useState("");
 
-    if (storedChoices && storedChoices.length >= 2) {
-        updateOption1(storedChoices[0]);
-        updateOption2(storedChoices[1]);
-    }
+    React.useEffect(() => {
+        if (storedChoices && storedChoices.length >= 2) {
+            updateOption1(storedChoices[0]);
+            updateOption2(storedChoices[1]);
+        }
+    }, [])
 
     const handlePreviousPress = () => {
         const info = {
