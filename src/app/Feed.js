@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import axios from "axios";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button, Animated } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Alert, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
-import { selectIsSuccessful } from '../redux/slices/publishSlice';
+import { selectIsSuccessful, resetIsSuccessful } from '../redux/slices/publishSlice';
 import FlipCard from 'react-native-flip-card';
 
 const PollBar = (props) => {
@@ -30,6 +30,7 @@ const PollBar = (props) => {
 const Feed = () => {
     const dispatch = useDispatch();
     const jwtToken = useSelector(selectAccessToken);
+    const isSuccessful = useSelector(selectIsSuccessful);
 
     const [whistles, updateWhistles] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -74,6 +75,13 @@ const Feed = () => {
         })
         .catch(err => console.log(err));
     }, []);
+
+    React.useEffect(() => {
+        if (isSuccessful) {
+            Alert.alert("Success!", "Your whistle has been published!");
+            dispatch(resetIsSuccessful());
+        }
+    }, [isSuccessful])
 
     function getMoreWhistles() {
         let lastWhistleId = whistles[whistles.length - 1].id;
