@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAnonymous, selectTitle, selectBackground, selectContext, selectChoices, selectExpirationDateTime, blowWhistleThunk } from '../redux/slices/publishSlice';
+import { selectAnonymous, selectTitle, selectBackground, selectContext, selectChoices, selectExpirationDateTime, selectErrorMessage, selectIsSuccessful, blowWhistleThunk } from '../redux/slices/publishSlice';
 import { selectUsername } from '../redux/slices/authSlice';
+import Feed from './Feed';
 
 const PreviewWhistle = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -14,10 +15,14 @@ const PreviewWhistle = ({ navigation }) => {
     const context = useSelector(selectContext);
     const choices = useSelector(selectChoices);
     const expirationDateTime = useSelector(selectExpirationDateTime);
+    const errorMessage = useSelector(selectErrorMessage);
+    const isSuccessful = useSelector(selectIsSuccessful);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+    const [isLoading, updateIsLoading] = React.useState(false);
 
     const blowWhistle = () => {
-        dispatch(blowWhistleThunk)
+        updateIsLoading(true);
+        dispatch(blowWhistleThunk);
     }
 
     React.useEffect(() => {
@@ -29,6 +34,16 @@ const PreviewWhistle = ({ navigation }) => {
         }
     }, []);
 
+    React.useEffect(() => {
+        if (isSuccessful) {
+            updateIsLoading(false);
+            for (let i = 0; i < 4; i++) {
+                navigation.pop();
+            }
+            navigation.navigate(Feed);
+        }
+    }, [isSuccessful]);
+
     return (
         <View style={styles.whistleContainer}>
             <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column' }}>
@@ -38,15 +53,20 @@ const PreviewWhistle = ({ navigation }) => {
                     </View>
                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
                         <TouchableOpacity style={styles.publishBtn} onPress={blowWhistle}>
-                            <Text style={styles.publishText}>Post</Text>
+                            {
+                                isLoading && !errorMessage
+                                    ? <ActivityIndicator size="small" color="#fff" />
+                                    : <Text style={styles.publishText}>Post</Text>
+                            }
                         </TouchableOpacity>
                     </View>
                 </View>
+                { errorMessage && <Text style={styles.errorText}>{errorMessage}</Text> }
                 <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Text style={styles.whistleTitle}>{title}</Text>
                 </View>
                 <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                    <Text style={styles.whistleAuthor}>{anonymous ? `Anonymous` : username}: </Text>
+                    <Text style={styles.whistleAuthor}>{anonymous ? "Anonymous" : username}: </Text>
                     <Text style={styles.whistleBackground}>{background}</Text>
                 </View>
                 <View style={{ flex: 4.5}}>
@@ -54,12 +74,12 @@ const PreviewWhistle = ({ navigation }) => {
                 </View>
                 <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.whistleOptionBtn}>
-                        <Text style={styles.whistleOptionText}>{choices[0]}</Text>
+                        <Text style={styles.whistleOptionText}>{choices && choices[0]}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.whistleOptionBtn}>
-                        <Text style={styles.whistleOptionText}>{choices[1]}</Text>
+                        <Text style={styles.whistleOptionText}>{choices && choices[1]}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -134,4 +154,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white'
     },
+    errorText: {
+        color: 'red',
+        fontSize: 20,
+        fontFamily: 'WorkSans-Medium'
+    }
 })

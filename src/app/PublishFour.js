@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, TextInput } from 'react-native'; 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectExpirationDateTime, setExpirationDateTime } from '../redux/slices/publishSlice';
+import { selectExpirationDateTime, setExpirationDateTime, selectIsSuccessful } from '../redux/slices/publishSlice';
 import PreviewWhistle from './PreviewWhistle';
 
 const PublishFour = ({ navigation }) => {
     const dispatch = useDispatch();
     const storedExpirationDate = useSelector(selectExpirationDateTime);
+    const isSuccessful = useSelector(selectIsSuccessful);
 
     const [date, setDate] = React.useState(new Date(storedExpirationDate));
 
@@ -50,7 +51,15 @@ const PublishFour = ({ navigation }) => {
         } else {
             updateShowExpiration(false);
         }
-    }, [days, hours, mins])
+    }, [days, hours, mins]);
+
+    React.useEffect(() => {
+        if (isSuccessful) {
+            updateDays(null);
+            updateHours(null);
+            updateMins(null);
+        }
+    }, [isSuccessful])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>

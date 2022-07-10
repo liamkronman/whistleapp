@@ -12,6 +12,7 @@ const initialState = {
     choices: null,
     expirationDateTime: null,
     errorMessage: null,
+    isSuccessful: false
 };
 
 const publishSlice = createSlice({
@@ -36,17 +37,21 @@ const publishSlice = createSlice({
             state.errorMessage = action.payload.error;
         },
         clearWhistle: (state) => {
+            state.isSuccessful = true;
             state.title = null;
             state.background = null;
             state.context = null;
             state.choices = null;
             state.expirationDateTime = null;
             state.errorMessage = null;
+        },
+        resetIsSuccessful: (state) => {
+            state.isSuccessful = false;
         }
     }
 });
 
-export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime } = publishSlice.actions;
+export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime, clearWhistle, setErrorMessage, resetIsSuccessful } = publishSlice.actions;
 
 export const selectAnonymous = (state) => state.whistleDraft.anonymous;
 export const selectTitle = (state) => state.whistleDraft.title;
@@ -54,6 +59,8 @@ export const selectBackground = (state) => state.whistleDraft.background;
 export const selectContext = (state) => state.whistleDraft.context;
 export const selectChoices = (state) => state.whistleDraft.choices;
 export const selectExpirationDateTime = (state) => state.whistleDraft.expirationDateTime;
+export const selectErrorMessage = (state) => state.whistleDraft.errorMessage;
+export const selectIsSuccessful = (state) => state.whistleDraft.isSuccessful;
 
 export default publishSlice.reducer;
 
@@ -84,6 +91,7 @@ export async function blowWhistleThunk(dispatch, getState) {
         dispatch(clearWhistle());
     })
     .catch(err => {
-        dispatch(setErrorMesssage(err.response.data));
+        console.log(err);
+        dispatch(setErrorMessage(err.response.data));
     });
 }

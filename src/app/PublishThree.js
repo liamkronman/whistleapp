@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, TextInput, Dimensions } from 'react-native'; 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectChoices, setChoices } from '../redux/slices/publishSlice';
+import { selectChoices, setChoices, selectIsSuccessful } from '../redux/slices/publishSlice';
 import PublishFour from './PublishFour';
 
 const PublishThree = ({ navigation }) => {
     const dispatch = useDispatch();
     const storedChoices = useSelector(selectChoices);
+    const isSuccessful = useSelector(selectIsSuccessful);
 
     const [option1, updateOption1] = React.useState("");
     const [option2, updateOption2] = React.useState("");
@@ -16,7 +17,14 @@ const PublishThree = ({ navigation }) => {
             updateOption1(storedChoices[0]);
             updateOption2(storedChoices[1]);
         }
-    }, [])
+    }, []);
+
+    React.useEffect(() => {
+        if (isSuccessful) {
+            updateOption1("");
+            updateOption2("");
+        }
+    }, [isSuccessful]);
 
     const handlePreviousPress = () => {
         const info = {

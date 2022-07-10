@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard, Dimensions, Switch } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTitle, selectAnonymous, selectBackground, setTitleAndBackground } from '../redux/slices/publishSlice';
+import { selectTitle, selectAnonymous, selectBackground, setTitleAndBackground, selectIsSuccessful } from '../redux/slices/publishSlice';
 import PublishTwo from './PublishTwo';
 
 const PublishOne = ({ navigation }) => {
@@ -9,11 +9,11 @@ const PublishOne = ({ navigation }) => {
     const storedAnonymous = useSelector(selectAnonymous);
     const storedTitle = useSelector(selectTitle);
     const storedBackground = useSelector(selectBackground);
+    const isSuccessful = useSelector(selectIsSuccessful);
 
     const [anonymous, updateAnonymous] = React.useState(storedAnonymous);
     const [title, updateTitle] = React.useState(storedTitle);
     const [background, updateBackground] = React.useState(storedBackground);
-    const [message, updateMessage] = React.useState("");
     
     const handleNextPress = () => {
         if (title && background) {
@@ -27,15 +27,18 @@ const PublishOne = ({ navigation }) => {
         }
     }
 
+    React.useEffect(() => {
+        if (isSuccessful) {
+            updateAnonymous(false);
+            updateTitle("");
+            updateBackground("");
+        }
+    }, [isSuccessful])
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
                 <View style={{ width: 353, height: Dimensions.get('window').height - 500, flexDirection: 'column' }}>
-                    {
-                        message
-                        ? <Text style={styles.errorText}>{message}</Text>
-                        : <></>
-                    }
                     <View style={{ flex : 0.7, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                         <View style={{ flex: 4, alignItems: 'flex-start' }}>
                             <Text style={styles.blowAWhistle}>Blow a Whistle!</Text>

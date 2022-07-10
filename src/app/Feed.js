@@ -3,6 +3,7 @@ import axios from "axios";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Button, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
+import { selectIsSuccessful } from '../redux/slices/publishSlice';
 import FlipCard from 'react-native-flip-card';
 
 const PollBar = (props) => {
