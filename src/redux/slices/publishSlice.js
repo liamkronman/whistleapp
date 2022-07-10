@@ -92,7 +92,6 @@ export async function blowWhistleThunk(dispatch, getState) {
         dispatch(clearWhistle());
     })
     .catch(err => {
-        console.log(err);
         dispatch(setErrorMessage(err.response.data));
     });
 }
