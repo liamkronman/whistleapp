@@ -8,15 +8,16 @@ const PublishFour = ({ navigation }) => {
     const dispatch = useDispatch();
     const storedExpirationDate = useSelector(selectExpirationDateTime);
 
-    const [date, setDate] = React.useState(storedExpirationDate);
-    const [days, updateDays] = React.useState(null);
-    const [hours, updateHours] = React.useState(null);
-    const [mins, updateMins] = React.useState(null);
+    const [date, setDate] = React.useState(new Date(storedExpirationDate));
+
+    const [days, updateDays] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24) : null]);
+    const [hours, updateHours] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60 * 60) : null]);
+    const [mins, updateMins] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60) : null]);
     const [showExpiration, updateShowExpiration] = React.useState(false);
 
     const handlePreviousPress = () => {
         const info = {
-            expirationDateTime: date
+            expirationDateTime: date.toString(),
         };
         dispatch(setExpirationDateTime(info));
         navigation.pop();
@@ -25,7 +26,7 @@ const PublishFour = ({ navigation }) => {
     const handlePreviewPress = () => {
         if (date) {
             const info = {
-                expirationDateTime: date
+                expirationDateTime: date.toString()
             };  
             dispatch(setExpirationDateTime(info));
             navigation.navigate(PreviewWhistle);
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
         color: '#2C65F6'
     },
     expirationDate: {
-        fontFamily: 'WorkSans-REgular',
+        fontFamily: 'WorkSans-Regular',
         fontSize: 14,
         color: 'black',
         textAlign: 'center'
