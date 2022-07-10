@@ -37,11 +37,10 @@ const PublishFour = ({ navigation }) => {
             const numDays = parseInt(days);
             const numHours = parseInt(hours);
             const numMins = parseInt(mins);
-            if (numDays && numHours && numMins) {
-                const date = new Date();
-                const offset = date.getTimezoneOffset();
-                let newDate = new Date(date.getTime() + offset*60000);
-                console.log(newDate);
+            if (numDays <= 10 && numDays >= 0 && numHours <= 23 && numHours >= 0 && numMins <= 59 && numMins >= 0) {
+                // current date and adding the numDays, numHours, and numMins
+                const currentDate = new Date();
+                const newDate = new Date(currentDate.getTime() + numDays * 24 * 60 * 60 * 1000 + numHours * 60 * 60 * 1000 + numMins * 60 * 1000);
                 setDate(newDate);
                 updateShowExpiration(true);
             } else {
@@ -102,10 +101,10 @@ const PublishFour = ({ navigation }) => {
                             </View>
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
                         {
                             showExpiration && 
-                            <Text></Text>
+                            <Text style={styles.expirationDate}>Your Whistle will expire on {date.toLocaleDateString()} at {date.toLocaleTimeString()}.</Text>
                         }
                     </View>
                 </View>
@@ -168,5 +167,11 @@ const styles = StyleSheet.create({
         fontFamily: 'WorkSans-Medium',
         fontSize: 16,
         color: '#2C65F6'
+    },
+    expirationDate: {
+        fontFamily: 'WorkSans-REgular',
+        fontSize: 14,
+        color: 'black',
+        textAlign: 'center'
     }
 })
