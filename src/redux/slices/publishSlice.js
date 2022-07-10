@@ -75,6 +75,7 @@ export async function blowWhistleThunk(dispatch, getState) {
 
     axios.post("https://trywhistle.app/api/app/makewhistle", 
         {
+            "anonymous": state.whistleDraft.anonymous,
             "title": state.whistleDraft.title,
             "background": state.whistleDraft.background,
             "context": state.whistleDraft.context,
