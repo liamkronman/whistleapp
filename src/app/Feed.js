@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { selectIsSuccessful, resetIsSuccessful } from '../redux/slices/publishSlice';
 import FlipCard from 'react-native-flip-card';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 
 const PollBar = (props) => {
     const heightAnim = React.useRef(new Animated.Value(0)).current;
@@ -224,9 +225,13 @@ const Feed = () => {
         <View style={styles.container}>
             {
                 isLoading
-                ? <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color="#ffffff" />
-                </View>
+                ? <SkeletonContent
+                    containerStyle={{ flex: 1 }}
+                    animationDirection="horizontalLeft"
+                    layout={[
+                        { width: Dimensions.get('window').width, height: Dimensions.get('window').height - 170, borderRadius: 10 },
+                    ]}
+                    />
                 : <FlatList
                     data={whistles}
                     renderItem={renderWhistle}
