@@ -146,19 +146,19 @@ const Feed = () => {
         console.log(whistle.item)
 
         return (
-            <TouchableOpacity>
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 2, flexDirection: 'column' }}>
-                        <View style={{ flex: 1 }}>
-                            <Text>{whistle.item.title}</Text>
+            <TouchableOpacity style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', height: 90, borderTopWidth: 1, borderTopColor: '#93B9F2' }}>
+                <View style={{ flexDirection: 'row', width: Dimensions.get('window').width - 50, height: 90 }}>
+                    <View style={{ flex: 3, flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                            <Text style={styles.whistleTitle} numberOfLines={1}>{whistle.item.title}</Text>
                         </View>
-                        <View style={{ flex: 1 }}>
-                            <Text>{getExpirationDiff(whistle.item.closeDateTime)}</Text>
+                        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                            <Text style={styles.whistleExpire}>{getExpirationDiff(whistle.item.closeDateTime)}</Text>
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <View style={{ flex: 1 }}>
-                            <Text>{votes}</Text>
+                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                        <View style={{ flex: 1.5, justifyContent: 'center' }}>
+                            <Text style={styles.whistleVotes}>{votes} Votes</Text>
                         </View>
                         <View style={{ flex: 1 }}></View>
                     </View>
@@ -262,6 +262,21 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     backgroundText: {
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 18,
+        color: '#2C65F6',
+    },
+    whistleTitle: {
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 22,
+        color: '#2C65F6',
+    },
+    whistleExpire: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 14,
+        color: '#2C65F6',
+    },
+    whistleVotes: {
         fontFamily: 'WorkSans-SemiBold',
         fontSize: 18,
         color: '#2C65F6',
