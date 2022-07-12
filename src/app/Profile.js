@@ -1,16 +1,48 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, ScrollView, Dimensions, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectUsername, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
+import axios from 'axios';
 
 const Feed = () => {
     const dispatch = useDispatch();
     const username = useSelector(selectUsername);
     const profilePic = useSelector(selectProfilePic);
     const accessToken = useSelector(selectAccessToken);
+
+    const [whistles, updateWhistles] = React.useState([]);
+    const [lastId, updateLastId] = React.useState(null);
+
+    React.useEffect(() => {
+        axios.get("https://trywhistle.app/api/getuserwhistles", {
+            "username": username
+        })
+        .then(resp => {
+            const newWhistles = resp.data.whistles;
+            updateWhistles(newWhistles);
+            updateLastId(newWhistles[newWhistles.length - 1].id);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }, []);
+
+    const getMoreWhistles = () => {
+        axios.get("https://trywhistle.app/api/getuserwhistles", {
+            "username": username
+        })
+        .then(resp => {
+            const newWhistles = resp.data.whistles;
+            updateWhistles(newWhistles => [...whistles, ...newWhistles]);
+            updateLastId(newWhistles[newWhistles.length - 1].id);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     const handleLogout = () => {
         dispatch(setSignOut());
@@ -85,6 +117,14 @@ const Feed = () => {
                         <Text style={styles.backgroundText}>Placeholder Background</Text> 
                     </View>
                 </View>
+                <FlatList 
+                    data={whistles}
+                    renderItem={({item}) => <WhistleItem {...item} />}
+                    onEndReached={() => {
+                        getMoreWhistles();
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    />
             </View>
         </ScrollView>
     )
