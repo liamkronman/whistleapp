@@ -80,8 +80,9 @@ const Feed = () => {
         // return a string that represents the time since expiration in largest denomination (years, months, days, hours, minutes)
         const now = new Date();
         const expDate = new Date(exp);
-        if (expDate < now) {
-            const diff = now - expDate;
+        
+        if (expDate > now) {
+            const diff = expDate - now;
             const diffSeconds = diff / 1000;
             const diffMinutes = diff / (60 * 1000);
             const diffHours = diff / (60 * 60 * 1000);
@@ -101,7 +102,7 @@ const Feed = () => {
             }
             return "0 seconds left"; 
         } else {
-            const diff = expDate - now;
+            const diff = now - expDate;
             const diffSeconds = diff / 1000;
             const diffMinutes = diff / (60 * 1000);
             const diffHours = diff / (60 * 60 * 1000);
@@ -142,6 +143,8 @@ const Feed = () => {
             votes += whistle.item.options[keys[i]];
         }
 
+        console.log(whistle.item)
+
         return (
             <TouchableOpacity>
                 <View style={{ flexDirection: 'row' }}>
@@ -150,7 +153,7 @@ const Feed = () => {
                             <Text>{whistle.item.title}</Text>
                         </View>
                         <View style={{ flex: 1 }}>
-                            <Text>{getExpirationDiff(whistle.item.expirationDateTime)}</Text>
+                            <Text>{getExpirationDiff(whistle.item.closeDateTime)}</Text>
                         </View>
                     </View>
                     <View style={{ flex: 1 }}>
