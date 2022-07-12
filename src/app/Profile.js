@@ -17,7 +17,7 @@ const Feed = () => {
     const [lastId, updateLastId] = React.useState(null);
 
     React.useEffect(() => {
-        axios.get("https://trywhistle.app/api/getuserwhistles", {
+        axios.post("https://trywhistle.app/api/user/getuserwhistles", {
             "username": username
         })
         .then(resp => {
@@ -31,13 +31,16 @@ const Feed = () => {
     }, []);
 
     const getMoreWhistles = () => {
-        axios.get("https://trywhistle.app/api/getuserwhistles", {
-            "username": username
+        axios.post("https://trywhistle.app/api/user/getuserwhistles", {
+            "username": username,
+            "lastId": lastId
         })
         .then(resp => {
             const newWhistles = resp.data.whistles;
-            updateWhistles(newWhistles => [...whistles, ...newWhistles]);
-            updateLastId(newWhistles[newWhistles.length - 1].id);
+            if (newWhistles.length > 0) {
+                updateWhistles(newWhistles => [...whistles, ...newWhistles]);
+                updateLastId(newWhistles[newWhistles.length - 1].id);
+            }
         })
         .catch(err => {
             console.log(err);
@@ -73,60 +76,142 @@ const Feed = () => {
         })
     }
 
-    return (
-        <ScrollView>
-            {/* <TouchableOpacity onPress={handleUpdateProfilePic} style={profilePic ? styles.profileSel : styles.profileSelNoImage}>
-                {profilePic && <ImageBackground style={styles.backgroundImage} imageStyle={{borderRadius: 20}} source={{uri: profilePic.uri}} />}
-                <View style={styles.plusSign}><Text style={styles.plus}>+</Text></View>
-            </TouchableOpacity> */}
-            <View style={styles.container}>
-                <View style={{ flexDirection: 'column', height: 380, justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <View style={{ flex: 2.5, justifyContent: 'flex-end' }}>
-                        <User width={120} height={120} color={"#97AAEC"} />
-                    </View>
-                    <View style={{ flex: 0.6 }}>
-                        <Text style={styles.username}>@{username}</Text>
-                    </View>
-                    <View style={{ flex: 0.4, justifyContent: 'flex-start' }}>
-                        <Text style={styles.lastActive}>Active</Text>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
-                        <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-                            <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                <Text style={styles.followCount}>0</Text>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text style={styles.followText}>followers</Text>
-                            </View>
+    function getExpirationDiff(exp) {
+        // return a string that represents the time since expiration in largest denomination (years, months, days, hours, minutes)
+        const now = new Date();
+        const expDate = new Date(exp);
+        if (expDate < now) {
+            const diff = now - expDate;
+            const diffSeconds = diff / 1000;
+            const diffMinutes = diff / (60 * 1000);
+            const diffHours = diff / (60 * 60 * 1000);
+            const diffDays = diff / (24 * 60 * 60 * 1000);
+
+            if (diffDays > 1) {
+                return Math.floor(diffDays) + " days left";
+            }
+            if (diffHours > 1) {
+                return Math.floor(diffHours) + " hours left";
+            }
+            if (diffMinutes > 1) {
+                return Math.floor(diffMinutes) + " minutes left";
+            }
+            if (diffSeconds > 1) {
+                return Math.floor(diffSeconds) + " seconds left";
+            }
+            return "0 seconds left"; 
+        } else {
+            const diff = expDate - now;
+            const diffSeconds = diff / 1000;
+            const diffMinutes = diff / (60 * 1000);
+            const diffHours = diff / (60 * 60 * 1000);
+            const diffDays = diff / (24 * 60 * 60 * 1000);
+            const diffWeeks = diff / (7 * 24 * 60 * 60 * 1000);
+            const diffMonths = diff / (30 * 24 * 60 * 60 * 1000);
+            const diffYears = diff / (365 * 24 * 60 * 60 * 1000);
+
+            if (diffYears > 1) {
+                return "Expired " + Math.floor(diffYears) + " years ago";
+            }
+            if (diffMonths > 1) {
+                return "Expired " + Math.floor(diffMonths) + " months ago";
+            }
+            if (diffWeeks > 1) {
+                return "Expired " + Math.floor(diffWeeks) + " weeks ago";
+            }
+            if (diffDays > 1) {
+                return "Expired " + Math.floor(diffDays) + " days ago";
+            }
+            if (diffHours > 1) {
+                return "Expired " + Math.floor(diffHours) + " hours ago";
+            }
+            if (diffMinutes > 1) {
+                return "Expired " + Math.floor(diffMinutes) + " minutes ago";
+            }
+            if (diffSeconds > 1) {
+                return "Expired " + Math.floor(diffSeconds) + " seconds ago";
+            }
+            return "Expired 0 seconds ago"; 
+        }
+    }
+
+    const renderWhistle = ( whistle ) => {
+        const keys = Object.keys(whistle.item.options);
+        let votes = 0;
+        for (let i = 0; i < keys.length; i++) {
+            votes += whistle.item.options[keys[i]];
+        }
+
+        return (
+            <TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 2, flexDirection: 'column' }}>
+                        <View style={{ flex: 1 }}>
+                            <Text>{whistle.item.title}</Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
-                            <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                <Text style={styles.followCount}>0</Text>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text style={styles.followText}>following</Text>
-                            </View>
+                        <View style={{ flex: 1 }}>
+                            <Text>{getExpirationDiff(whistle.item.expirationDateTime)}</Text>
                         </View>
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-                            <Text style={styles.logoutText}>Log Out</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 0.5, justifyContent: 'center' }}>
-                        <Text style={styles.backgroundText}>Placeholder Background</Text> 
+                    <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1 }}>
+                            <Text>{votes}</Text>
+                        </View>
+                        <View style={{ flex: 1 }}></View>
                     </View>
                 </View>
-                <FlatList 
-                    data={whistles}
-                    renderItem={({item}) => <WhistleItem {...item} />}
-                    onEndReached={() => {
-                        getMoreWhistles();
-                    }}
-                    showsVerticalScrollIndicator={false}
-                    />
-            </View>
-        </ScrollView>
+            </TouchableOpacity>
+        )
+    }
+
+    return (
+        <View style={styles.container}>
+            <FlatList
+                ListHeaderComponent={() => (
+                    <View style={{ flexDirection: 'column', height: 380, justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <View style={{ flex: 2.5, justifyContent: 'flex-end' }}>
+                            <User width={120} height={120} color={"#97AAEC"} />
+                        </View>
+                        <View style={{ flex: 0.6 }}>
+                            <Text style={styles.username}>@{username}</Text>
+                        </View>
+                        <View style={{ flex: 0.4, justifyContent: 'flex-start' }}>
+                            <Text style={styles.lastActive}>Active</Text>
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
+                            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+                                <View style={{ flex: 2, justifyContent: 'flex-end' }}>
+                                    <Text style={styles.followCount}>0</Text>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <Text style={styles.followText}>followers</Text>
+                                </View>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+                                <View style={{ flex: 2, justifyContent: 'flex-end' }}>
+                                    <Text style={styles.followCount}>0</Text>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <Text style={styles.followText}>following</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+                                <Text style={styles.logoutText}>Log Out</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 0.5, justifyContent: 'center' }}>
+                            <Text style={styles.backgroundText}>Placeholder Background</Text> 
+                        </View>
+                    </View>
+                )}
+                data={whistles}
+                renderItem={renderWhistle}
+                onEndReached={getMoreWhistles}
+                showsVerticalScrollIndicator={false}
+                />
+        </View>
     )
 }
 

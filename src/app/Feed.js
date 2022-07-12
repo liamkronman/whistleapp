@@ -95,7 +95,6 @@ const Feed = () => {
 
     const renderWhistle = ( whistle ) => {
         const keys = Object.keys(whistle.item.options);
-        const colors = ['#600080', '#9900cc', '#c61aff', '#d966ff', '#ecb3ff'];
         let totalVotes = 0;
 
         for (let i = 0; i < keys.length; i++) {
