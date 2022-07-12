@@ -15,6 +15,7 @@ const Feed = () => {
 
     const [whistles, updateWhistles] = React.useState([]);
     const [lastId, updateLastId] = React.useState(null);
+    const [numWhistles, updateNumWhistles] = React.useState(0);
 
     React.useEffect(() => {
         axios.post("https://trywhistle.app/api/user/getuserwhistles", {
@@ -24,6 +25,7 @@ const Feed = () => {
             const newWhistles = resp.data.whistles;
             updateWhistles(newWhistles);
             updateLastId(newWhistles[newWhistles.length - 1].id);
+            updateNumWhistles(newWhistles.length);
         })
         .catch(err => {
             console.log(err);
@@ -40,6 +42,7 @@ const Feed = () => {
             if (newWhistles.length > 0) {
                 updateWhistles(newWhistles => [...whistles, ...newWhistles]);
                 updateLastId(newWhistles[newWhistles.length - 1].id);
+                updateNumWhistles(numWhistles + newWhistles.length);
             }
         })
         .catch(err => {
@@ -143,8 +146,6 @@ const Feed = () => {
             votes += whistle.item.options[keys[i]];
         }
 
-        console.log(whistle.item)
-
         return (
             <TouchableOpacity style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', height: 90, borderTopWidth: 1, borderTopColor: '#93B9F2' }}>
                 <View style={{ flexDirection: 'row', width: Dimensions.get('window').width - 50, height: 90 }}>
@@ -204,8 +205,12 @@ const Feed = () => {
                                 <Text style={styles.logoutText}>Log Out</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 0.5, justifyContent: 'center' }}>
+                        {/* <View style={{ flex: 0.5, justifyContent: 'center' }}>
                             <Text style={styles.backgroundText}>Placeholder Background</Text> 
+                        </View> */}
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#93B9F2' }}>
+                            <Text style={styles.whistlesHeader}>Whistles </Text>
+                            <Text style={styles.whistlesHeaderNum}>({numWhistles})</Text>
                         </View>
                     </View>
                 )}
@@ -279,6 +284,16 @@ const styles = StyleSheet.create({
     whistleVotes: {
         fontFamily: 'WorkSans-SemiBold',
         fontSize: 18,
+        color: '#2C65F6',
+    },
+    whistlesHeader: {
+        fontFamily: 'WorkSans-Bold',
+        fontSize: 24,
+        color: '#2C65F6',
+    },
+    whistlesHeaderNum: {
+        fontFamily: 'WorkSans-Medium',
+        fontSize: 24,
         color: '#2C65F6',
     },
     profileSel: {
