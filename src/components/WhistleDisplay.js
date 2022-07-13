@@ -68,47 +68,66 @@ const WhistleDisplay = (props) => {
                     <View style={{ flex: 4.5}}>
                         <Text style={styles.whistleContext}>{whistle.context}</Text>
                     </View>
-                    <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
-                            axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                whistleId: whistle.id,
-                                optionSelected: keys[0]
-                            }, {
-                                headers: {
-                                    "x-access-token": jwtToken,
-                                }
-                            })
-                            .then(resp => {
-                                whistle.options[keys[0]] += 1;
-                                setBackside(true);
-                            })
-                            .catch(err => console.log(err));
-                        }}>
-                            <Text style={styles.whistleOptionText}>{keys[0]}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
-                            axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                whistleId: whistle.id,
-                                optionSelected: keys[1]
-                            }, {
-                                headers: {
-                                    "x-access-token": jwtToken,
-                                }
-                            })
-                            .then(resp => {
-                                whistle.options[keys[1]] += 1;
-                                setBackside(true);
-                            })
-                            .catch(err => console.log(err));
-                        }}>
-                            <Text style={styles.whistleOptionText}>{keys[1]}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 22, color:'#2C65F6' }}>{totalVotes} Votes</Text>
-                    </View>
+                    {
+                        isOwner || hasExpired || hasVoted
+                        ? <View style={{ flex: 2.7, flexDirection: 'column' }}>
+                            <View style={{ flex: 1, alignItems: 'center' }}>
+                                <TouchableOpacity onPress={() => {
+                                        if (totalVotes > 0) {
+                                            setBackside(true)
+                                        }
+                                    }} style={{ backgroundColor: 'white', borderColor: '#5B57FA', borderWidth: 1, width: 347, height: 62, borderRadius: 6, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 20, color: '#5B57FA' }}>Show Results</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'center' }}>
+                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 30, color: '#2C65F6' }}>{totalVotes} Votes</Text>
+                            </View>
+                        </View>
+                        : <View style={{ flex: 2.7, flexDirection: 'column' }}>
+                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
+                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                        whistleId: whistle.id,
+                                        optionSelected: keys[0]
+                                    }, {
+                                        headers: {
+                                            "x-access-token": jwtToken,
+                                        }
+                                    })
+                                    .then(resp => {
+                                        whistle.options[keys[0]] += 1;
+                                        setBackside(true);
+                                    })
+                                    .catch(err => console.log(err));
+                                }}>
+                                    <Text style={styles.whistleOptionText}>{keys[0]}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
+                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
+                                        whistleId: whistle.id,
+                                        optionSelected: keys[1]
+                                    }, {
+                                        headers: {
+                                            "x-access-token": jwtToken,
+                                        }
+                                    })
+                                    .then(resp => {
+                                        whistle.options[keys[1]] += 1;
+                                        setBackside(true);
+                                    })
+                                    .catch(err => console.log(err));
+                                }}>
+                                    <Text style={styles.whistleOptionText}>{keys[1]}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 22, color:'#2C65F6' }}>{totalVotes} Votes</Text>
+                            </View>
+                        </View>
+                    }
                     <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 20, color: '#4D7AEF', textAlign: 'center' }}>Time left </Text>
                         {
@@ -222,6 +241,19 @@ const styles = StyleSheet.create({
     percentage: {
         fontFamily: 'WorkSans-Medium',
         fontSize: 16,
+        color: '#2C65F6'
+    },
+    pollBar: {
+        width: 70,
+        height: 350,
+        backgroundColor: '#5B57FA',
+        borderRadius: 10,
+    },
+    pollBarText: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        fontFamily: 'WorkSans-SemiBold',
         color: '#2C65F6'
     },
 })
