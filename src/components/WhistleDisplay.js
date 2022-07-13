@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from '../redux/slices/authSlice';
 import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
@@ -7,8 +9,11 @@ import axios from 'axios';
 const WhistleDisplay = (props) => {
     const whistle = props.whistle;
     const isOwner = props.isOwner;
+    const jwtToken = useSelector(selectAccessToken);
     const [backside, setBackside] = React.useState(false);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
+    const [hasVoted, setHasVoted] = React.useState(false);
+    const hasExpired = currentDateTime > new Date(whistle.closeDateTime);
     const keys = Object.keys(whistle.options);
     let totalVotes = 0;
     
@@ -17,15 +22,30 @@ const WhistleDisplay = (props) => {
     }
 
     React.useEffect(() => {
-        console.log(whistle);
+        if (!isOwner && !hasExpired) {
+            axios.post("https://trywhistle.app/api/user/checkhasvoted", {
+                "whistleId": whistle.id,
+            }, {
+                headers: {
+                    "x-access-token": jwtToken
+                }
+            })
+            .then(resp => {
+                if (resp.data.hasVoted) {
+                    setHasVoted(true);
+                }
+            })
+        }
     }, []);
 
     React.useEffect(() => {
-        const handle = setInterval(() => {
-            setCurrentDateTime(new Date());
-        }, 1000);
-        return () => {
-            clearInterval(handle);
+        if (!hasExpired) {
+            const handle = setInterval(() => {
+                setCurrentDateTime(new Date());
+            }, 1000);
+            return () => {
+                clearInterval(handle);
+            }
         }
     }, []);
 
@@ -91,7 +111,11 @@ const WhistleDisplay = (props) => {
                     </View>
                     <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 20, color: '#4D7AEF', textAlign: 'center' }}>Time left </Text>
-                        <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 18, color: '#E21313', textAlign: 'center' }}>{Math.floor((new Date(whistle.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hrs : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} mins : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} secs</Text>
+                        {
+                            hasExpired
+                            ? <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 18, color: '#E21313', textAlign: 'center' }}>Expired</Text>
+                            : <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 18, color: '#E21313', textAlign: 'center' }}>{Math.floor((new Date(whistle.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hrs : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} mins : {Math.floor(((new Date(whistle.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} secs</Text>
+                        }
                     </View>
                 </View>
             </View>
