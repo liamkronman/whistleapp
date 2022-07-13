@@ -5,7 +5,7 @@ import { Home, Plus, User } from "react-native-feather";
 
 import Feed from '../app/Feed';
 import PublishNavigator from './publish-navigator';
-import Profile from '../app/Profile';
+import ProfileNavigator from './profile-navigator';
 
 const AppTabs = createBottomTabNavigator();
 
@@ -44,7 +44,7 @@ const AppNavigator = () => {
             <AppTabs.Screen name="Publish" component={PublishNavigator} options={{
                 tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
             }} />
-            <AppTabs.Screen name="Profile" component={Profile} options={{
+            <AppTabs.Screen name="Profile" component={ProfileNavigator} options={{
                 tabBarIcon: (tabInfo) => <User width={32} height={32} color={tabInfo.color} />
             }} />
         </AppTabs.Navigator>

@@ -225,13 +225,7 @@ const Feed = () => {
         <View style={styles.container}>
             {
                 isLoading
-                ? <SkeletonContent
-                    containerStyle={{ flex: 1 }}
-                    animationDirection="horizontalLeft"
-                    layout={[
-                        { width: Dimensions.get('window').width, height: Dimensions.get('window').height - 170, borderRadius: 10 },
-                    ]}
-                    />
+                ? <ActivityIndicator size="large" color="#2C65F6" />
                 : <FlatList
                     data={whistles}
                     renderItem={renderWhistle}
