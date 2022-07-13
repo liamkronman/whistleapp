@@ -1,32 +1,12 @@
 import React, { useEffect } from 'react';
 import axios from "axios";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Alert, Animated } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { selectIsSuccessful, resetIsSuccessful } from '../redux/slices/publishSlice';
 import FlipCard from 'react-native-flip-card';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-
-const PollBar = (props) => {
-    const heightAnim = React.useRef(new Animated.Value(0)).current;
-
-    React.useEffect(() => {
-        Animated.timing(
-            heightAnim,
-            {
-                toValue: 350 * props.percent,
-                duration: 1000,
-                useNativeDriver: false,
-            }
-        ).start();
-    }, [heightAnim])
-
-    return (
-        <Animated.View style={{...props.style, height: heightAnim}}>
-            {props.children}
-        </Animated.View>
-    )
-}
+import PollBar from '../components/PollBar';
 
 const Feed = () => {
     const dispatch = useDispatch();

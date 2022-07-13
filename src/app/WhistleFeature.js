@@ -4,12 +4,13 @@ import { StyleSheet } from "react-native";
 import WhistleDisplay from "../components/WhistleDisplay";
 
 const WhistleFeature = ({ route, navigation }) => {
-    const focusedWhistle = route.params;
+    console.log(route.params);
+    const { focusedWhistle, isOwner } = route.params;
     
     return (
         <>
             <ChevronLeft onPress={() => navigation.pop()} style={styles.backBtn} width={34} height={34} />
-            <WhistleDisplay whistle={focusedWhistle} />
+            <WhistleDisplay whistle={focusedWhistle} isOwner={isOwner} />
         </>
     )
 }
