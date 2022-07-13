@@ -148,7 +148,7 @@ const Profile = ({ navigation }) => {
         }
 
         return (
-            <TouchableOpacity onPress={() => navigation.navigate(WhistleFeature, { focusedWhistle: whistle.item, isOwner: true })} style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', height: 90, borderTopWidth: 1, borderTopColor: '#93B9F2' }}>
+            <TouchableOpacity onPress={() => navigation.navigate('WhistleFeature', { focusedWhistle: whistle.item, isOwner: true })} style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', height: 90, borderTopWidth: 1, borderTopColor: '#93B9F2' }}>
                 <View style={{ flexDirection: 'row', width: Dimensions.get('window').width - 50, height: 90 }}>
                     <View style={{ flex: 3, flexDirection: 'column', alignItems: 'flex-start' }}>
                         <View style={{ flex: 1.5, justifyContent: 'center' }}>

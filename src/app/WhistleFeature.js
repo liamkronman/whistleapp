@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import WhistleDisplay from "../components/WhistleDisplay";
 
 const WhistleFeature = ({ route, navigation }) => {
+    console.log(route);
     console.log(route.params);
     const { focusedWhistle, isOwner } = route.params;
     
