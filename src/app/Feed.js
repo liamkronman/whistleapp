@@ -178,7 +178,7 @@ const Feed = ({ navigation }) => {
                                 <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
                             </View>
                             <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                                <Text style={styles.whistleAuthor}>{whistle.item.author}</Text>
+                                <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.author})}>{whistle.item.author}</Text>
                             </View>
                             <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center' }}>
                                 <View style={styles.pollBarContainer}>

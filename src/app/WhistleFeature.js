@@ -8,7 +8,7 @@ const WhistleFeature = ({ route, navigation }) => {
     
     return (
         <View style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height - 170, backgroundColor: '#ECEEFF' }}>
-            <WhistleDisplay whistle={focusedWhistle} isOwner={isOwner} />
+            <WhistleDisplay whistle={focusedWhistle} isOwner={isOwner} navigation={navigation} />
             <ChevronLeft onPress={() => navigation.pop()} style={styles.backBtn} width={34} height={34}  />
         </View>
     )
