@@ -17,6 +17,7 @@ const Feed = ({ navigation }) => {
     const [isLoading, setIsLoading] = React.useState(true);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [backSides, setBackSides] = React.useState([]);
+    const [topReasons, setTopReasons] = React.useState([]);
 
     useEffect(() => {
         const handle = setInterval(() => {
@@ -81,6 +82,20 @@ const Feed = ({ navigation }) => {
         for (let i = 0; i < keys.length; i++) {
             totalVotes += whistle.item.options[keys[i]];
         }
+
+        axios.post("https://trywhistle.app/api/app/getreasons", {
+            "whistleId": whistle.id,
+        }, {
+            headers: {
+                "x-access-token": jwtToken
+            }
+        })
+        .then(resp => {
+            setTopReasons((topReasons) => [...topReasons, resp.data])
+        })
+        .catch(err => {
+            console.log(err);
+        })
 
         return (
             <FlipCard
@@ -178,6 +193,22 @@ const Feed = ({ navigation }) => {
                                             {keys[0]}
                                         </Text>
                                     </View>
+                                    <View style={{ flex: 1 }}>
+                                        {
+                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 0
+                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                                    <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
+                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[0]][0].comment}</Text>
+                                                </View>
+                                        }
+                                        {
+                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 1
+                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
+                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[0]][1].comment}</Text>
+                                            </View>
+                                        }
+                                    </View>
                                 </View>
                                 <View style={styles.pollBarContainer}>
                                     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -191,9 +222,24 @@ const Feed = ({ navigation }) => {
                                             {keys[1]}
                                         </Text>
                                     </View>
+                                    <View style={{ flex: 1 }}>
+                                        {
+                                            topReasons.length > 0 && topReasons[whistle.index][keys[1]] && topReasons[whistle.index][keys[1]].length > 0
+                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                                    <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
+                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[1]][0].comment}</Text>
+                                                </View>
+                                        }
+                                        {
+                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 1
+                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
+                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[1]][1].comment}</Text>
+                                            </View>
+                                        }
+                                    </View>
                                 </View>
                             </View>
-                            <View style={{ flex: 1 }}></View>
                         </View>
                     </View>
                 </View>

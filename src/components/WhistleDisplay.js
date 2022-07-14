@@ -13,6 +13,7 @@ const WhistleDisplay = (props) => {
     const [backside, setBackside] = React.useState(false);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [hasVoted, setHasVoted] = React.useState(false);
+    const [topReasons, setTopReasons] = React.useState([]);
     const hasExpired = currentDateTime > new Date(whistle.closeDateTime);
     const keys = Object.keys(whistle.options);
     let totalVotes = 0;
@@ -32,15 +33,11 @@ const WhistleDisplay = (props) => {
                 }
             })
             .then(resp => {
-                console.log(resp);
                 if (resp.data.hasVoted) {
                     setHasVoted(true);
                 }
             })
         }
-    }, []);
-
-    React.useEffect(() => {
         if (!hasExpired) {
             const handle = setInterval(() => {
                 setCurrentDateTime(new Date());
@@ -49,6 +46,22 @@ const WhistleDisplay = (props) => {
                 clearInterval(handle);
             }
         }
+    }, []);
+
+    React.useEffect(() => {
+        axios.post("https://trywhistle.app/api/app/getreasons", {
+            "whistleId": whistle.id,
+        }, {
+            headers: {
+                "x-access-token": jwtToken
+            }
+        })
+        .then(resp => {
+            setTopReasons((topReasons) => [...topReasons, resp.data])
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }, []);
 
     return (
@@ -161,6 +174,22 @@ const WhistleDisplay = (props) => {
                                     {keys[0]}
                                 </Text>
                             </View>
+                            <View style={{ flex: 1 }}>
+                                {
+                                topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 0
+                                && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
+                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][0].comment}</Text>
+                                    </View>
+                                }
+                                {
+                                    topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
+                                    && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
+                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][1].comment}</Text>
+                                    </View>
+                                }
+                            </View>
                         </View>
                         <View style={styles.pollBarContainer}>
                             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -174,9 +203,24 @@ const WhistleDisplay = (props) => {
                                     {keys[1]}
                                 </Text>
                             </View>
+                            <View style={{ flex: 1 }}>
+                                {
+                                topReasons.length > 0 && topReasons[0][keys[1]] && topReasons[0][keys[1]].length > 0
+                                && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
+                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[1]][0].comment}</Text>
+                                    </View>
+                                }
+                                {
+                                    topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
+                                    && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
+                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[1]][1].comment}</Text>
+                                    </View>
+                                }
+                            </View>
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}></View>
                 </View>
             </View>
         </FlipCard>
