@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Pressable , ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
+import Modal from 'react-native-modal';
 
 const WhistleDisplay = (props) => {
     const whistle = props.whistle;
@@ -14,6 +15,24 @@ const WhistleDisplay = (props) => {
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [hasVoted, setHasVoted] = React.useState(false);
     const [topReasons, setTopReasons] = React.useState([]);
+    const [isComment1Visible, setIsComment1Visible] = React.useState(false);
+    const [scrollOffset1, setScrollOffset] = React.useState(null);
+    
+    const commentModal1Ref = React.createRef();
+    const close1 = () => {
+        setIsComment1Visible(false);
+    }
+    
+    const handleScrollTo1 = p => {
+        if (commentModal1Ref.current) {
+            commentModal1Ref.current.scrollTo(p);
+        }
+    }
+
+    const handleOnScroll1 = event => {
+        setScrollOffset(event.nativeEvent.contentOffset.y);
+    }
+
     const hasExpired = currentDateTime > new Date(whistle.closeDateTime);
     const keys = Object.keys(whistle.options);
     let totalVotes = 0;
@@ -162,7 +181,7 @@ const WhistleDisplay = (props) => {
                         <Text style={styles.whistleAuthor}>{whistle.author}</Text>
                     </View>
                     <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center' }}>
-                        <View style={styles.pollBarContainer}>
+                        <Pressable onPress={() => setIsComment1Visible(true)} style={styles.pollBarContainer}>
                             <View style={{ flex: 1, justifyContent: 'center' }}>
                                 <Text style={styles.percentage}>{whistle.options[keys[0]]} Votes ({~~(whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
                             </View>
@@ -176,11 +195,11 @@ const WhistleDisplay = (props) => {
                             </View>
                             <View style={{ flex: 1 }}>
                                 {
-                                topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 0
-                                && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                        <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
-                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][0].comment}</Text>
-                                    </View>
+                                    topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 0
+                                    && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+                                            <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
+                                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][0].comment}</Text>
+                                        </View>
                                 }
                                 {
                                     topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
@@ -190,7 +209,7 @@ const WhistleDisplay = (props) => {
                                     </View>
                                 }
                             </View>
-                        </View>
+                        </Pressable>
                         <View style={styles.pollBarContainer}>
                             <View style={{ flex: 1, justifyContent: 'center' }}>
                                 <Text style={styles.percentage}>{whistle.options[keys[1]]} Votes ({~~(whistle.options[keys[1]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
@@ -221,6 +240,26 @@ const WhistleDisplay = (props) => {
                             </View>
                         </View>
                     </View>
+                </View>
+                <View>
+                    <Modal
+                        onSwipeComplete={close1}
+                        swipeDirection={['down']}
+                        scrollTo={handleScrollTo1}
+                        scrollOffset={scrollOffset1}
+                        scrollOffsetMax={100}
+                        propagateSwipe={true}
+                        style={styles.modal}
+                        isVisible={isComment1Visible}>
+                        <View style={styles.scrollableModal}>
+                            <ScrollView 
+                                ref={commentModal1Ref}
+                                onScroll={handleOnScroll1}
+                                scrollEventThrottle={16}>
+                                
+                            </ScrollView>
+                        </View>
+                    </Modal>
                 </View>
             </View>
         </FlipCard>
@@ -302,4 +341,15 @@ const styles = StyleSheet.create({
         fontFamily: 'WorkSans-SemiBold',
         color: '#2C65F6'
     },
-})
+    modal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    scrollableModal: {
+        height: 550,
+        backgroundColor: '#FEFEFE',
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24
+    },
+    
+});
