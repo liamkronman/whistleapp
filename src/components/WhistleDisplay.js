@@ -19,7 +19,8 @@ const WhistleDisplay = (props) => {
     const [topReasons, setTopReasons] = React.useState([]);
     const [isComment1Visible, setIsComment1Visible] = React.useState(false);
     const [scrollOffset1, setScrollOffset1] = React.useState(null);
-    
+    const [comments1, setComments1] = React.useState([]);
+
     const commentModal1Ref = React.createRef();
     const close1 = () => {
         setIsComment1Visible(false);
@@ -84,6 +85,26 @@ const WhistleDisplay = (props) => {
             console.log(err);
         })
     }, []);
+
+    React.useEffect(() => {
+        if (isComment1Visible && comments1.length === 0) {
+            axios.post("https://trywhistle.app/api/app/getcomments", {
+                "whistleId": whistle.id,
+                "associatedSide": keys[0]
+            }, {
+                headers: {
+                    "x-access-token": jwtToken
+                }
+            })
+            .then(resp => {
+                console.log(resp)
+                setComments1((comments1) => [...comments1, resp.data])
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
+    }, [isComment1Visible]);
 
     return (
         <FlipCard
@@ -259,7 +280,22 @@ const WhistleDisplay = (props) => {
                                 ref={commentModal1Ref}
                                 onScroll={handleOnScroll1}
                                 scrollEventThrottle={16}>
-                                
+                                <View style={{ width: 370, flexDirection: 'column', marginTop: 15 }}>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ fontFamily: 'WorkSans-Bold', fontSize: 24, color: '#2C65F6' }}>{keys[0]} </Text>
+                                        <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 24, color: '#2C65F6' }}>({comments1.length})</Text>
+                                    </View>
+                                    {
+                                        comments1.map((comment, index) => {
+                                            return (
+                                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>{index + 1}. {comment.comment}</Text>
+                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>{comment.votes}</Text>
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </View>
                             </ScrollView>
                         </View>
                     </Modal>

@@ -63,7 +63,7 @@ const Feed = ({ navigation }) => {
             Alert.alert("Success!", "Your whistle has been published!");
             dispatch(resetIsSuccessful());
         }
-    }, [isSuccessful])
+    }, [isSuccessful]);
 
     function getMoreWhistles() {
         let lastWhistleId = whistles[whistles.length - 1].id;
