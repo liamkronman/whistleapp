@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, View, Text } from 'react-native';
 import { Home, Plus, User } from "react-native-feather";
 
-import Feed from '../app/Feed';
+import FeedNavigator from './feed-navigator';
 import PublishNavigator from './publish-navigator';
 import ProfileNavigator from './profile-navigator';
 
@@ -27,7 +27,7 @@ function Header() {
 
 const AppNavigator = () => {
     return (
-        <AppTabs.Navigator initialRouteName='Feed' screenOptions={{ 
+        <AppTabs.Navigator initialRouteName='FeedNavigator' screenOptions={{ 
             headerStyle: {
                 backgroundColor: '#ECEEFF'
             },
@@ -38,13 +38,13 @@ const AppNavigator = () => {
             tabBarInactiveTintColor: '#97AAEC',
             headerTitle: (props) => <Header {...props} />
         }}>
-            <AppTabs.Screen name="Feed" component={Feed} options={{
+            <AppTabs.Screen name="FeedNavigator" component={FeedNavigator} options={{
                 tabBarIcon: (tabInfo) => <Home width={32} height={32} color={tabInfo.color} />
             }} />
-            <AppTabs.Screen name="Publish" component={PublishNavigator} options={{
+            <AppTabs.Screen name="PublishNavigator" component={PublishNavigator} options={{
                 tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
             }} />
-            <AppTabs.Screen name="Profile" component={ProfileNavigator} options={{
+            <AppTabs.Screen name="ProfileNavigator" component={ProfileNavigator} options={{
                 tabBarIcon: (tabInfo) => <User width={32} height={32} color={tabInfo.color} />
             }} />
         </AppTabs.Navigator>

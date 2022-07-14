@@ -23,6 +23,7 @@ const WhistleDisplay = (props) => {
 
     React.useEffect(() => {
         if (!isOwner && !hasExpired) {
+            console.log(whistle.id)
             axios.post("https://trywhistle.app/api/user/checkhasvoted", {
                 "whistleId": whistle.id,
             }, {
@@ -31,6 +32,7 @@ const WhistleDisplay = (props) => {
                 }
             })
             .then(resp => {
+                console.log(resp);
                 if (resp.data.hasVoted) {
                     setHasVoted(true);
                 }

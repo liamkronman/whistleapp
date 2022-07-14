@@ -8,7 +8,7 @@ import FlipCard from 'react-native-flip-card';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import PollBar from '../components/PollBar';
 
-const Feed = () => {
+const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
     const jwtToken = useSelector(selectAccessToken);
     const isSuccessful = useSelector(selectIsSuccessful);
@@ -96,7 +96,7 @@ const Feed = () => {
                                 <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
                             </View>
                             <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                                <Text style={styles.whistleAuthor}>{whistle.item.author}: </Text>
+                                <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.item.author})}>{whistle.item.author}: </Text>
                                 <Text style={styles.whistleBackground}>{whistle.item.background}</Text>
                             </View>
                             <View style={{ flex: 4.5}}>
