@@ -6,6 +6,7 @@ import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
 import Modal from 'react-native-modal';
+import { ChevronUp, ChevronDown } from 'react-native-feather';
 
 const WhistleDisplay = (props) => {
     const whistle = props.whistle;
@@ -20,6 +21,8 @@ const WhistleDisplay = (props) => {
     const [isComment1Visible, setIsComment1Visible] = React.useState(false);
     const [scrollOffset1, setScrollOffset1] = React.useState(null);
     const [comments1, setComments1] = React.useState([]);
+    const [upvotes1, updateUpvotes1] = React.useState([]);
+    const [downvotes1, updateDownvotes1] = React.useState([]);
 
     const commentModal1Ref = React.createRef();
     const close1 = () => {
@@ -34,6 +37,70 @@ const WhistleDisplay = (props) => {
 
     const handleOnScroll1 = event => {
         setScrollOffset1(event.nativeEvent.contentOffset.y);
+    }
+
+    function handleVoteComment1(commentId, index, action) {
+        axios.post("https://trywhistle.app/api/app/votecomment", {
+            commentId: commentId,
+            action: action
+        }, {
+            headers: {
+                'x-access-token': jwtToken
+            }
+        })
+        .then(resp => {
+            switch (action) {
+                case "upvote":
+                    updateUpvotes1((upvotes) => {
+                        return [...upvotes.slice(0, index), true, ...upvotes.slice(index + 1)]
+                    });
+                    setComments1((comments) => {
+                        let newEle = comments[index]
+                        newEle.upvotes += 1;
+                        newEle.votes += 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    })
+                    break;
+                case "downvote":
+                    updateDownvotes1((downvotes) => {
+                        return [...downvotes.slice(0, index), true, ...downvotes.slice(index + 1)]
+                    });
+                    setComments1((comments) => {
+                        let newEle = comments[index]
+                        newEle.downvotes += 1;
+                        newEle.votes -= 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                case "unupvote":
+                    updateUpvotes1((upvotes) => {
+                        return [...upvotes.slice(0, index), false, ...upvotes.slice(index + 1)]
+                    });
+                    setComments1((comments) => {
+                        let newEle = comments[index]
+                        newEle.upvotes -= 1;
+                        newEle.votes -= 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                case "undownvote":
+                    updateDownvotes1((downvotes) => {
+                        return [...downvotes.slice(0, index), false, ...downvotes.slice(index + 1)]
+                    });
+                    setComments1((comments) => {
+                        let newEle = comments[index]
+                        newEle.downvotes -= 1;
+                        newEle.votes += 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                default:
+                    break;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     const getTimeDifference = (d) => {
@@ -119,6 +186,10 @@ const WhistleDisplay = (props) => {
             })
             .then(resp => {
                 setComments1((comments1) => [...resp.data]);
+                for (let i = 0; i < resp.data.length; i++) {
+                    updateUpvotes1((upvotes1) => [...upvotes1, false]);
+                    updateDownvotes1((downvotes1) => [...downvotes1, false]);
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -308,7 +379,7 @@ const WhistleDisplay = (props) => {
                                     {
                                         comments1.map((comment, index) => {
                                             return (
-                                                <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                                                     <View style={{ flexDirection: 'column' }}>
                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                                             setIsComment1Visible(false)
@@ -318,7 +389,33 @@ const WhistleDisplay = (props) => {
                                                         {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)}</Text>
                                                     </View>
-                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>{comment.votes}</Text>
+                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                                        <Pressable onPress={() => {
+                                                            if (downvotes1[index]) {
+                                                                handleVoteComment1(comment.id, index, 'undownvote')
+                                                            }
+                                                            if (upvotes1[index]) {
+                                                                handleVoteComment1(comment.id, index, 'unupvote')
+                                                            } else {
+                                                                handleVoteComment1(comment.id, index, 'upvote')
+                                                            }
+                                                        }}>
+                                                            <ChevronUp style={{ color: upvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                                        </Pressable>
+                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comment.votes}</Text>
+                                                        <Pressable onPress={() => {
+                                                            if (upvotes1[index]) {
+                                                                handleVoteComment1(comment.id, index, 'unupvote')
+                                                            }
+                                                            if (downvotes1[index]) {
+                                                                handleVoteComment1(comment.id, index, 'undownvote')
+                                                            } else {
+                                                                handleVoteComment1(comment.id, index, 'downvote')
+                                                            }
+                                                        }}>
+                                                            <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                                        </Pressable>
+                                                    </View>
                                                 </View>
                                             )
                                         })
