@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Pressable , ScrollView, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useSelector } from 'react-redux';
-import { selectAccessToken } from '../redux/slices/authSlice';
+import { selectAccessToken, selectUsername } from '../redux/slices/authSlice';
 import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
@@ -14,6 +14,7 @@ const WhistleDisplay = (props) => {
     const navigation = props.navigation;
 
     const jwtToken = useSelector(selectAccessToken);
+    const username = useSelector(selectUsername);
     const [backside, setBackside] = React.useState(false);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [hasVoted, setHasVoted] = React.useState(false);
@@ -118,6 +119,29 @@ const WhistleDisplay = (props) => {
         .catch(err => {
             console.log(err);
         });
+    }
+
+    function submitComment1() {
+        axios.post("https://trywhistle.app/api/app/commentwhistle", {
+            whistleId: whistle.id,
+            comment: comment1Text,
+            associatedSide: keys[0],
+            replyingTo: null,
+        }, {
+            headers: {
+                'x-access-token': jwtToken
+            }
+        })
+        .then(resp => {
+            setComments1((comments) => {
+                return [...comments, resp.data.comment]
+            })
+            updateComment1Text("");
+            commentModal1Ref.current.scrollToEnd();
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     const getTimeDifference = (d) => {
@@ -363,7 +387,7 @@ const WhistleDisplay = (props) => {
                                             </View>
                                     }
                                     {
-                                        topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
+                                        topReasons.length > 0 && topReasons[0][keys[1]] && topReasons[0][keys[1]].length > 1
                                         && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
                                             <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
                                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[1]][1].comment}</Text>
@@ -443,8 +467,8 @@ const WhistleDisplay = (props) => {
                                         </View>
                                     </ScrollView>
                                 </View>
-                                <View style={{ height: 70, width: '100%', position: 'absolute', bottom: keyboardOffset, alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput}/>
+                                <View style={{ height: 70, width: '100%', position: 'absolute', bottom: keyboardOffset, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white' }}>
+                                    <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1()}/>
                                 </View>
                             </View>
                         </Modal>
