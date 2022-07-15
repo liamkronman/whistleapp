@@ -36,6 +36,27 @@ const WhistleDisplay = (props) => {
         setScrollOffset1(event.nativeEvent.contentOffset.y);
     }
 
+    const getTimeDifference = (d) => {
+        const currentDate = new Date();
+        const date = new Date(d);
+        const diff = currentDate.getTime() - date.getTime();
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor(diff / (1000 * 60));
+        const seconds = Math.floor(diff / (1000));
+        if (days > 0) {
+            return days + "d";
+        } else if (hours > 0) {
+            return hours + "hr";
+        } else if (minutes > 0) {
+            return minutes + "min";
+        } else if (seconds > 0) {
+            return seconds + "sec";
+        } else {
+            return "Just now";
+        }
+    }
+
     const hasExpired = currentDateTime > new Date(whistle.closeDateTime);
     const keys = Object.keys(whistle.options);
     let totalVotes = 0;
@@ -97,8 +118,7 @@ const WhistleDisplay = (props) => {
                 }
             })
             .then(resp => {
-                console.log(resp)
-                setComments1((comments1) => [...comments1, resp.data])
+                setComments1((comments1) => [...resp.data]);
             })
             .catch(err => {
                 console.log(err);
@@ -280,7 +300,7 @@ const WhistleDisplay = (props) => {
                                 ref={commentModal1Ref}
                                 onScroll={handleOnScroll1}
                                 scrollEventThrottle={16}>
-                                <View style={{ width: 370, flexDirection: 'column', marginTop: 15 }}>
+                                <View style={{ width: 350, flexDirection: 'column', marginTop: 15, alignSelf: 'center' }}>
                                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                         <Text style={{ fontFamily: 'WorkSans-Bold', fontSize: 24, color: '#2C65F6' }}>{keys[0]} </Text>
                                         <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 24, color: '#2C65F6' }}>({comments1.length})</Text>
@@ -288,8 +308,16 @@ const WhistleDisplay = (props) => {
                                     {
                                         comments1.map((comment, index) => {
                                             return (
-                                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>{index + 1}. {comment.comment}</Text>
+                                                <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
+                                                            setIsComment1Visible(false)
+                                                            navigation.navigate('UserFeature', {username: comment.commenter})
+                                                            }}>{comment.commenter}</Text>
+                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comment.comment}</Text>
+                                                        {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
+                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)}</Text>
+                                                    </View>
                                                     <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>{comment.votes}</Text>
                                                 </View>
                                             )
