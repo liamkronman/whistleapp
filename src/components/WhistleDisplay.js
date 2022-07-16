@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Pressable , ScrollView, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useSelector } from 'react-redux';
-import { selectAccessToken, selectUsername } from '../redux/slices/authSlice';
+import { selectAccessToken } from '../redux/slices/authSlice';
 import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
@@ -14,7 +14,6 @@ const WhistleDisplay = (props) => {
     const navigation = props.navigation;
 
     const jwtToken = useSelector(selectAccessToken);
-    const username = useSelector(selectUsername);
     const [backside, setBackside] = React.useState(false);
     const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
     const [hasVoted, setHasVoted] = React.useState(false);
@@ -41,6 +40,7 @@ const WhistleDisplay = (props) => {
     const [upvotes1, updateUpvotes1] = React.useState([]);
     const [downvotes1, updateDownvotes1] = React.useState([]);
     const [comment1Text, updateComment1Text] = React.useState("");
+    const [comment1Tree, updateComment1Tree] = React.useState({});
 
     const commentModal1Ref = React.createRef();
     const close1 = () => {
@@ -155,7 +155,7 @@ const WhistleDisplay = (props) => {
         if (days > 0) {
             return days + "d";
         } else if (hours > 0) {
-            return hours + "hr";
+            return hours + "h";
         } else if (minutes > 0) {
             return minutes + "min";
         } else if (seconds > 0) {
@@ -175,7 +175,6 @@ const WhistleDisplay = (props) => {
 
     React.useEffect(() => {
         if (!isOwner && !hasExpired) {
-            console.log(whistle.id)
             axios.post("https://trywhistle.app/api/user/checkhasvoted", {
                 "whistleId": whistle.id,
             }, {
@@ -231,12 +230,100 @@ const WhistleDisplay = (props) => {
                     updateUpvotes1((upvotes1) => [...upvotes1, false]);
                     updateDownvotes1((downvotes1) => [...downvotes1, false]);
                 }
+                resp.data.forEach(comment => {
+                    if (comment.replyingTo) {
+                        updateComment1Tree(tree => {
+                            if (tree[comment.replyingTo]) {
+                                tree[comment.replyingTo].push(comment.id);
+                            } else {
+                                tree[comment.replyingTo] = [comment.id];
+                            }
+                            return tree
+                        })
+                    }
+                })
             })
             .catch(err => {
                 console.log(err);
             });
         }
     }, [isComment1Visible]);
+
+    function getIndex(comments, id) {
+        for (let i = 0; i < comments.length; i++) {
+            if (comments[i].id === id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    const CommentReplies = (props) => { 
+        const commentId = props.commentId;
+        const replyTree = props.replyTree;
+        const comments = props.comments;
+
+        function generateAllReplies(id) {
+            let replies = [id];
+    
+            if (replyTree[id]) {
+                replies = replies.concat(...replyTree[id].map(reply => generateAllReplies(reply)));
+            }
+    
+            return replies;
+        }
+    
+        let allReplies = generateAllReplies(commentId);
+        // pop front of allReplies
+        allReplies.shift();
+    
+        return (
+            <View style={{ paddingLeft: 20 }}>
+                {allReplies.map((replyKey, index) => {
+                    return (
+                    <View key={getIndex(comments, replyKey)} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
+                                setIsComment1Visible(false)
+                                navigation.navigate('UserFeature', {username: comments[getIndex(comments, replyKey)].commenter})
+                                }}>{comments[getIndex(comments, replyKey)].commenter}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments[getIndex(comments, replyKey)].comment}</Text>
+                            {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments[getIndex(comments, replyKey)].createdAt)}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                            <Pressable onPress={() => {
+                                if (downvotes1[index]) {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'undownvote')
+                                }
+                                if (upvotes1[index]) {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'unupvote')
+                                } else {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'upvote')
+                                }
+                            }}>
+                                <ChevronUp style={{ color: upvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                            </Pressable>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments[getIndex(comments, replyKey)].votes}</Text>
+                            <Pressable onPress={() => {
+                                if (upvotes1[index]) {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'unupvote')
+                                }
+                                if (downvotes1[index]) {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'undownvote')
+                                } else {
+                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'downvote')
+                                }
+                            }}>
+                                <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                            </Pressable>
+                        </View>
+                    </View>
+                    )
+                })}
+            </View>
+        );
+    };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -339,7 +426,7 @@ const WhistleDisplay = (props) => {
                         <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center' }}>
                             <Pressable onPress={() => setIsComment1Visible(true)} style={styles.pollBarContainer}>
                                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={styles.percentage}>{whistle.options[keys[0]]} Votes ({~~(whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
+                                    <Text style={styles.percentage}>{whistle.options[keys[0]]} Votes ({(whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
                                 </View>
                                 <View style={{ flex: 5, justifyContent: 'flex-end' }}>
                                     <PollBar key={0} percent={whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])} style={styles.pollBar}></PollBar>
@@ -368,7 +455,7 @@ const WhistleDisplay = (props) => {
                             </Pressable>
                             <View style={styles.pollBarContainer}>
                                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={styles.percentage}>{whistle.options[keys[1]]} Votes ({~~(whistle.options[keys[1]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
+                                    <Text style={styles.percentage}>{whistle.options[keys[1]]} Votes ({(whistle.options[keys[1]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
                                 </View>
                                 <View style={{ flex: 5, justifyContent: 'flex-end' }}>
                                     <PollBar key={1} percent={whistle.options[keys[1]] / (whistle.options[keys[0]] + whistle.options[keys[1]])} style={styles.pollBar}></PollBar>
@@ -422,46 +509,54 @@ const WhistleDisplay = (props) => {
                                             </View>
                                             {
                                                 comments1.map((comment, index) => {
-                                                    return (
-                                                        <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                                            <View style={{ flexDirection: 'column' }}>
-                                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
-                                                                    setIsComment1Visible(false)
-                                                                    navigation.navigate('UserFeature', {username: comment.commenter})
-                                                                    }}>{comment.commenter}</Text>
-                                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comment.comment}</Text>
-                                                                {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
-                                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)}</Text>
-                                                            </View>
-                                                            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                                                                <Pressable onPress={() => {
-                                                                    if (downvotes1[index]) {
-                                                                        handleVoteComment1(comment.id, index, 'undownvote')
-                                                                    }
-                                                                    if (upvotes1[index]) {
-                                                                        handleVoteComment1(comment.id, index, 'unupvote')
-                                                                    } else {
-                                                                        handleVoteComment1(comment.id, index, 'upvote')
-                                                                    }
-                                                                }}>
-                                                                    <ChevronUp style={{ color: upvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
-                                                                </Pressable>
-                                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comment.votes}</Text>
-                                                                <Pressable onPress={() => {
-                                                                    if (upvotes1[index]) {
-                                                                        handleVoteComment1(comment.id, index, 'unupvote')
-                                                                    }
-                                                                    if (downvotes1[index]) {
-                                                                        handleVoteComment1(comment.id, index, 'undownvote')
-                                                                    } else {
-                                                                        handleVoteComment1(comment.id, index, 'downvote')
-                                                                    }
-                                                                }}>
-                                                                    <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
-                                                                </Pressable>
-                                                            </View>
-                                                        </View>
-                                                    )
+                                                    if (!comment.replyingTo) {
+                                                        return (
+                                                            <>
+                                                                <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                                                    <View style={{ flexDirection: 'column' }}>
+                                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
+                                                                            setIsComment1Visible(false)
+                                                                            navigation.navigate('UserFeature', {username: comment.commenter})
+                                                                            }}>{comment.commenter}</Text>
+                                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comment.comment}</Text>
+                                                                        {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
+                                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)}</Text>
+                                                                    </View>
+                                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                                                        <Pressable onPress={() => {
+                                                                            if (downvotes1[index]) {
+                                                                                handleVoteComment1(comment.id, index, 'undownvote')
+                                                                            }
+                                                                            if (upvotes1[index]) {
+                                                                                handleVoteComment1(comment.id, index, 'unupvote')
+                                                                            } else {
+                                                                                handleVoteComment1(comment.id, index, 'upvote')
+                                                                            }
+                                                                        }}>
+                                                                            <ChevronUp style={{ color: upvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                                                        </Pressable>
+                                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comment.votes}</Text>
+                                                                        <Pressable onPress={() => {
+                                                                            if (upvotes1[index]) {
+                                                                                handleVoteComment1(comment.id, index, 'unupvote')
+                                                                            }
+                                                                            if (downvotes1[index]) {
+                                                                                handleVoteComment1(comment.id, index, 'undownvote')
+                                                                            } else {
+                                                                                handleVoteComment1(comment.id, index, 'downvote')
+                                                                            }
+                                                                        }}>
+                                                                            <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                                                        </Pressable>
+                                                                    </View>
+                                                                </View>
+                                                                {/* CommentReplies passing comment1Tree, commend.id and comments1 through */}
+                                                                {
+                                                                    comment1Tree[comment.id] && <CommentReplies replyTree={comment1Tree} commentId={comment.id} comments={comments1} />
+                                                                }
+                                                            </>
+                                                        )
+                                                    }
                                                 })
                                             }
                                         </View>
