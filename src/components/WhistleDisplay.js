@@ -19,11 +19,16 @@ const WhistleDisplay = (props) => {
     const [hasVoted, setHasVoted] = React.useState(false);
     const [topReasons, setTopReasons] = React.useState([]);
     const [keyboardOffset, setKeyboardOffset] = React.useState(0);
+    const [replyingTo, setReplyingTo] = React.useState(null);
 
     const onKeyboardShow = event => setKeyboardOffset(event.endCoordinates.height);
-    const onKeyboardHide = () => setKeyboardOffset(0);
+    const onKeyboardHide = () => {
+        setKeyboardOffset(0)
+        setReplyingTo(null)
+    };
     const keyboardDidShowListener = React.useRef();
     const keyboardDidHideListener = React.useRef();
+    const replyingInputRef = React.useRef();
 
     React.useEffect(() => {
         keyboardDidShowListener.current = Keyboard.addListener('keyboardWillShow', onKeyboardShow);
@@ -32,7 +37,13 @@ const WhistleDisplay = (props) => {
             keyboardDidShowListener.current.remove();
             keyboardDidHideListener.current.remove();
         }
-    }, [])
+    }, []);
+
+    React.useEffect(() => {
+        if (replyingTo) {
+            replyingInputRef.current.focus()
+        }
+    }, [replyingTo]);
 
     const [isComment1Visible, setIsComment1Visible] = React.useState(false);
     const [scrollOffset1, setScrollOffset1] = React.useState(null);
@@ -121,12 +132,12 @@ const WhistleDisplay = (props) => {
         });
     }
 
-    function submitComment1() {
+    function submitComment1(replyId=null) {
         axios.post("https://trywhistle.app/api/app/commentwhistle", {
             whistleId: whistle.id,
             comment: comment1Text,
             associatedSide: keys[0],
-            replyingTo: null,
+            replyingTo: replyId,
         }, {
             headers: {
                 'x-access-token': jwtToken
@@ -138,6 +149,16 @@ const WhistleDisplay = (props) => {
             })
             updateComment1Text("");
             commentModal1Ref.current.scrollToEnd();
+            if (replyId) {
+                updateComment1Tree(tree => {
+                    if (tree[replyId]) {
+                        tree[replyId].push(resp.data.comment.id)
+                    } else {
+                        tree[replyId] = [resp.data.comment.id]
+                    }
+                    return tree
+                })
+            }
         })
         .catch(err => {
             console.log(err);
@@ -157,9 +178,9 @@ const WhistleDisplay = (props) => {
         } else if (hours > 0) {
             return hours + "h";
         } else if (minutes > 0) {
-            return minutes + "min";
+            return minutes + "m";
         } else if (seconds > 0) {
-            return seconds + "sec";
+            return seconds + "s";
         } else {
             return "Just now";
         }
@@ -258,16 +279,14 @@ const WhistleDisplay = (props) => {
         return -1;
     }
 
-    const CommentReplies = (props) => { 
+    const CommentReplies1 = (props) => { 
         const commentId = props.commentId;
-        const replyTree = props.replyTree;
-        const comments = props.comments;
 
         function generateAllReplies(id) {
             let replies = [id];
     
-            if (replyTree[id]) {
-                replies = replies.concat(...replyTree[id].map(reply => generateAllReplies(reply)));
+            if (comment1Tree[id]) {
+                replies = replies.concat(...comment1Tree[id].map(reply => generateAllReplies(reply)));
             }
     
             return replies;
@@ -280,17 +299,17 @@ const WhistleDisplay = (props) => {
         return (
             <View style={{ paddingLeft: 20 }}>
                 {allReplies.map((replyKey, index) => {
-                    const ind = getIndex(comments, replyKey);
+                    const ind = getIndex(comments1, replyKey);
                     return (
                     <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                 setIsComment1Visible(false)
-                                navigation.navigate('UserFeature', {username: comments[ind].commenter})
-                                }}>{comments[ind].commenter}</Text>
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments[ind].comment}</Text>
+                                navigation.navigate('UserFeature', {username: comments1[ind].commenter})
+                                }}>{comments1[ind].commenter}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments1[ind].comment}</Text>
                             {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments[ind].createdAt)}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments1[ind].createdAt)}</Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Pressable onPress={() => {
@@ -305,7 +324,7 @@ const WhistleDisplay = (props) => {
                             }}>
                                 <ChevronUp style={{ color: upvotes1[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments[ind].votes}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments1[ind].votes}</Text>
                             <Pressable onPress={() => {
                                 if (upvotes1[ind]) {
                                     handleVoteComment1(replyKey, ind, 'unupvote')
@@ -529,7 +548,12 @@ const WhistleDisplay = (props) => {
                                                                             }}>{comment.commenter}</Text>
                                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comment.comment}</Text>
                                                                         {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
-                                                                        <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)}</Text>
+                                                                        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                                                                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comment.createdAt)} </Text>
+                                                                            <Pressable onPress={() => setReplyingTo(comment.id)}>
+                                                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>Reply</Text>
+                                                                            </Pressable>
+                                                                        </View>
                                                                     </View>
                                                                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                                                                         <Pressable onPress={() => {
@@ -561,7 +585,7 @@ const WhistleDisplay = (props) => {
                                                                 </View>
                                                                 {/* CommentReplies passing comment1Tree, commend.id and comments1 through */}
                                                                 {
-                                                                    comment1Tree[comment.id] && <CommentReplies replyTree={comment1Tree} commentId={comment.id} comments={comments1} />
+                                                                    comment1Tree[comment.id] && <CommentReplies1 replyTree={comment1Tree} commentId={comment.id} comments={comments1} />
                                                                 }
                                                             </>
                                                         )
@@ -572,7 +596,11 @@ const WhistleDisplay = (props) => {
                                     </ScrollView>
                                 </View>
                                 <View style={{ height: 70, width: '100%', position: 'absolute', bottom: keyboardOffset, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white' }}>
-                                    <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1()}/>
+                                    {
+                                        replyingTo
+                                        ? <TextInput ref={replyingInputRef} editable placeholderTextColor="#9D9D9D" placeholder={`Replying to ${comments1[getIndex(comments1, replyingTo)].commenter}...`} value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1(replyingTo)}/>
+                                        : <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1()}/>
+                                    }
                                 </View>
                             </View>
                         </Modal>
