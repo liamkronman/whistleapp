@@ -4,9 +4,8 @@ import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { selectIsSuccessful, resetIsSuccessful } from '../redux/slices/publishSlice';
-import FlipCard from 'react-native-flip-card';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import PollBar from '../components/PollBar';
+import WhistleDisplay from '../components/WhistleDisplay';
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -15,18 +14,6 @@ const Feed = ({ navigation }) => {
 
     const [whistles, updateWhistles] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [currentDateTime, setCurrentDateTime] = React.useState(new Date());
-    const [backSides, setBackSides] = React.useState([]);
-    const [topReasons, setTopReasons] = React.useState([]);
-
-    useEffect(() => {
-        const handle = setInterval(() => {
-            setCurrentDateTime(new Date());
-        }, 1000);
-        return () => {
-            clearInterval(handle);
-        }
-    }, []);
     
     const getWhistles = async (lastWhistleId=null) => {
         if (lastWhistleId) {
@@ -76,175 +63,9 @@ const Feed = ({ navigation }) => {
 
 
     const renderWhistle = ( whistle ) => {
-        const keys = Object.keys(whistle.item.options);
-        let totalVotes = 0;
-
-        for (let i = 0; i < keys.length; i++) {
-            totalVotes += whistle.item.options[keys[i]];
-        }
-
-        axios.post("https://trywhistle.app/api/app/getreasons", {
-            "whistleId": whistle.id,
-        }, {
-            headers: {
-                "x-access-token": jwtToken
-            }
-        })
-        .then(resp => {
-            setTopReasons((topReasons) => [...topReasons, resp.data])
-        })
-        .catch(err => {
-            console.log(err);
-        })
-
         return (
-            <FlipCard
-                flipHorizontal={true}
-                friction={1000}
-                flipVertical={false}
-                flip={backSides[whistle.index]}
-                clickable={false}>
-                <View style={styles.face}>
-                    <View style={styles.whistleContainer}>
-                        <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column' }}>
-                            <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
-                                <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
-                            </View>
-                            <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                                <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.item.author})}>{whistle.item.author}: </Text>
-                                <Text style={styles.whistleBackground}>{whistle.item.background}</Text>
-                            </View>
-                            <View style={{ flex: 4.5}}>
-                                <Text style={styles.whistleContext}>{whistle.item.context}</Text>
-                            </View>
-                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
-                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                        whistleId: whistle.item.id,
-                                        optionSelected: keys[0]
-                                    }, {
-                                        headers: {
-                                            "x-access-token": jwtToken,
-                                        }
-                                    })
-                                    .then(resp => {
-                                        whistle.item.options[keys[0]] += 1;
-                                        setBackSides(backSides => {
-                                            backSides[whistle.index] = true;
-                                            return backSides;
-                                        });
-                                    })
-                                    .catch(err => console.log(err));
-                                }}>
-                                    <Text style={styles.whistleOptionText}>{keys[0]}</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ flex: 1.1, justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity style={styles.whistleOptionBtn} onPress={() => {
-                                    axios.post("https://trywhistle.app/api/app/votewhistle", {
-                                        whistleId: whistle.item.id,
-                                        optionSelected: keys[1]
-                                    }, {
-                                        headers: {
-                                            "x-access-token": jwtToken,
-                                        }
-                                    })
-                                    .then(resp => {
-                                        whistle.item.options[keys[1]] += 1;
-                                        setBackSides(backSides => {
-                                            backSides[whistle.index] = true;
-                                            return backSides;
-                                        });
-                                    })
-                                    .catch(err => console.log(err));
-                                }}>
-                                    <Text style={styles.whistleOptionText}>{keys[1]}</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 22, color:'#2C65F6' }}>{totalVotes} Votes</Text>
-                            </View>
-                            <View style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 20, color: '#4D7AEF', textAlign: 'center' }}>Time left </Text>
-                                <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 18, color: '#E21313', textAlign: 'center' }}>{Math.floor((new Date(whistle.item.closeDateTime) - currentDateTime) / (1000 * 60 * 60 * 24))} days : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))} hrs : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60 * 60)) / (1000 * 60))} mins : {Math.floor(((new Date(whistle.item.closeDateTime) - currentDateTime) % (1000 * 60)) / 1000)} secs</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.back}>
-                    <View style={styles.whistleContainerBack}>
-                        <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column', justifyContent: 'center' }}>
-                            <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
-                                <Text style={styles.whistleTitle}>{whistle.item.title}</Text>
-                            </View>
-                            <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                                <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.author})}>{whistle.item.author}</Text>
-                            </View>
-                            <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center' }}>
-                                <View style={styles.pollBarContainer}>
-                                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                                        <Text style={styles.percentage}>{whistle.item.options[keys[0]]} Votes ({~~(whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}%)</Text>
-                                    </View>
-                                    <View style={{ flex: 5, justifyContent: 'flex-end' }}>
-                                        <PollBar key={0} percent={whistle.item.options[keys[0]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
-                                    </View>
-                                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                                        <Text style={styles.pollBarText}>
-                                            {keys[0]}
-                                        </Text>
-                                    </View>
-                                    <View style={{ flex: 1 }}>
-                                        {
-                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 0
-                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                                    <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
-                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[0]][0].comment}</Text>
-                                                </View>
-                                        }
-                                        {
-                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 1
-                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
-                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[0]][1].comment}</Text>
-                                            </View>
-                                        }
-                                    </View>
-                                </View>
-                                <View style={styles.pollBarContainer}>
-                                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                                        <Text style={styles.percentage}>{whistle.item.options[keys[1]]} Votes ({~~(whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])).toFixed(2) * 100}%)</Text>
-                                    </View>
-                                    <View style={{ flex: 5, justifyContent: 'flex-end' }}>
-                                        <PollBar key={1} percent={whistle.item.options[keys[1]] / (whistle.item.options[keys[0]] + whistle.item.options[keys[1]])} style={styles.pollBar}></PollBar>
-                                    </View>
-                                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                                        <Text style={styles.pollBarText}>
-                                            {keys[1]}
-                                        </Text>
-                                    </View>
-                                    <View style={{ flex: 1 }}>
-                                        {
-                                            topReasons.length > 0 && topReasons[whistle.index][keys[1]] && topReasons[whistle.index][keys[1]].length > 0
-                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                                    <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
-                                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[1]][0].comment}</Text>
-                                                </View>
-                                        }
-                                        {
-                                            topReasons.length > 0 && topReasons[whistle.index][keys[0]] && topReasons[whistle.index][keys[0]].length > 1
-                                            && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
-                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[whistle.index][keys[1]][1].comment}</Text>
-                                            </View>
-                                        }
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </FlipCard>
-        )
+            <WhistleDisplay whistle={whistle.item} isOwner={false} navigation={navigation} />
+        );
     };
 
     return (
