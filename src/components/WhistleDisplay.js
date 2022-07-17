@@ -53,8 +53,21 @@ const WhistleDisplay = (props) => {
     const [comment1Text, updateComment1Text] = React.useState("");
     const [comment1Tree, updateComment1Tree] = React.useState({});
 
+    const [isComment2Visible, setIsComment2Visible] = React.useState(false);
+    const [scrollOffset2, setScrollOffset2] = React.useState(null);
+    const [comments2, setComments2] = React.useState([]);
+    const [upvotes2, updateUpvotes2] = React.useState([]);
+    const [downvotes2, updateDownvotes2] = React.useState([]);
+    const [comment2Text, updateComment2Text] = React.useState("");
+    const [comment2Tree, updateComment2Tree] = React.useState({});
+
     const commentModal1Ref = React.createRef();
     const close1 = () => {
+        setIsComment1Visible(false);
+    }
+
+    const commentModal2Ref = React.createRef();
+    const close2 = () => {
         setIsComment1Visible(false);
     }
     
@@ -64,8 +77,18 @@ const WhistleDisplay = (props) => {
         }
     }
 
+    const handleScrollTo2 = p => {
+        if (commentModal2Ref.current) {
+            commentModal2Ref.current.scrollTo(p);
+        }
+    }
+
     const handleOnScroll1 = event => {
         setScrollOffset1(event.nativeEvent.contentOffset.y);
+    }
+
+    const handleOnScroll2 = event => {
+        setScrollOffset2(event.nativeEvent.contentOffset.y);
     }
 
     function handleVoteComment1(commentId, index, action) {
@@ -132,6 +155,70 @@ const WhistleDisplay = (props) => {
         });
     }
 
+    function handleVoteComment2(commentId, index, action) {
+        axios.post("https://trywhistle.app/api/app/votecomment", {
+            commentId: commentId,
+            action: action
+        }, {
+            headers: {
+                'x-access-token': jwtToken
+            }
+        })
+        .then(resp => {
+            switch (action) {
+                case "upvote":
+                    updateUpvotes2((upvotes) => {
+                        return [...upvotes.slice(0, index), true, ...upvotes.slice(index + 1)]
+                    });
+                    setComments2((comments) => {
+                        let newEle = comments[index]
+                        newEle.upvotes += 1;
+                        newEle.votes += 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    })
+                    break;
+                case "downvote":
+                    updateDownvotes2((downvotes) => {
+                        return [...downvotes.slice(0, index), true, ...downvotes.slice(index + 1)]
+                    });
+                    setComments2((comments) => {
+                        let newEle = comments[index]
+                        newEle.downvotes += 1;
+                        newEle.votes -= 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                case "unupvote":
+                    updateUpvotes2((upvotes) => {
+                        return [...upvotes.slice(0, index), false, ...upvotes.slice(index + 1)]
+                    });
+                    setComments2((comments) => {
+                        let newEle = comments[index]
+                        newEle.upvotes -= 1;
+                        newEle.votes -= 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                case "undownvote":
+                    updateDownvotes2((downvotes) => {
+                        return [...downvotes.slice(0, index), false, ...downvotes.slice(index + 1)]
+                    });
+                    setComments2((comments) => {
+                        let newEle = comments[index]
+                        newEle.downvotes -= 1;
+                        newEle.votes += 1;
+                        return [...comments.slice(0, index), newEle, ...comments.slice(index + 1)]
+                    });
+                    break;
+                default:
+                    break;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     function submitComment1(replyId=null) {
         axios.post("https://trywhistle.app/api/app/commentwhistle", {
             whistleId: whistle.id,
@@ -150,6 +237,38 @@ const WhistleDisplay = (props) => {
             updateComment1Text("");
             if (replyId) {
                 updateComment1Tree(tree => {
+                    if (tree[replyId]) {
+                        tree[replyId].push(resp.data.comment.id)
+                    } else {
+                        tree[replyId] = [resp.data.comment.id]
+                    }
+                    return tree
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    function submitComment2(replyId=null) {
+        axios.post("https://trywhistle.app/api/app/commentwhistle", {
+            whistleId: whistle.id,
+            comment: comment1Text,
+            associatedSide: keys[0],
+            replyingTo: replyId,
+        }, {
+            headers: {
+                'x-access-token': jwtToken
+            }
+        })
+        .then(resp => {
+            setComments2((comments) => {
+                return [...comments, resp.data.comment]
+            })
+            updateComment2Text("");
+            if (replyId) {
+                updateComment2Tree(tree => {
                     if (tree[replyId]) {
                         tree[replyId].push(resp.data.comment.id)
                     } else {
@@ -269,6 +388,41 @@ const WhistleDisplay = (props) => {
         }
     }, [isComment1Visible]);
 
+    React.useEffect(() => {
+        if (isComment2Visible && comments2.length === 0) {
+            axios.post("https://trywhistle.app/api/app/getcomments", {
+                "whistleId": whistle.id,
+                "associatedSide": keys[0]
+            }, {
+                headers: {
+                    "x-access-token": jwtToken
+                }
+            })
+            .then(resp => {
+                setComments2((comments) => [...resp.data]);
+                for (let i = 0; i < resp.data.length; i++) {
+                    updateUpvotes2((upvotes1) => [...upvotes1, false]);
+                    updateDownvotes2((downvotes1) => [...downvotes1, false]);
+                }
+                resp.data.forEach(comment => {
+                    if (comment.replyingTo) {
+                        updateComment2Tree(tree => {
+                            if (tree[comment.replyingTo]) {
+                                tree[comment.replyingTo].push(comment.id);
+                            } else {
+                                tree[comment.replyingTo] = [comment.id];
+                            }
+                            return tree
+                        })
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
+    }, [isComment2Visible]);
+
     function getIndex(comments, id) {
         for (let i = 0; i < comments.length; i++) {
             if (comments[i].id === id) {
@@ -308,7 +462,12 @@ const WhistleDisplay = (props) => {
                                 }}>{comments1[ind].commenter}</Text>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments1[ind].comment}</Text>
                             {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments1[ind].createdAt)}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments1[ind].createdAt)} </Text>
+                                <Pressable onPress={() => setReplyingTo(comments1[ind].id)}>
+                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>Reply</Text>
+                                </Pressable>
+                            </View>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Pressable onPress={() => {
@@ -335,6 +494,77 @@ const WhistleDisplay = (props) => {
                                 }
                             }}>
                                 <ChevronDown style={{ color: downvotes1[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                            </Pressable>
+                        </View>
+                    </View>
+                    )
+                })}
+            </View>
+        );
+    };
+
+    const CommentReplies2 = (props) => { 
+        const commentId = props.commentId;
+
+        function generateAllReplies(id) {
+            let replies = [id];
+    
+            if (comment2Tree[id]) {
+                replies = replies.concat(...comment2Tree[id].map(reply => generateAllReplies(reply)));
+            }
+    
+            return replies;
+        }
+    
+        let allReplies = generateAllReplies(commentId);
+        // pop front of allReplies
+        allReplies.shift();
+    
+        return (
+            <View style={{ paddingLeft: 20 }}>
+                {allReplies.map((replyKey, index) => {
+                    const ind = getIndex(comments2, replyKey);
+                    return (
+                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
+                                setIsComment2Visible(false)
+                                navigation.navigate('UserFeature', {username: comments2[ind].commenter})
+                                }}>{comments2[ind].commenter}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments2[ind].comment}</Text>
+                            {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
+                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments2[ind].createdAt)} </Text>
+                                <Pressable onPress={() => setReplyingTo(comments2[ind].id)}>
+                                    <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>Reply</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                            <Pressable onPress={() => {
+                                if (downvotes2[ind]) {
+                                    handleVoteComment2(replyKey, ind, 'undownvote')
+                                }
+                                if (upvotes2[ind]) {
+                                    handleVoteComment2(replyKey, ind, 'unupvote')
+                                } else {
+                                    handleVoteComment2(replyKey, ind, 'upvote')
+                                }
+                            }}>
+                                <ChevronUp style={{ color: upvotes2[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                            </Pressable>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments2[ind].votes}</Text>
+                            <Pressable onPress={() => {
+                                if (upvotes2[ind]) {
+                                    handleVoteComment2(replyKey, ind, 'unupvote')
+                                }
+                                if (downvotes2[ind]) {
+                                    handleVoteComment2(replyKey, ind, 'undownvote')
+                                } else {
+                                    handleVoteComment2(replyKey, ind, 'downvote')
+                                }
+                            }}>
+                                <ChevronDown style={{ color: downvotes2[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
                         </View>
                     </View>
