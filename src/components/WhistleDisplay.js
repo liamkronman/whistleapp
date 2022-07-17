@@ -148,7 +148,6 @@ const WhistleDisplay = (props) => {
                 return [...comments, resp.data.comment]
             })
             updateComment1Text("");
-            commentModal1Ref.current.scrollToEnd();
             if (replyId) {
                 updateComment1Tree(tree => {
                     if (tree[replyId]) {
