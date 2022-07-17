@@ -681,7 +681,7 @@ const WhistleDisplay = (props) => {
                         <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
                             <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.author})}>{whistle.author}</Text>
                         </View>
-                        <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center', width: 310, alignSelf: 'center' }}>
+                        <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'center', width: 340, alignSelf: 'center' }}>
                             <Pressable onPress={() => setIsComment1Visible(true)} style={styles.pollBarContainer}>
                                 <View style={{ flex: 1, justifyContent: 'center' }}>
                                     <Text style={styles.percentage}>{whistle.options[keys[0]]} Votes ({(whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])).toFixed(2) * 100}%)</Text>
@@ -697,14 +697,14 @@ const WhistleDisplay = (props) => {
                                 <View style={{ flex: 1 }}>
                                     {
                                         topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 0
-                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row' }}>
+                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row', width: 150 }}>
                                                 <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
                                                 <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][0].comment}</Text>
                                             </View> 
                                     }
                                     {
                                         topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
-                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row' }}>
+                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row', width: 150 }}>
                                                 <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
                                                 <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][1].comment}</Text>
                                             </View>
@@ -726,14 +726,14 @@ const WhistleDisplay = (props) => {
                                 <View style={{ flex: 1 }}>
                                     {
                                         topReasons.length > 0 && topReasons[0][keys[1]] && topReasons[0][keys[1]].length > 0
-                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row' }}>
+                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row', width: 150 }}>
                                                 <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
                                                 <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[1]][0].comment}</Text>
                                             </View>
                                     }
                                     {
                                         topReasons.length > 0 && topReasons[0][keys[1]] && topReasons[0][keys[1]].length > 1
-                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row' }}>
+                                        && <View style={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'row', width: 150 }}>
                                             <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
                                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[1]][1].comment}</Text>
                                         </View>
