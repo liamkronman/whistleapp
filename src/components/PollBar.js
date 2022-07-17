@@ -8,7 +8,7 @@ const PollBar = (props) => {
         Animated.timing(
             heightAnim,
             {
-                toValue: 350 * props.percent,
+                toValue: 335 * props.percent,
                 duration: 1000,
                 useNativeDriver: false,
             }
