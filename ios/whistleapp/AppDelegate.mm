@@ -40,8 +40,7 @@
   _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
   bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
 #endif
-
-  UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"whistleapp", nil);
+  RCTRootView *rootView = (RCTRootView *)RCTAppSetupDefaultRootView(bridge, @"whistleapp", nil);
 
   rootView.backgroundColor = [UIColor colorWithRed:236 green:238 blue:255 alpha:1.0];
 
@@ -50,6 +49,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  UIStoryboard *sb = [UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil];
+  UIViewController *vc = [sb instantiateInitialViewController];
+  rootView.loadingView = vc.view;
   return YES;
 }
 

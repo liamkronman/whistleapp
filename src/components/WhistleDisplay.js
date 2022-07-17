@@ -6,7 +6,7 @@ import FlipCard from 'react-native-flip-card';
 import PollBar from './PollBar';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import { ChevronUp, ChevronDown } from 'react-native-feather';
+import { ChevronUp, ChevronDown, X } from 'react-native-feather';
 
 const WhistleDisplay = (props) => {
     const whistle = props.whistle;
@@ -280,42 +280,43 @@ const WhistleDisplay = (props) => {
         return (
             <View style={{ paddingLeft: 20 }}>
                 {allReplies.map((replyKey, index) => {
+                    const ind = getIndex(comments, replyKey);
                     return (
-                    <View key={getIndex(comments, replyKey)} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                 setIsComment1Visible(false)
-                                navigation.navigate('UserFeature', {username: comments[getIndex(comments, replyKey)].commenter})
-                                }}>{comments[getIndex(comments, replyKey)].commenter}</Text>
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments[getIndex(comments, replyKey)].comment}</Text>
+                                navigation.navigate('UserFeature', {username: comments[ind].commenter})
+                                }}>{comments[ind].commenter}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'black' }}>{comments[ind].comment}</Text>
                             {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments[getIndex(comments, replyKey)].createdAt)}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments[ind].createdAt)}</Text>
                         </View>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Pressable onPress={() => {
-                                if (downvotes1[index]) {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'undownvote')
+                                if (downvotes1[ind]) {
+                                    handleVoteComment1(replyKey, ind, 'undownvote')
                                 }
-                                if (upvotes1[index]) {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'unupvote')
+                                if (upvotes1[ind]) {
+                                    handleVoteComment1(replyKey, ind, 'unupvote')
                                 } else {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'upvote')
+                                    handleVoteComment1(replyKey, ind, 'upvote')
                                 }
                             }}>
-                                <ChevronUp style={{ color: upvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                <ChevronUp style={{ color: upvotes1[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
-                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments[getIndex(comments, replyKey)].votes}</Text>
+                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: 'black' }}>{comments[ind].votes}</Text>
                             <Pressable onPress={() => {
-                                if (upvotes1[index]) {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'unupvote')
+                                if (upvotes1[ind]) {
+                                    handleVoteComment1(replyKey, ind, 'unupvote')
                                 }
-                                if (downvotes1[index]) {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'undownvote')
+                                if (downvotes1[ind]) {
+                                    handleVoteComment1(replyKey, ind, 'undownvote')
                                 } else {
-                                    handleVoteComment1(replyKey, getIndex(comments, replyKey), 'downvote')
+                                    handleVoteComment1(replyKey, ind, 'downvote')
                                 }
                             }}>
-                                <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
+                                <ChevronDown style={{ color: downvotes1[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
                         </View>
                     </View>
@@ -442,14 +443,14 @@ const WhistleDisplay = (props) => {
                                         && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
                                                 <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>1. </Text>
                                                 <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][0].comment}</Text>
-                                            </View>
+                                            </View> 
                                     }
                                     {
                                         topReasons.length > 0 && topReasons[0][keys[0]] && topReasons[0][keys[0]].length > 1
                                         && <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-                                            <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
-                                            <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][1].comment}</Text>
-                                        </View>
+                                                <Text style={{ fontFamily: 'WorkSans-SemiBold', fontSize: 16, color: '#2C65F6' }}>2. </Text>
+                                                <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }} numberOfLines={1}>{topReasons[0][keys[0]][1].comment}</Text>
+                                            </View>
                                     }
                                 </View>
                             </Pressable>
@@ -504,8 +505,16 @@ const WhistleDisplay = (props) => {
                                         >
                                         <View style={{ width: 350, flexDirection: 'column', marginTop: 15, alignSelf: 'center' }}>
                                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontFamily: 'WorkSans-Bold', fontSize: 24, color: '#2C65F6' }}>{keys[0]} </Text>
-                                                <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 24, color: '#2C65F6' }}>({comments1.length})</Text>
+                                                <View style={{ flex: 1 }}></View>
+                                                <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'center' }}>
+                                                    <Text style={{ fontFamily: 'WorkSans-Bold', fontSize: 24, color: '#2C65F6' }}>{keys[0]} </Text>
+                                                    <Text style={{ fontFamily: 'WorkSans-Medium', fontSize: 24, color: '#2C65F6' }}>({comments1.length})</Text>
+                                                </View>
+                                                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                                                    <Pressable onPress={() => setIsComment1Visible(false)}>
+                                                        <X width={24} height={24} />
+                                                    </Pressable>
+                                                </View>
                                             </View>
                                             {
                                                 comments1.map((comment, index) => {
