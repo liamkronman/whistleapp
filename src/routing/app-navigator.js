@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, View, Text } from 'react-native';
-import { Home, Plus, User } from "react-native-feather";
+import { Home, Plus, BarChart2, User } from "react-native-feather";
 
 import FeedNavigator from './feed-navigator';
 import PublishNavigator from './publish-navigator';
 import ProfileNavigator from './profile-navigator';
+import Activity from '../app/Activity';
 
 const AppTabs = createBottomTabNavigator();
 
@@ -43,6 +44,9 @@ const AppNavigator = () => {
             }} />
             <AppTabs.Screen name="PublishNavigator" component={PublishNavigator} options={{
                 tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
+            }} />
+            <AppTabs.Screen name="Activity" component={Activity} options={{
+                tabBarIcon: (tabInfo) => <BarChart2 width={32} height={32} color={tabInfo.color} />
             }} />
             <AppTabs.Screen name="ProfileNavigator" component={ProfileNavigator} options={{
                 tabBarIcon: (tabInfo) => <User width={32} height={32} color={tabInfo.color} />
