@@ -8,6 +8,13 @@ import PublishNavigator from './publish-navigator';
 import ProfileNavigator from './profile-navigator';
 import Activity from '../app/Activity';
 
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+
+const options = {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false
+};
+
 const AppTabs = createBottomTabNavigator();
 
 function Header() {
@@ -38,6 +45,10 @@ const AppNavigator = () => {
             tabBarActiveTintColor: '#2249D2',
             tabBarInactiveTintColor: '#97AAEC',
             headerTitle: (props) => <Header {...props} />
+        }} screenListeners={{ 
+            tabPress: (e) => {
+                ReactNativeHapticFeedback.trigger("impactLight", options);
+            }
         }}>
             <AppTabs.Screen name="FeedNavigator" component={FeedNavigator} options={{
                 tabBarIcon: (tabInfo) => <Home width={32} height={32} color={tabInfo.color} />

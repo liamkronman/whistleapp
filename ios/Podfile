@@ -19,6 +19,8 @@ target 'whistleapp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'RNReactNativeHapticFeedback', :path => '../node_modules/react-native-haptic-feedback'
+
   target 'whistleappTests' do
     inherit! :complete
     # Pods for testing
