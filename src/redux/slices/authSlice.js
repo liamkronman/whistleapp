@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import FormData from 'form-data';
 import axiosRetry from 'axios-retry';
+import OneSignal from 'react-native-onesignal';
 
 axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
 
@@ -34,6 +35,27 @@ const authSlice = createSlice({
             state.profilePic = null;
             state.loginMessage = null;
             state.signupMessage = null;
+            // Remove External User Id with Callback Available in SDK Version 3.7.0+
+            OneSignal.removeExternalUserId((results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of removing external user id');
+                console.log(results);
+                // Push can be expected in almost every situation with a success status, but
+                // as a pre-caution its good to verify it exists
+                if (results.push && results.push.success) {
+                console.log('Results of removing external user id push status:');
+                console.log(results.push.success);
+                }
+                
+                // Verify the email is set or check that the results have an email success status
+                if (results.email && results.email.success) {
+                console.log('Results of removoing external user id email status:');
+                console.log(results.email.success);
+                }
+            });
+            
+            //Available in SDK Version 3.6.5-
+            //OneSignal.removeExternalUserId()
         },
         setProfilePic: (state, action) => {
             state.profilePic = action.payload.profilePic;
@@ -66,6 +88,30 @@ export function login(user) {
         })
         .then(resp => {
             dispatch(setSignIn(resp.data));
+            OneSignal.setExternalUserId(resp.data.username, (results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of setting external user id');
+                console.log(results);
+                
+                // Push can be expected in almost every situation with a success status, but
+                // as a pre-caution its good to verify it exists
+                if (results.push && results.push.success) {
+                    console.log('Results of setting external user id push status:');
+                    console.log(results.push.success);
+                }
+                
+                // Verify the email is set or check that the results have an email success status
+                if (results.email && results.email.success) {
+                    console.log('Results of setting external user id email status:');
+                    console.log(results.email.success);
+                }
+
+                // Verify the number is set or check that the results have an sms success status
+                if (results.sms && results.sms.success) {
+                    console.log('Results of setting external user id sms status:');
+                    console.log(results.sms.success);
+                }
+            });
         })
         .catch(err => {
             dispatch(setLoginMessage(err.response.data));
