@@ -73,7 +73,8 @@ const Feed = ({ navigation }) => {
             {
                 isLoading
                 ? <ActivityIndicator size="large" color="#2C65F6" />
-                : <FlatList
+                : whistles.length > 0 
+                ? <FlatList
                     data={whistles}
                     renderItem={renderWhistle}
                     keyExtractor={(whistle) => whistle.id}
@@ -84,6 +85,7 @@ const Feed = ({ navigation }) => {
                     decelerationRate={"normal"}
                     showsVerticalScrollIndicator={false}
                     />
+                : <Text style={styles.noWhistlesText}>No New Whistles Active.</Text>
             }
         </View>
     );
@@ -185,4 +187,9 @@ const styles = StyleSheet.create({
         fontFamily: 'WorkSans-SemiBold',
         color: '#2C65F6'
     },
+    noWhistlesText: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 20,
+        color: '#2C65F6',
+    }
 })
