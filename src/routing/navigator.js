@@ -8,8 +8,23 @@ import { selectIsLoggedIn } from '../redux/slices/authSlice';
 const AppRoute = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
+  const config = {
+    screens: {
+      ActivityNavigator: {
+        screens: {
+          Activity: 'activity'
+        },
+      },
+    },
+  };
+
+  const linking = {
+    prefixes: ['whistle://', 'https://trywhistle.app/', 'http://*.trywhistle.app/'],
+    config,
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       {
         isLoggedIn ? <AppNavigator /> : <AuthNavigator />
       }
