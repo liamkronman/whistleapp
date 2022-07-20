@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions }
 import axios from 'axios';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { useSelector } from 'react-redux';
+import { Navigation } from 'react-native-feather';
 
 const Activity = ({ navigation }) => {
     const jwtToken = useSelector(selectAccessToken);
@@ -68,7 +69,7 @@ const Activity = ({ navigation }) => {
                 }
             }}>
                 <Text>
-                    {user && <Text style={styles.notificationUserText}>{user}</Text>}
+                    {user && <Text style={styles.notificationUserText} onPress={() => navigation.navigate('UserFeature', {username: user})}>{user}</Text>}
                     {text1 && <Text style={styles.notificationText}>{text1}</Text>}
                     {action && <Text style={styles.notificationLightText}>{action}</Text>}
                     {text2 && <Text style={styles.notificationText}>{text2}</Text>}
