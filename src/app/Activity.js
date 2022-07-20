@@ -15,7 +15,7 @@ const Activity = ({ navigation }) => {
             }
         })
         .then(resp => {
-            setNotifications(notifications => [...notifications, ...resp.data.notifications]);
+            setNotifications([...resp.data.notifications]);
         })
         .catch(err => {
             console.log(err);
@@ -23,9 +23,33 @@ const Activity = ({ navigation }) => {
     }, []);
 
     const renderNotification = ( notification ) => {
-        console.log(notification);
+        let user = "";
+        let text1 = "";
+        let action = "";
+        let text2 = "";
+        let whistleTitle = "";
+
+        switch (notification.item.type) {
+            case "whistleVote":
+                user = notification.item.info.voter;
+                text1 = " voted ";
+                action = notification.item.info.optionSelected;
+                text2 = " on your Whistle ";
+                whistleTitle = notification.item.info.whistle.title;
+                break;
+        }
+
         return (
-            <></>
+            <TouchableOpacity style={notification.item.read ? styles.readNotificationContainer : styles.unreadNoticationContainer}>
+                <Text>
+                    {user && <Text style={styles.notificationUserText}>{user}</Text>}
+                    {text1 && <Text style={styles.notificationText}>{text1}</Text>}
+                    {action && <Text style={styles.notificationLightText}>{action}</Text>}
+                    {text2 && <Text style={styles.notificationText}>{text2}</Text>}
+                    {whistleTitle && <Text style={styles.notificationLightText}>{whistleTitle}</Text>}
+                    <Text style={styles.notificationText}>.</Text>
+                </Text>
+            </TouchableOpacity>
         );
     }
 
@@ -73,5 +97,40 @@ const styles = StyleSheet.create({
         color: '#6187EB',
         marginBottom: 4,
         marginTop: 20
+    },
+    readNotificationContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: 20,
+        width: Dimensions.get('window').width,
+        backgroundColor: '#ECEEFF',
+        topBorderWidth: 1,
+        topBorderColor: '#93B9F2',
+    },
+    unreadNoticationContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: 20,
+        width: Dimensions.get('window').width,
+        backgroundColor: '#F3F5FA',
+        topBorderWidth: 1,
+        topBorderColor: '#93B9F2',
+    },
+    notificationText: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 18,
+        color: 'black',
+    },
+    notificationUserText: {
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 18,
+        color: '#2C65F6',
+    },
+    notificationLightText: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 18,
+        color: '#2C65F6',
     }
 });
