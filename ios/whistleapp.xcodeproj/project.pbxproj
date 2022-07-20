@@ -39,9 +39,6 @@
 		5DC0BC892874477E00E44A5A /* WorkSans-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92605E13A64540EBB955498D /* WorkSans-ThinItalic.ttf */; };
 		5DC0BC8A2874477E00E44A5A /* WorkSans-Italic-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0FA7F1E9DC048269F6C9B50 /* WorkSans-Italic-VariableFont_wght.ttf */; };
 		5DC0BC8B2874477E00E44A5A /* WorkSans-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F38547299AB4584A3C0A6BC /* WorkSans-VariableFont_wght.ttf */; };
-		5DFF0BA32885B9F2002C615F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DFF0BA22885B9F1002C615F /* GoogleService-Info.plist */; };
-		5DFF0BA62885BB98002C615F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFF0BA52885BB98002C615F /* FirebaseAnalytics */; };
-		5DFF0BA82885BB98002C615F /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5DFF0BA72885BB98002C615F /* FirebaseMessaging */; };
 		6FB53167F8A74AA7856C7716 /* GemunuLibre-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F462B3C69CA46AB9093EE66 /* GemunuLibre-ExtraBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85D0A0A87F28423C9747A9A2 /* GemunuLibre-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66104AE324D54388A41DDE56 /* GemunuLibre-VariableFont_wght.ttf */; };
@@ -128,7 +125,6 @@
 		5D212397288671D000034C56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		5D212399288671D100034C56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5DD7C257288675CA00B706A1 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
-		5DFF0BA22885B9F1002C615F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		613923313F5F40048182750F /* WorkSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BlackItalic.ttf"; path = "../assets/fonts/WorkSans-BlackItalic.ttf"; sourceTree = "<group>"; };
 		65DA4F3907954AF1B02E6C2E /* WorkSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Light.ttf"; path = "../assets/fonts/Work_Sans/static/WorkSans-Light.ttf"; sourceTree = "<group>"; };
 		66104AE324D54388A41DDE56 /* GemunuLibre-VariableFont_wght.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "GemunuLibre-VariableFont_wght.ttf"; path = "../assets/fonts/Gemunu_Libre (1)/GemunuLibre-VariableFont_wght.ttf"; sourceTree = "<group>"; };
@@ -191,8 +187,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DFF0BA82885BB98002C615F /* FirebaseMessaging in Frameworks */,
-				5DFF0BA62885BB98002C615F /* FirebaseAnalytics in Frameworks */,
 				5C9FCDC22F62FF25266F1DC0 /* libPods-whistleapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,7 +230,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				5DFF0BA22885B9F1002C615F /* GoogleService-Info.plist */,
 			);
 			name = whistleapp;
 			sourceTree = "<group>";
@@ -435,8 +428,6 @@
 			);
 			name = whistleapp;
 			packageProductDependencies = (
-				5DFF0BA52885BB98002C615F /* FirebaseAnalytics */,
-				5DFF0BA72885BB98002C615F /* FirebaseMessaging */,
 			);
 			productName = whistleapp;
 			productReference = 13B07F961A680F5B00A75B9A /* whistleapp.app */;
@@ -491,7 +482,6 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				5DFF0BA42885BB97002C615F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -532,7 +522,6 @@
 				5DC0BC842874477E00E44A5A /* WorkSans-MediumItalic.ttf in Resources */,
 				5DC0BC852874477E00E44A5A /* WorkSans-Regular.ttf in Resources */,
 				5DC0BC862874477E00E44A5A /* WorkSans-SemiBold.ttf in Resources */,
-				5DFF0BA32885B9F2002C615F /* GoogleService-Info.plist in Resources */,
 				5DC0BC872874477E00E44A5A /* WorkSans-SemiBoldItalic.ttf in Resources */,
 				5DC0BC882874477E00E44A5A /* WorkSans-Thin.ttf in Resources */,
 				5DC0BC892874477E00E44A5A /* WorkSans-ThinItalic.ttf in Resources */,
@@ -1136,30 +1125,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5DFF0BA42885BB97002C615F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		5DFF0BA52885BB98002C615F /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5DFF0BA42885BB97002C615F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		5DFF0BA72885BB98002C615F /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5DFF0BA42885BB97002C615F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

@@ -41,7 +41,29 @@ const Activity = ({ navigation }) => {
         });
     }, []);
 
+    const getTimeDifference = (d) => {
+        const currentDate = new Date();
+        const date = new Date(d);
+        const diff = currentDate.getTime() - date.getTime();
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor(diff / (1000 * 60));
+        const seconds = Math.floor(diff / (1000));
+        if (days > 0) {
+            return days + "d";
+        } else if (hours > 0) {
+            return hours + "h";
+        } else if (minutes > 0) {
+            return minutes + "m";
+        } else if (seconds > 0) {
+            return seconds + "s";
+        } else {
+            return "Now";
+        }
+    }
+
     const renderNotification = ( notification ) => {
+        console.log(notification);
         let user = "";
         let text1 = "";
         let action = "";
@@ -98,8 +120,8 @@ const Activity = ({ navigation }) => {
                         break;
                 }
             }}>
-                <Text>
-                    {user && <Text style={styles.notificationUserText} onPress={() => navigation.navigate('UserFeature', {username: user})}>{user}</Text>}
+                <Text style={{ flex: 8 }}>
+                    {user && <Text style={styles.notificationUserText} onPress={() => navigation.navigate('UserFeature', {username: user})}>@{user}</Text>}
                     {text1 && <Text style={styles.notificationText}>{text1}</Text>}
                     {action && <Text style={styles.notificationLightText}>{action}</Text>}
                     {text2 && <Text style={styles.notificationText}>{text2}</Text>}
@@ -108,6 +130,7 @@ const Activity = ({ navigation }) => {
                     {whistleTitle && <Text style={styles.notificationLightText}>{whistleTitle}</Text>}
                     <Text style={styles.notificationText}>.</Text>
                 </Text>
+                <Text style={styles.timeText}>{getTimeDifference(notification.createdAt)}</Text>
             </TouchableOpacity>
         );
     }
@@ -166,23 +189,25 @@ const styles = StyleSheet.create({
     },
     readNotificationContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         padding: 20,
         width: Dimensions.get('window').width,
         backgroundColor: '#ECEEFF',
         borderBottomWidth: 1,
         borderBottomColor: '#93B9F2',
+        flexDirection: 'row'
     },
     unreadNoticationContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         padding: 20,
         width: Dimensions.get('window').width,
         backgroundColor: '#F3F5FA',
         borderBottomWidth: 1,
         borderBottomColor: '#93B9F2',
+        flexDirection: 'row',
     },
     notificationText: {
         fontFamily: 'WorkSans-Regular',
@@ -198,5 +223,11 @@ const styles = StyleSheet.create({
         fontFamily: 'WorkSans-Regular',
         fontSize: 18,
         color: '#2C65F6',
-    }
+    },
+    timeText: {
+        fontFamily: 'WorkSans-Regular',
+        fontSize: 18,
+        color: '#6187EB',
+        flex: 1
+    },
 });
