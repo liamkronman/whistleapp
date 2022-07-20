@@ -58,10 +58,14 @@ const Activity = ({ navigation }) => {
                         console.log(err);
                     });
                 }
-                navigation.navigate("WhistleFeature", {
-                    focusedWhistle: notification.item.info.whistle,
-                    isOwner: true
-                });
+                switch (notification.item.type) {
+                    case "whistleVote":
+                        navigation.navigate("WhistleFeature", {
+                            focusedWhistle: notification.item.info.whistle,
+                            isOwner: true
+                        });
+                        break;
+                }
             }}>
                 <Text>
                     {user && <Text style={styles.notificationUserText}>{user}</Text>}

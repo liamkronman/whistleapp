@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoginMessage } from '../redux/slices/authSlice';
 import { ChevronLeft } from "react-native-feather";
@@ -30,7 +30,9 @@ const Login = ({navigation}) => {
             <View style={[styles.container, {
                 flexDirection: "column"
             }]}>
-                <ChevronLeft style={{ position: 'absolute', alignSelf: 'flex-start', top: 70, left: 20 }} width={34} height={34} onPress={() => navigation.pop()} />
+                <Pressable style={{ position: 'absolute', alignSelf: 'flex-start', top: 70, left: 20 }} onPress={() => navigation.pop()}>
+                    <ChevronLeft width={34} height={34} />
+                </Pressable>
                 {
                     message
                     ? <Text style={styles.errorText}>{message}</Text>
