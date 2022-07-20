@@ -46,6 +46,8 @@ const Activity = ({ navigation }) => {
         let text1 = "";
         let action = "";
         let text2 = "";
+        let action2 = "";
+        let text3 = "";
         let whistleTitle = "";
 
         switch (notification.item.type) {
@@ -54,6 +56,15 @@ const Activity = ({ navigation }) => {
                 text1 = " voted ";
                 action = notification.item.info.optionSelected;
                 text2 = " on your Whistle ";
+                whistleTitle = notification.item.info.whistle.title;
+                break;
+            case "whistleComment":
+                user = notification.item.info.commenter;
+                text1 = " commented ";
+                action = notification.item.info.comment;
+                text2 = " under ";
+                action2 = notification.item.info.associatedSide;
+                text3 = " on your Whistle ";
                 whistleTitle = notification.item.info.whistle.title;
                 break;
         }
@@ -79,6 +90,7 @@ const Activity = ({ navigation }) => {
                 }
                 switch (notification.item.type) {
                     case "whistleVote":
+                    case "whistleComment":
                         navigation.navigate("WhistleFeature", {
                             focusedWhistle: notification.item.info.whistle,
                             isOwner: true
@@ -91,6 +103,8 @@ const Activity = ({ navigation }) => {
                     {text1 && <Text style={styles.notificationText}>{text1}</Text>}
                     {action && <Text style={styles.notificationLightText}>{action}</Text>}
                     {text2 && <Text style={styles.notificationText}>{text2}</Text>}
+                    {action2 && <Text style={styles.notificationLightText}>{action2}</Text>}
+                    {text3 && <Text style={styles.notificationText}>{text3}</Text>}
                     {whistleTitle && <Text style={styles.notificationLightText}>{whistleTitle}</Text>}
                     <Text style={styles.notificationText}>.</Text>
                 </Text>
