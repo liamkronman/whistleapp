@@ -1,13 +1,31 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { useSelector } from 'react-redux';
-import { Navigation } from 'react-native-feather';
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Activity = ({ navigation }) => {
     const jwtToken = useSelector(selectAccessToken);
     const [notifications, setNotifications] = React.useState([]);
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(1000).then(() => setRefreshing(false));
+        axios.post("https://trywhistle.app/api/user/getnotifications", {}, {
+            headers: {
+                "x-access-token": jwtToken,
+            }
+        })
+        .then(resp => {
+            setNotifications(resp.data.notifications);
+        })
+        .catch(err => console.log(err));
+    }, []);
 
     React.useEffect(() => {
         axios.post("https://trywhistle.app/api/user/getnotifications", {}, {
@@ -16,7 +34,7 @@ const Activity = ({ navigation }) => {
             }
         })
         .then(resp => {
-            setNotifications([...resp.data.notifications]);
+            setNotifications(resp.data.notifications);
         })
         .catch(err => {
             console.log(err);
@@ -90,6 +108,13 @@ const Activity = ({ navigation }) => {
                 ? <FlatList
                 data={notifications}
                 renderItem={renderNotification}
+                refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#2C65F6"
+                    />
+                }
                 />
                 : <Text style={styles.noNotificationsText}>No notifications yet!</Text>
             }
