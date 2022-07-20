@@ -43,7 +43,7 @@ const UserDisplay = (props) => {
         .then(resp => {
             const newWhistles = resp.data.whistles;
             if (newWhistles.length > 0) {
-                updateWhistles(newWhistles => [...whistles, ...newWhistles]);
+                updateWhistles(whistles => [...whistles, ...newWhistles]);
                 updateLastId(newWhistles[newWhistles.length - 1].id);
                 updateNumWhistles(numWhistles + newWhistles.length);
             }
