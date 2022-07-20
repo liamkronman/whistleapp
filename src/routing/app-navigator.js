@@ -6,7 +6,7 @@ import { Home, Plus, BarChart2, User } from "react-native-feather";
 import FeedNavigator from './feed-navigator';
 import PublishNavigator from './publish-navigator';
 import ProfileNavigator from './profile-navigator';
-import Activity from '../app/Activity';
+import ActivityNavigator from './activity-navigator';
 
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
@@ -56,7 +56,7 @@ const AppNavigator = () => {
             <AppTabs.Screen name="PublishNavigator" component={PublishNavigator} options={{
                 tabBarIcon: (tabInfo) => <Plus width={32} height={32} color={tabInfo.color} />
             }} />
-            <AppTabs.Screen name="Activity" component={Activity} options={{
+            <AppTabs.Screen name="ActivityNavigator" component={ActivityNavigator} options={{
                 tabBarIcon: (tabInfo) => <BarChart2 width={32} height={32} color={tabInfo.color} />
             }} />
             <AppTabs.Screen name="ProfileNavigator" component={ProfileNavigator} options={{

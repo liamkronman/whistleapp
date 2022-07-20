@@ -58,6 +58,10 @@ const Activity = ({ navigation }) => {
                         console.log(err);
                     });
                 }
+                navigation.navigate("WhistleFeature", {
+                    focusedWhistle: notification.item.info.whistle,
+                    isOwner: true
+                });
             }}>
                 <Text>
                     {user && <Text style={styles.notificationUserText}>{user}</Text>}
@@ -123,8 +127,8 @@ const styles = StyleSheet.create({
         padding: 20,
         width: Dimensions.get('window').width,
         backgroundColor: '#ECEEFF',
-        topBorderWidth: 1,
-        topBorderColor: '#93B9F2',
+        borderBottomWidth: 1,
+        borderBottomColor: '#93B9F2',
     },
     unreadNoticationContainer: {
         flex: 1,
@@ -133,8 +137,8 @@ const styles = StyleSheet.create({
         padding: 20,
         width: Dimensions.get('window').width,
         backgroundColor: '#F3F5FA',
-        topBorderWidth: 1,
-        topBorderColor: '#93B9F2',
+        borderBottomWidth: 1,
+        borderBottomColor: '#93B9F2',
     },
     notificationText: {
         fontFamily: 'WorkSans-Regular',
