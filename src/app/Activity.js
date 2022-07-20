@@ -40,7 +40,25 @@ const Activity = ({ navigation }) => {
         }
 
         return (
-            <TouchableOpacity style={notification.item.read ? styles.readNotificationContainer : styles.unreadNoticationContainer}>
+            <TouchableOpacity style={notification.item.read ? styles.readNotificationContainer : styles.unreadNoticationContainer} onPress={() => {
+                if (!notification.item.read) {
+                    axios.post("https://trywhistle.app/api/user/marknotificationread", {
+                        notificationId: notification.item.id
+                    }, {
+                        headers: {
+                            "x-access-token": jwtToken
+                        }
+                    })
+                    .then(resp => {
+                        setNotifications(notifications => {
+                            notifications[notification.index].read = true;
+                            return [...notifications];
+                        });
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }
+            }}>
                 <Text>
                     {user && <Text style={styles.notificationUserText}>{user}</Text>}
                     {text1 && <Text style={styles.notificationText}>{text1}</Text>}
