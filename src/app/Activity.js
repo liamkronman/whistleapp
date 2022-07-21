@@ -63,7 +63,6 @@ const Activity = ({ navigation }) => {
     }
 
     const renderNotification = ( notification ) => {
-        console.log(notification);
         let user = "";
         let text1 = "";
         let action = "";
@@ -153,7 +152,17 @@ const Activity = ({ navigation }) => {
                     />
                 }
                 />
-                : <Text style={styles.noNotificationsText}>No notifications yet!</Text>
+                : <FlatList 
+                    data={["No notifications yet!"]}
+                    renderItem={({item}) => <Text style={styles.noNotificationsText}>{item}</Text>}
+                    refreshControl={
+                        <RefreshControl
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                          tintColor="#2C65F6"
+                        />
+                    }
+                />
             }
         </View>
     );
