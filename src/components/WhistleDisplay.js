@@ -836,8 +836,14 @@ const WhistleDisplay = (props) => {
                                 <View style={{ height: 70, width: '100%', position: 'absolute', bottom: keyboardOffset, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white' }}>
                                     {
                                         replyingTo1
-                                        ? <TextInput ref={replyingInputRef1} editable placeholderTextColor="#9D9D9D" placeholder={`Replying to ${comments1[getIndex(comments1, replyingTo1)].commenter}...`} value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1(replyingTo1)}/>
-                                        : <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => submitComment1()}/>
+                                        ? <TextInput ref={replyingInputRef1} editable placeholderTextColor="#9D9D9D" placeholder={`Replying to ${comments1[getIndex(comments1, replyingTo1)].commenter}...`} value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => {
+                                            if (comment1Text.trim().length > 0)
+                                                submitComment1(replyingTo1);
+                                        }}/>
+                                        : <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment1Text} onChangeText={updateComment1Text} style={styles.commentInput} onSubmitEditing={() => {
+                                            if (comment1Text.trim().length > 0)
+                                                submitComment1();
+                                        }}/>
                                     }
                                 </View>
                             </View>
@@ -937,8 +943,14 @@ const WhistleDisplay = (props) => {
                                 <View style={{ height: 70, width: '100%', position: 'absolute', bottom: keyboardOffset, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white' }}>
                                     {
                                         replyingTo2
-                                        ? <TextInput ref={replyingInputRef2} editable placeholderTextColor="#9D9D9D" placeholder={`Replying to ${comments2[getIndex(comments2, replyingTo2)].commenter}...`} value={comment2Text} onChangeText={updateComment2Text} style={styles.commentInput} onSubmitEditing={() => submitComment2(replyingTo2)}/>
-                                        : <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment2Text} onChangeText={updateComment2Text} style={styles.commentInput} onSubmitEditing={() => submitComment2()}/>
+                                        ? <TextInput ref={replyingInputRef2} editable placeholderTextColor="#9D9D9D" placeholder={`Replying to ${comments2[getIndex(comments2, replyingTo2)].commenter}...`} value={comment2Text} onChangeText={updateComment2Text} style={styles.commentInput} onSubmitEditing={() => {
+                                            if (comment1Text.trim().length > 0)
+                                                submitComment2(replyingTo2);
+                                        }}/>
+                                        : <TextInput editable placeholderTextColor="#9D9D9D" placeholder="Add comment..." value={comment2Text} onChangeText={updateComment2Text} style={styles.commentInput} onSubmitEditing={() => {
+                                            if (comment1Text.trim().length > 0)
+                                                submitComment2();
+                                        }}/>
                                     }
                                 </View>
                             </View>
