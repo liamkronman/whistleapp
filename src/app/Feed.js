@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import axios from "axios";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Dimensions, FlatList, Alert, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { selectIsSuccessful, resetIsSuccessful } from '../redux/slices/publishSlice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import WhistleDisplay from '../components/WhistleDisplay';
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Feed = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -14,6 +18,7 @@ const Feed = ({ navigation }) => {
 
     const [whistles, updateWhistles] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [refreshing, setRefreshing] = React.useState(false);
     
     const getWhistles = async (lastWhistleId=null) => {
         if (lastWhistleId) {
@@ -35,6 +40,17 @@ const Feed = ({ navigation }) => {
         }
     };
     
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(1000).then(() => setRefreshing(false));
+        getWhistles()
+        .then(newWhistles => {
+            updateWhistles(newWhistles.data.whistles);
+            setIsLoading(false);
+        })
+        .catch(err => console.log(err));
+    }, []);
+
     // load whistles immediately
     React.useEffect(() => {
         getWhistles()
@@ -84,8 +100,25 @@ const Feed = ({ navigation }) => {
                     pagingEnabled
                     decelerationRate={"normal"}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                          tintColor="#2C65F6"
+                        />
+                    }
                     />
-                : <Text style={styles.noWhistlesText}>No New Whistles Active.</Text>
+                : <FlatList
+                    data={["No New Whistles Active."]}
+                    renderItem={({item}) => <Text style={styles.noWhistlesText}>{item}</Text>}
+                    refreshControl={
+                        <RefreshControl
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                          tintColor="#2C65F6"
+                        />
+                    }
+                    />
             }
         </View>
     );
