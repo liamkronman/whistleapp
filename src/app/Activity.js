@@ -129,7 +129,7 @@ const Activity = ({ navigation }) => {
                     {whistleTitle && <Text style={styles.notificationLightText}>{whistleTitle}</Text>}
                     <Text style={styles.notificationText}>.</Text>
                 </Text>
-                <Text style={styles.timeText}>{getTimeDifference(notification.createdAt)}</Text>
+                <Text style={styles.timeText}>{getTimeDifference(notification.item.createdAt)}</Text>
             </TouchableOpacity>
         );
     }
