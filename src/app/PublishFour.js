@@ -8,11 +8,11 @@ const PublishFour = ({ navigation }) => {
     const storedExpirationDate = useSelector(selectExpirationDateTime);
     const isSuccessful = useSelector(selectIsSuccessful);
 
-    const [date, setDate] = React.useState(new Date(storedExpirationDate));
+    const [date, setDate] = React.useState(null);
 
-    const [days, updateDays] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24) : null]);
-    const [hours, updateHours] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60 * 60) : null]);
-    const [mins, updateMins] = React.useState([date ? (date.getTime() - new Date().getTime()) / (1000 * 60) : null]);
+    const [days, updateDays] = React.useState(null);
+    const [hours, updateHours] = React.useState(null);
+    const [mins, updateMins] = React.useState(null);
     const [showExpiration, updateShowExpiration] = React.useState(false);
 
     const handlePreviousPress = () => {
@@ -24,14 +24,48 @@ const PublishFour = ({ navigation }) => {
     };
 
     const handlePreviewPress = () => {
-        if (date) {
-            const info = {
-                expirationDateTime: date.toString()
-            };  
-            dispatch(setExpirationDateTime(info));
-            navigation.navigate('PreviewWhistle');
+        if (!days || !hours || !mins) {
+            if (days || hours || mins) {
+                let numDays = 0;
+                let numHours = 0;
+                let numMins = 0;
+                if (days) {
+                    numDays = parseInt(days);
+                }
+                if (hours) {
+                    numHours = parseInt(hours);
+                }
+                if (mins) {
+                    numMins = parseInt(mins);
+                }
+                if (numDays <= 10 && numDays >= 0 && numHours <= 23 && numHours >= 0 && numMins <= 59 && numMins >= 0) {
+                    const info = {
+                        expirationDateTime: new Date(new Date().getTime() + numDays * 1000 * 60 * 60 * 24 + numHours * 1000 * 60 * 60 + numMins * 1000 * 60).toString()
+                    };
+                    dispatch(setExpirationDateTime(info));
+                    navigation.navigate('PreviewWhistle');
+                }
+            }
+        } else {
+            if (date) {
+                const info = {
+                    expirationDateTime: date.toString()
+                };  
+                dispatch(setExpirationDateTime(info));
+                navigation.navigate('PreviewWhistle');
+            }
         }
     };
+
+    React.useEffect(() => {
+        if (storedExpirationDate) {
+            const newDate = new Date(storedExpirationDate);
+            setDate(newDate);
+            updateDays((newDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+            updateHours((newDate.getTime() - new Date().getTime()) / (1000 * 60 * 60));
+            updateMins((newDate.getTime() - new Date().getTime()) / (1000 * 60));
+        }
+    }, [storedExpirationDate]);
 
     React.useEffect(() => {
         if (days && hours && mins) {
