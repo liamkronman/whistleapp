@@ -633,6 +633,7 @@ const WhistleDisplay = (props) => {
                                         .then(resp => {
                                             whistle.options[keys[0]] += 1;
                                             setBackside(true);
+                                            setHasVoted(true);
                                         })
                                         .catch(err => console.log(err));
                                     }}>
@@ -652,6 +653,7 @@ const WhistleDisplay = (props) => {
                                         .then(resp => {
                                             whistle.options[keys[1]] += 1;
                                             setBackside(true);
+                                            setHasVoted(true);
                                         })
                                         .catch(err => console.log(err));
                                     }}>
@@ -741,6 +743,9 @@ const WhistleDisplay = (props) => {
                                 </View>
                             </Pressable>
                         </View>
+                        <Pressable style={{ position: 'absolute', top: 15, right: 1 }} onPress={() => setBackside(false)}>
+                            <Text style={{ fontFamily: 'WorkSans-Medium', color: '#4D7AEF', fontSize: 16, textDecorationLine: 'underline' }}>Go Back</Text>
+                        </Pressable>
                     </View>
                     <View>
                         <Modal
