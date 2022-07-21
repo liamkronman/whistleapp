@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -7,6 +7,10 @@ import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
 import axios from 'axios';
 import { resetPublish } from '../redux/slices/publishSlice';
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const UserDisplay = (props) => {
     const isOwner = props.isOwner;
@@ -20,8 +24,9 @@ const UserDisplay = (props) => {
     const [whistles, updateWhistles] = React.useState([]);
     const [lastId, updateLastId] = React.useState(null);
     const [numWhistles, updateNumWhistles] = React.useState(0);
+    const [refreshing, setRefreshing] = React.useState(false);
 
-    React.useEffect(() => {
+    function getWhistles() {
         axios.post("https://trywhistle.app/api/user/getuserwhistles", {
             "username": username
         })
@@ -34,6 +39,16 @@ const UserDisplay = (props) => {
         .catch(err => {
             console.log(err);
         })
+    }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(1000).then(() => setRefreshing(false));
+        getWhistles();
+    }, []);
+
+    React.useEffect(() => {
+        getWhistles();
     }, []);
 
     const getMoreWhistles = () => {
@@ -229,6 +244,13 @@ const UserDisplay = (props) => {
                 renderItem={renderWhistle}
                 onEndReached={getMoreWhistles}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#2C65F6"
+                    />
+                }
                 />
         </View>
     );
