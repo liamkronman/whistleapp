@@ -38,6 +38,7 @@ const publishSlice = createSlice({
         },
         clearWhistle: (state) => {
             state.isSuccessful = true;
+            state.anonymous = false;
             state.title = null;
             state.background = null;
             state.context = null;
@@ -47,11 +48,21 @@ const publishSlice = createSlice({
         },
         resetIsSuccessful: (state) => {
             state.isSuccessful = false;
+        },
+        resetPublish: (state) => {
+            state.anonymous = false;
+            state.title = null;
+            state.background = null;
+            state.context = null;
+            state.choices =  null;
+            state.expirationDateTime = null;
+            state.errorMessage = null;
+            state.isSuccessful = false;
         }
     }
 });
 
-export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime, clearWhistle, setErrorMessage, resetIsSuccessful } = publishSlice.actions;
+export const { setTitleAndBackground, setContext, setChoices, setExpirationDateTime, clearWhistle, setErrorMessage, resetIsSuccessful, resetPublish } = publishSlice.actions;
 
 export const selectAnonymous = (state) => state.whistleDraft.anonymous;
 export const selectTitle = (state) => state.whistleDraft.title;

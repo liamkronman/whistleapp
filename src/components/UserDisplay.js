@@ -6,6 +6,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
 import axios from 'axios';
+import { resetPublish } from '../redux/slices/publishSlice';
 
 const UserDisplay = (props) => {
     const isOwner = props.isOwner;
@@ -54,6 +55,7 @@ const UserDisplay = (props) => {
     }
 
     const handleLogout = () => {
+        dispatch(resetPublish());
         dispatch(setSignOut());
     }
 
