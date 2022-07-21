@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, TextInput } from 'react-native'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectExpirationDateTime, setExpirationDateTime, selectIsSuccessful } from '../redux/slices/publishSlice';
-import PreviewWhistle from './PreviewWhistle';
 
 const PublishFour = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -30,7 +29,7 @@ const PublishFour = ({ navigation }) => {
                 expirationDateTime: date.toString()
             };  
             dispatch(setExpirationDateTime(info));
-            navigation.navigate(PreviewWhistle);
+            navigation.navigate('PreviewWhistle');
         }
     };
 

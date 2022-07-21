@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard, Dimensions, Switch } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTitle, selectAnonymous, selectBackground, setTitleAndBackground, selectIsSuccessful } from '../redux/slices/publishSlice';
-import PublishTwo from './PublishTwo';
 
 const PublishOne = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -11,9 +10,18 @@ const PublishOne = ({ navigation }) => {
     const storedBackground = useSelector(selectBackground);
     const isSuccessful = useSelector(selectIsSuccessful);
 
-    const [anonymous, updateAnonymous] = React.useState(storedAnonymous);
-    const [title, updateTitle] = React.useState(storedTitle);
-    const [background, updateBackground] = React.useState(storedBackground);
+    const [anonymous, updateAnonymous] = React.useState(false);
+    const [title, updateTitle] = React.useState("");
+    const [background, updateBackground] = React.useState("");
+
+    React.useEffect(() => {
+        if (storedAnonymous)
+            updateAnonymous(true);
+        if (storedTitle)
+            updateTitle(storedTitle);
+        if (storedBackground)
+            updateBackground(storedBackground);
+    }, []);
     
     const handleNextPress = () => {
         if (title && background) {
@@ -23,7 +31,7 @@ const PublishOne = ({ navigation }) => {
                 background
             }
             dispatch(setTitleAndBackground(info))
-            navigation.navigate(PublishTwo);
+            navigation.navigate('PublishTwo');
         }
     }
 

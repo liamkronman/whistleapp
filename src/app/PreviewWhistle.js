@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAnonymous, selectTitle, selectBackground, selectContext, selectChoices, selectExpirationDateTime, selectErrorMessage, selectIsSuccessful, blowWhistleThunk } from '../redux/slices/publishSlice';
 import { selectUsername } from '../redux/slices/authSlice';
-import Feed from './Feed';
 
 const PreviewWhistle = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const PreviewWhistle = ({ navigation }) => {
             for (let i = 0; i < 4; i++) {
                 navigation.pop();
             }
-            navigation.navigate(Feed);
+            navigation.navigate('Feed');
         }
     }, [isSuccessful]);
 

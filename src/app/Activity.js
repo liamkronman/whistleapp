@@ -120,7 +120,7 @@ const Activity = ({ navigation }) => {
                         break;
                 }
             }}>
-                <Text style={{ flex: 8 }}>
+                <Text style={{ flex: 8, textAlign: 'left', marginRight: 5 }}>
                     {user && <Text style={styles.notificationUserText} onPress={() => navigation.navigate('UserFeature', {username: user})}>@{user}</Text>}
                     {text1 && <Text style={styles.notificationText}>{text1}</Text>}
                     {action && <Text style={styles.notificationLightText}>{action}</Text>}
@@ -226,8 +226,9 @@ const styles = StyleSheet.create({
     },
     timeText: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 18,
+        fontSize: 17,
         color: '#6187EB',
-        flex: 1
+        flex: 1,
+        textAlign: 'right'
     },
 });

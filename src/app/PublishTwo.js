@@ -2,14 +2,18 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, TextInput, Dimensions } from 'react-native'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectContext, setContext, selectIsSuccessful } from '../redux/slices/publishSlice';
-import PublishThree from './PublishThree';
 
 const PublishTwo = ({ navigation }) => {
     const dispatch = useDispatch();
     const storedContext = useSelector(selectContext);
     const isSuccessful = useSelector(selectIsSuccessful);
 
-    const [context, updateContext] = React.useState(storedContext);
+    const [context, updateContext] = React.useState("");
+
+    React.useEffect(() => {
+        if (storedContext)
+            updateContext(storedContext);
+    }, []);
 
     const handlePreviousPress = () => {
         const info = {
@@ -25,7 +29,7 @@ const PublishTwo = ({ navigation }) => {
                 context
             };
             dispatch(setContext(info));
-            navigation.navigate(PublishThree);
+            navigation.navigate('PublishThree');
         }
     }
 
@@ -33,7 +37,7 @@ const PublishTwo = ({ navigation }) => {
         if (isSuccessful) {
             updateContext("");
         }
-    }, [isSuccessful])
+    }, [isSuccessful]);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>

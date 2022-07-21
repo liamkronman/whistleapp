@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, TextInput, Dimensions } from 'react-native'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectChoices, setChoices, selectIsSuccessful } from '../redux/slices/publishSlice';
-import PublishFour from './PublishFour';
 
 const PublishThree = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const PublishThree = ({ navigation }) => {
                 choices: [option1, option2]
             };
             dispatch(setChoices(info));
-            navigation.navigate(PublishFour);
+            navigation.navigate('PublishFour');
         }
     };
 

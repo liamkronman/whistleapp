@@ -36,20 +36,12 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Access</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Location Access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library Image Picker</string>
 	<key>UIAppFonts</key>
