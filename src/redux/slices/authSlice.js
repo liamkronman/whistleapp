@@ -3,8 +3,6 @@ import axios from "axios";
 import FormData from 'form-data';
 import axiosRetry from 'axios-retry';
 import OneSignal from 'react-native-onesignal';
-import { useDispatch } from "react-redux";
-import { resetPublish } from "./publishSlice";
 
 axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
 
