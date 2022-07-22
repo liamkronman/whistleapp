@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Refresh
 import axios from 'axios';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { useSelector } from 'react-redux';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));

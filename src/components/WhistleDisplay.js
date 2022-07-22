@@ -463,7 +463,7 @@ const WhistleDisplay = (props) => {
                 {allReplies.map((replyKey, index) => {
                     const ind = getIndex(comments1, replyKey);
                     return (
-                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                 setIsComment1Visible(false)
@@ -782,9 +782,9 @@ const WhistleDisplay = (props) => {
                                                 comments1.map((comment, index) => {
                                                     if (!comment.replyingTo) {
                                                         return (
-                                                            <>
+                                                            <View style={{ width: 350 }}>
                                                                 <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                                                    <View style={{ flexDirection: 'column' }}>
+                                                                    <View style={{ flexDirection: 'column', flex: 12 }}>
                                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                                                             setIsComment1Visible(false)
                                                                             navigation.navigate('UserFeature', {username: comment.commenter})
@@ -798,7 +798,7 @@ const WhistleDisplay = (props) => {
                                                                             </Pressable>
                                                                         </View>
                                                                     </View>
-                                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                                                    <View style={{ flexDirection: 'column', alignItems: 'center', flex: 1 }}>
                                                                         <Pressable onPress={() => {
                                                                             if (downvotes1[index]) {
                                                                                 handleVoteComment1(comment.id, index, 'undownvote')
@@ -830,7 +830,7 @@ const WhistleDisplay = (props) => {
                                                                 {
                                                                     comment1Tree[comment.id] && <CommentReplies1 replyTree={comment1Tree} commentId={comment.id} comments={comments1} />
                                                                 }
-                                                            </>
+                                                            </View>
                                                         )
                                                     }
                                                 })
@@ -889,9 +889,9 @@ const WhistleDisplay = (props) => {
                                                 comments2.map((comment, index) => {
                                                     if (!comment.replyingTo) {
                                                         return (
-                                                            <>
+                                                            <View style={{ width: 350 }}>
                                                                 <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                                                    <View style={{ flexDirection: 'column' }}>
+                                                                    <View style={{ flexDirection: 'column', flex: 12 }}>
                                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                                                             setIsComment2Visible(false)
                                                                             navigation.navigate('UserFeature', {username: comment.commenter})
@@ -905,7 +905,7 @@ const WhistleDisplay = (props) => {
                                                                             </Pressable>
                                                                         </View>
                                                                     </View>
-                                                                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                                                    <View style={{ flexDirection: 'column', alignItems: 'center', flex: 1 }}>
                                                                         <Pressable onPress={() => {
                                                                             if (downvotes2[index]) {
                                                                                 handleVoteComment2(comment.id, index, 'undownvote')
@@ -937,7 +937,7 @@ const WhistleDisplay = (props) => {
                                                                 {
                                                                     comment2Tree[comment.id] && <CommentReplies2 replyTree={comment2Tree} commentId={comment.id} comments={comments2} />
                                                                 }
-                                                            </>
+                                                            </View>
                                                         )
                                                     }
                                                 })
