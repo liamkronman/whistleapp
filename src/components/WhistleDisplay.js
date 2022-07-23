@@ -694,7 +694,7 @@ const WhistleDisplay = (props) => {
                                     <PollBar key={0} percent={whistle.options[keys[0]] / (whistle.options[keys[0]] + whistle.options[keys[1]])} style={styles.pollBar}></PollBar>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={styles.pollBarText}>
+                                    <Text style={styles.pollBarText} numberOfLines={3}>
                                         {keys[0]}
                                     </Text>
                                 </View>
@@ -723,7 +723,7 @@ const WhistleDisplay = (props) => {
                                     <PollBar key={1} percent={whistle.options[keys[1]] / (whistle.options[keys[0]] + whistle.options[keys[1]])} style={styles.pollBar}></PollBar>
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'center' }}>
-                                    <Text style={styles.pollBarText}>
+                                    <Text style={styles.pollBarText} numberOfLines={3}>
                                         {keys[1]}
                                     </Text>
                                 </View>
@@ -988,7 +988,7 @@ const styles = StyleSheet.create({
     },
     whistleTitle: {
         fontFamily: 'WorkSans-Bold',
-        fontSize: 30,
+        fontSize: 28,
         color: '#2C65F6',
         textAlign: 'center'
     },
@@ -1042,7 +1042,7 @@ const styles = StyleSheet.create({
     },
     pollBarText: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'center',
         fontFamily: 'WorkSans-SemiBold',
         color: '#2C65F6'

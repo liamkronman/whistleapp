@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     },
     whistleTitle: {
         fontFamily: 'WorkSans-Bold',
-        fontSize: 30,
+        fontSize: 28,
         color: '#2C65F6',
         textAlign: 'center'
     },
