@@ -64,9 +64,11 @@ const PreviewWhistle = ({ navigation }) => {
                 <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Text style={styles.whistleTitle}>{title}</Text>
                 </View>
-                <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                    <Text style={styles.whistleAuthor}>{anonymous ? "Anonymous" : username}: </Text>
-                    <Text style={styles.whistleBackground}>{background}</Text>
+                <View style={{ flex: 0.7, alignItems: 'center', paddingTop: 4 }}>
+                    <Text numberOfLines={2} style={{ textAlign: 'center' }}>
+                        <Text style={styles.whistleAuthor}>{anonymous ? "Anonymous" : username}: </Text>
+                        <Text style={styles.whistleBackground}>{background}</Text>
+                    </Text>
                 </View>
                 <View style={{ flex: 4.5}}>
                     <Text style={styles.whistleContext}>{context}</Text>
@@ -108,12 +110,12 @@ const styles = StyleSheet.create({
     },
     whistleAuthor: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 18,
+        fontSize: 16,
         color: '#8CA9F2'
     },
     whistleBackground: {
         fontFamily: 'WorkSans-SemiBold',
-        fontSize: 18,
+        fontSize: 16,
         color: '#2C65F6'
     },
     whistleContext: {
@@ -127,12 +129,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: '#5B57FA',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 10
     },
     whistleOptionText: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 19,
-        color: 'white'
+        fontSize: 17.5,
+        color: 'white',
+        textAlign: 'center'
     },
     backBtn: {
         fontFamily: 'WorkSans-SemiBold',

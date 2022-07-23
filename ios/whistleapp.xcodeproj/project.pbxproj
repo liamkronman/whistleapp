@@ -427,8 +427,6 @@
 				5D21239B288671D100034C56 /* PBXTargetDependency */,
 			);
 			name = whistleapp;
-			packageProductDependencies = (
-			);
 			productName = whistleapp;
 			productReference = 13B07F961A680F5B00A75B9A /* whistleapp.app */;
 			productType = "com.apple.product-type.application";
@@ -481,8 +479,6 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
-			packageReferences = (
-			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

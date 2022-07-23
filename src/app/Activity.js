@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Refresh
 import axios from 'axios';
 import { selectAccessToken } from '../redux/slices/authSlice';
 import { useSelector } from 'react-redux';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import NotificationLoading from '../components/NotificationLoading';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -36,6 +36,7 @@ const Activity = ({ navigation }) => {
         })
         .then(resp => {
             setNotifications(resp.data.notifications);
+            setIsLoading(false);
         })
         .catch(err => {
             console.log(err);

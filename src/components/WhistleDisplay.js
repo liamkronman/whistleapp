@@ -596,9 +596,11 @@ const WhistleDisplay = (props) => {
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
                             <Text style={styles.whistleTitle}>{whistle.title}</Text>
                         </View>
-                        <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', paddingTop: 4 }}>
-                            <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.author})}>{whistle.author}: </Text>
-                            <Text style={styles.whistleBackground}>{whistle.background}</Text>
+                        <View style={{ flex: 0.7, paddingTop: 4, alignItems: 'center' }}>
+                            <Text numberOfLines={2} style={{ textAlign: 'center' }}>
+                                <Text style={styles.whistleAuthor} onPress={() => navigation.navigate('UserFeature', {username: whistle.author})}>{whistle.author}: </Text>
+                                <Text style={styles.whistleBackground}>{whistle.background}</Text>
+                            </Text>
                         </View>
                         <View style={{ flex: 4.5}}>
                             <Text style={styles.whistleContext}>{whistle.context}</Text>
@@ -743,7 +745,7 @@ const WhistleDisplay = (props) => {
                                 </View>
                             </Pressable>
                         </View>
-                        <Pressable style={{ position: 'absolute', top: 15, right: 1 }} onPress={() => setBackside(false)}>
+                        <Pressable style={{ position: 'absolute', top: 5, right: 1 }} onPress={() => setBackside(false)}>
                             <Text style={{ fontFamily: 'WorkSans-Medium', color: '#4D7AEF', fontSize: 16, textDecorationLine: 'underline' }}>Go Back</Text>
                         </Pressable>
                     </View>
@@ -992,12 +994,12 @@ const styles = StyleSheet.create({
     },
     whistleAuthor: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 18,
+        fontSize: 16,
         color: '#8CA9F2'
     },
     whistleBackground: {
         fontFamily: 'WorkSans-SemiBold',
-        fontSize: 18,
+        fontSize: 16,
         color: '#2C65F6'
     },
     whistleContext: {
@@ -1011,12 +1013,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: '#5B57FA',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 10
     },
     whistleOptionText: {
         fontFamily: 'WorkSans-Regular',
-        fontSize: 19,
-        color: 'white'
+        fontSize: 17.5,
+        color: 'white',
+        textAlign: 'center'
     },
     pollBarContainer: {
         alignItems: 'center',
