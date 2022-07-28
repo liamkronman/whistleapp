@@ -63,7 +63,7 @@ const Feed = ({ navigation }) => {
 
     React.useEffect(() => {
         if (isSuccessful) {
-            Alert.alert("Success!", "Your whistle has been published!");
+            Alert.alert("Success!", "Your Whistle has been published!");
             dispatch(resetIsSuccessful());
         }
     }, [isSuccessful]);

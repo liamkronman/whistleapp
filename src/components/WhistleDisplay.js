@@ -594,7 +594,7 @@ const WhistleDisplay = (props) => {
                 <View style={styles.whistleContainer}>
                     <View style ={{ width: 353, height: Dimensions.get('window').height - 170, flexDirection: 'column' }}>
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Text style={styles.whistleTitle}>{whistle.title}</Text>
+                            <Text style={styles.whistleTitle} numberOfLines={2}>{whistle.title}</Text>
                         </View>
                         <View style={{ flex: 0.7, paddingTop: 4, alignItems: 'center' }}>
                             <Text numberOfLines={2} style={{ textAlign: 'center' }}>
@@ -988,7 +988,7 @@ const styles = StyleSheet.create({
     },
     whistleTitle: {
         fontFamily: 'WorkSans-Bold',
-        fontSize: 28,
+        fontSize: 25,
         color: '#2C65F6',
         textAlign: 'center'
     },

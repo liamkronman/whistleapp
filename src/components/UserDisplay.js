@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -25,6 +25,8 @@ const UserDisplay = (props) => {
     const [lastId, updateLastId] = React.useState(null);
     const [numWhistles, updateNumWhistles] = React.useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
+    const [followers, updateFollowers] = React.useState([]);
+    const [following, updateFollowing] = React.useState([]);
 
     function getWhistles() {
         axios.post("https://trywhistle.app/api/user/getuserwhistles", {
@@ -41,14 +43,31 @@ const UserDisplay = (props) => {
         })
     }
 
+    function getFollowerFollowing() {
+        axios.post("https://trywhistle.app/api/user/getuserfollowerfollowing", {
+            "username": username
+        })
+        .then(resp => {
+            const newFollowers = resp.data.followers;
+            const newFollowing = resp.data.following;
+            updateFollowers(newFollowers);
+            updateFollowing(newFollowing);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         wait(1000).then(() => setRefreshing(false));
         getWhistles();
+        getFollowerFollowing();
     }, []);
 
     React.useEffect(() => {
         getWhistles();
+        getFollowerFollowing();
     }, []);
 
     const getMoreWhistles = () => {
@@ -72,6 +91,17 @@ const UserDisplay = (props) => {
     const handleLogout = () => {
         dispatch(resetPublish());
         dispatch(setSignOut());
+    }
+
+    const logoutAlert = () => {
+        Alert.alert(
+            "Log Out",
+            "Are you sure you want to log out?",
+            [
+                { text: "Cancel", style: "cancel" },
+                { text: "Log out", onPress: () => handleLogout() }
+            ]
+        );
     }
 
     const handleUpdateProfilePic = () => {
@@ -205,7 +235,7 @@ const UserDisplay = (props) => {
                         <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
                             <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                    <Text style={styles.followCount}>0</Text>
+                                    <Text style={styles.followCount}>{followers.length}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>followers</Text>
@@ -213,7 +243,7 @@ const UserDisplay = (props) => {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                    <Text style={styles.followCount}>0</Text>
+                                    <Text style={styles.followCount}>{following.length}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>following</Text>
@@ -223,7 +253,7 @@ const UserDisplay = (props) => {
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             { 
                                 isOwner 
-                                ? <TouchableOpacity onPress={handleLogout} style={styles.btn}>
+                                ? <TouchableOpacity onPress={logoutAlert} style={styles.btn}>
                                     <Text style={styles.btnText}>Log Out</Text>
                                 </TouchableOpacity>
                                 : <TouchableOpacity style={styles.btn}>
