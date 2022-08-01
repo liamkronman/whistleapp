@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Feed from '../app/Feed';
 import UserFeature from '../app/UserFeature';
 import WhistleFeature from "../app/WhistleFeature";
+import FollowNavigator from "./follow-navigator";
 
 const FeedTabs = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ const FeedNavigator = () => {
             <FeedTabs.Screen name="Feed" component={Feed} />
             <FeedTabs.Screen name="UserFeature" component={UserFeature} />
             <FeedTabs.Screen name="WhistleFeature" component={WhistleFeature} />
+            <FeedTabs.Screen name="FollowNavigator" component={FollowNavigator} />
         </FeedTabs.Navigator>
     );
 }

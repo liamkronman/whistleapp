@@ -110,7 +110,7 @@ const Feed = ({ navigation }) => {
                     />
                 : <FlatList
                     data={["No New Whistles Active."]}
-                    renderItem={({item}) => <Text style={styles.noWhistlesText}>{item}</Text>}
+                    renderItem={({item}) => <View style={{ height: Dimensions.get('window').height - 170, justifyContent: 'center'}}><Text style={styles.noWhistlesText}>{item}</Text></View>}
                     refreshControl={
                         <RefreshControl
                           refreshing={refreshing}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -233,22 +233,22 @@ const UserDisplay = (props) => {
                             <Text style={styles.lastActive}>Active</Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
-                            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {followers: [...followers], following: [...following], isFollowersSelected: true})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
                                     <Text style={styles.followCount}>{followers.length}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>followers</Text>
                                 </View>
-                            </View>
-                            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }}>
+                            </Pressable>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {followers: [...followers], following: [...following], isFollowersSelected: false})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
                                     <Text style={styles.followCount}>{following.length}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>following</Text>
                                 </View>
-                            </View>
+                            </Pressable>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             { 
