@@ -46,6 +46,10 @@ const UserDisplay = (props) => {
     function getFollowerFollowing() {
         axios.post("https://trywhistle.app/api/user/getuserfollowerfollowing", {
             "username": username
+        }, {
+            headers: {
+                "x-access-token": accessToken
+            }
         })
         .then(resp => {
             const newFollowers = resp.data.followers;
