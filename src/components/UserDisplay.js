@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
+import { selectFollowers, selectFollowing, setFollowers, setFollowing, resetUserInfo } from '../redux/slices/userSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
@@ -25,8 +26,8 @@ const UserDisplay = (props) => {
     const [lastId, updateLastId] = React.useState(null);
     const [numWhistles, updateNumWhistles] = React.useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
-    const [followers, updateFollowers] = React.useState([]);
-    const [following, updateFollowing] = React.useState([]);
+    const followers = useSelector(selectFollowers);
+    const following = useSelector(selectFollowing);
 
     function getWhistles() {
         axios.post("https://trywhistle.app/api/user/getuserwhistles", {
@@ -54,8 +55,10 @@ const UserDisplay = (props) => {
         .then(resp => {
             const newFollowers = resp.data.followers;
             const newFollowing = resp.data.following;
-            updateFollowers(newFollowers);
-            updateFollowing(newFollowing);
+            console.log(resp)
+            console.log(newFollowers)
+            dispatch(setFollowers(newFollowers));
+            dispatch(setFollowing(newFollowing));
         })
         .catch(err => {
             console.log(err);
@@ -70,6 +73,7 @@ const UserDisplay = (props) => {
     }, []);
 
     React.useEffect(() => {
+        dispatch(resetUserInfo());
         getWhistles();
         getFollowerFollowing();
     }, []);
@@ -237,17 +241,17 @@ const UserDisplay = (props) => {
                             <Text style={styles.lastActive}>Active</Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
-                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {followers: [...followers], following: [...following], isFollowersSelected: true})}>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: true})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                    <Text style={styles.followCount}>{followers.length}</Text>
+                                    <Text style={styles.followCount}>{followers ? followers.length : 0}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>followers</Text>
                                 </View>
                             </Pressable>
-                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {followers: [...followers], following: [...following], isFollowersSelected: false})}>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: false})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                                    <Text style={styles.followCount}>{following.length}</Text>
+                                    <Text style={styles.followCount}>{following ? following.length : 0}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.followText}>following</Text>

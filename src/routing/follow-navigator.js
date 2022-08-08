@@ -7,7 +7,7 @@ import FollowDisplay from '../components/FollowDisplay';
 const FollowTabs = createMaterialTopTabNavigator();
 
 function FollowNavigator({route, navigation}) {
-    const { followers, following, isFollowersSelected} = route.params;
+    const { isFollowersSelected} = route.params;
     const [initialRoute, setInitialRoute] = React.useState(isFollowersSelected ? 'Followers' : 'Following');
     
     return (
@@ -29,8 +29,8 @@ function FollowNavigator({route, navigation}) {
                     height: 2,
                 },
             }}>
-                <FollowTabs.Screen name="Followers" children={() => <FollowDisplay users={followers} isFollower={true} navigation={navigation} />} />
-                <FollowTabs.Screen name="Following" children={() => <FollowDisplay users={following} isFollower={false} navigation={navigation}/>} />
+                <FollowTabs.Screen name="Followers" children={() => <FollowDisplay isFollower={true} navigation={navigation} />} />
+                <FollowTabs.Screen name="Following" children={() => <FollowDisplay isFollower={false} navigation={navigation}/>} />
             </FollowTabs.Navigator>
         </View>
     );

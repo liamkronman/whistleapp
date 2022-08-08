@@ -1,23 +1,74 @@
 import * as React from 'react';
 import { StyleSheet, View, FlatList, Text, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAccessToken } from '../redux/slices/authSlice';
+import { selectFollowers, selectFollowing, setFollowers, setFollowing } from '../redux/slices/userSlice';
 import axios from 'axios';
 
 const FollowDisplay = (props) => {
-    const users = props.users;
     const isFollower = props.isFollower;
     const navigation = props.navigation;
-    const [usersState, updateUsersState] = React.useState(users)
+    const accessToken = useSelector(selectAccessToken);
+    const users = useSelector(isFollower ? selectFollowers : selectFollowing);
+    const dispatch = useDispatch();
 
-    const handleFollowPress = (user) => {
-        if (user.isFollowing) {
+    const handleFollowPress = (follow) => {
+        const isFollowing = follow.isFollowing;
+        const username = isFollower ? follow.follower : follow.followed;
 
+        if (isFollowing) {
+            axios.post("https://trywhistle.app/api/user/unfollowuser", {
+                username: username
+            }, {
+                headers: {
+                    "x-access-token": accessToken
+                }
+            })
+            .then(res => {
+                let newUsers = users;
+                for (let i = 0; i < newUsers.length; i++) {
+                    if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
+                        newUsers[i].isFollowing = false;
+                        break;
+                    }
+                }
+                dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        } else {
+            axios.post("https://trywhistle.app/api/user/followuser", {
+                username: username
+            }, {
+                headers: {
+                    "x-access-token": accessToken
+                }
+            })
+            .then(res => {
+                let newUsers = users;
+                for (let i = 0; i < newUsers.length; i++) {
+                    if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
+                        newUsers[i].isFollowing = true;
+                        break;
+                    }
+                }
+                dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
+                if (isFollower) {
+                    let following = useSelector(selectFollowing);
+                    following.append(res);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
         }
     }
 
     return (
         <View style={{ backgroundColor: '#ECEEFF', height: Dimensions.get('window').height - 220 }}>
             <FlatList
-                data={usersState}
+                data={users}
                 renderItem={({ item }) => (
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 70, alignItems: 'center', padding: 25 }}>
                         {
