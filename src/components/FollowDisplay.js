@@ -25,7 +25,7 @@ const FollowDisplay = (props) => {
         dispatch(setFollowerFollowing);
     }, []);
 
-    const handleFollowPress = (follow) => {
+    function handleFollowPress(follow) {
         const isFollowing = follow.isFollowing;
         const username = isFollower ? follow.follower : follow.followed;
 
@@ -38,43 +38,25 @@ const FollowDisplay = (props) => {
                 }
             })
             .then(res => {
-                let newUsers = users;
-                for (let i = 0; i < newUsers.length; i++) {
-                    if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
-                        newUsers[i].isFollowing = false;
-                        break;
-                    }
-                }
-                dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
+                dispatch(setFollowerFollowing)
             })
             .catch(err => {
                 console.log(err);
             });
         } else {
-            // axios.post("https://trywhistle.app/api/user/followuser", {
-            //     username: username
-            // }, {
-            //     headers: {
-            //         "x-access-token": accessToken
-            //     }
-            // })
-            // .then(res => {
-            //     let newUsers = users;
-            //     for (let i = 0; i < newUsers.length; i++) {
-            //         if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
-            //             newUsers[i].isFollowing = true;
-            //             break;
-            //         }
-            //     }
-            //     dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
-            //     if (isFollower) {
-            //         let following = useSelector(selectFollowing);
-            //         following.append(res);
-            //     }
-            // })
-            // .catch(err => {
-            //     console.log(err);
-            // });
+            axios.post("https://trywhistle.app/api/user/followuser", {
+                username: username
+            }, {
+                headers: {
+                    "x-access-token": accessToken
+                }
+            })
+            .then(res => {
+                dispatch(setFollowerFollowing);
+            })
+            .catch(err => {
+                console.log(err);
+            });
         }
     }
 
@@ -91,8 +73,8 @@ const FollowDisplay = (props) => {
                         }
                         {
                             item.isFollowing
-                            ? <TouchableOpacity style={{ width: 113, height: 33, backgroundColor: 'white', borderWidth: 1, borderColor: '#5B57FA', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }} onPress={handleFollowPress(item)}><Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#5B57FA' }}>Following</Text></TouchableOpacity>
-                            : <TouchableOpacity style={{ width: 113, height: 33, backgroundColor: '#5B57FA', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }} onPress={handleFollowPress(item)}><Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'white' }}>Follow</Text></TouchableOpacity>
+                            ? <TouchableOpacity style={{ width: 113, height: 33, backgroundColor: 'white', borderWidth: 1, borderColor: '#5B57FA', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }} onPress={() => handleFollowPress(item)}><Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#5B57FA' }}>Following</Text></TouchableOpacity>
+                            : <TouchableOpacity style={{ width: 113, height: 33, backgroundColor: '#5B57FA', alignItems: 'center', justifyContent: 'center', borderRadius: 6 }} onPress={() => handleFollowPress(item)}><Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: 'white' }}>Follow</Text></TouchableOpacity>
                         }
                     </View>
                 )}

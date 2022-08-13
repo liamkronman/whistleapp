@@ -41,7 +41,6 @@ export default userSlice.reducer;
 
 export async function setFollowerFollowing(dispatch, getState) {
     const state = getState();
-    console.log(state);
     axios.post("https://trywhistle.app/api/user/getuserfollowerfollowing", {
         "username": state.userInfo.username
     }, {
@@ -50,6 +49,7 @@ export async function setFollowerFollowing(dispatch, getState) {
         }
     })
     .then(resp => {
+        console.log(resp)
         const newFollowers = resp.data.followers;
         const newFollowing = resp.data.following;
         dispatch(resetUserInfo());
