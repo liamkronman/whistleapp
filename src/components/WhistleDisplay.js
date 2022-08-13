@@ -463,7 +463,7 @@ const WhistleDisplay = (props) => {
                 {allReplies.map((replyKey, index) => {
                     const ind = getIndex(comments1, replyKey);
                     return (
-                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <TouchableOpacity key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} onPress={() => setReplyingTo1(comments1[ind].id)}>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                 setIsComment1Visible(false)
@@ -505,7 +505,7 @@ const WhistleDisplay = (props) => {
                                 <ChevronDown style={{ color: downvotes1[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     )
                 })}
             </View>
@@ -534,7 +534,7 @@ const WhistleDisplay = (props) => {
                 {allReplies.map((replyKey, index) => {
                     const ind = getIndex(comments2, replyKey);
                     return (
-                    <View key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                    <TouchableOpacity key={ind} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }} onPress={() => setReplyingTo2(comments2[ind].id)}>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                 setIsComment2Visible(false)
@@ -544,7 +544,7 @@ const WhistleDisplay = (props) => {
                             {/* display largest denomination of difference between current time and comment.createdAt (e.g. 2yr, 5d, 2hr, 3m) */}
                             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                                 <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#8CA9F2' }}>{getTimeDifference(comments2[ind].createdAt)} </Text>
-                                <Pressable onPress={() => setReplyingTo1(comments2[ind].id)}>
+                                <Pressable onPress={() => setReplyingTo2(comments2[ind].id)}>
                                     <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 16, color: '#2C65F6' }}>Reply</Text>
                                 </Pressable>
                             </View>
@@ -576,7 +576,7 @@ const WhistleDisplay = (props) => {
                                 <ChevronDown style={{ color: downvotes2[ind] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                             </Pressable>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     )
                 })}
             </View>
@@ -785,7 +785,7 @@ const WhistleDisplay = (props) => {
                                                     if (!comment.replyingTo) {
                                                         return (
                                                             <View style={{ width: 350 }}>
-                                                                <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                                                <TouchableOpacity key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }} onPress={() => setReplyingTo1(comment.id)}>
                                                                     <View style={{ flexDirection: 'column', flex: 12 }}>
                                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                                                             setIsComment1Visible(false)
@@ -827,7 +827,7 @@ const WhistleDisplay = (props) => {
                                                                             <ChevronDown style={{ color: downvotes1[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                                                                         </Pressable>
                                                                     </View>
-                                                                </View>
+                                                                </TouchableOpacity>
                                                                 {/* CommentReplies passing comment1Tree, commend.id and comments1 through */}
                                                                 {
                                                                     comment1Tree[comment.id] && <CommentReplies1 replyTree={comment1Tree} commentId={comment.id} comments={comments1} />
@@ -892,7 +892,7 @@ const WhistleDisplay = (props) => {
                                                     if (!comment.replyingTo) {
                                                         return (
                                                             <View style={{ width: 350 }}>
-                                                                <View key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                                                <TouchableOpacity key={index} style={{ flex: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }} onPress={() => setReplyingTo2(comment.id)}>
                                                                     <View style={{ flexDirection: 'column', flex: 12 }}>
                                                                         <Text style={{ fontFamily: 'WorkSans-Regular', fontSize: 18, color: '#8CA9F2' }} onPress={() => {
                                                                             setIsComment2Visible(false)
@@ -934,7 +934,7 @@ const WhistleDisplay = (props) => {
                                                                             <ChevronDown style={{ color: downvotes2[index] ? '#2C65F6' : '#8CA9F2' }} width={30} height={30} />
                                                                         </Pressable>
                                                                     </View>
-                                                                </View>
+                                                                </TouchableOpacity>
                                                                 {/* CommentReplies passing comment1Tree, commend.id and comments1 through */}
                                                                 {
                                                                     comment2Tree[comment.id] && <CommentReplies2 replyTree={comment2Tree} commentId={comment.id} comments={comments2} />
