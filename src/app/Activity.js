@@ -90,6 +90,9 @@ const Activity = ({ navigation }) => {
                 text3 = " on your Whistle ";
                 whistleTitle = notification.item.info.whistle.title;
                 break;
+            case "userFollow":
+                user = notification.item.info.follower;
+                text1 = " started following you";
         }
 
         return (
@@ -117,6 +120,11 @@ const Activity = ({ navigation }) => {
                         navigation.navigate("WhistleFeature", {
                             focusedWhistle: notification.item.info.whistle,
                             isOwner: true
+                        });
+                        break;
+                    case "userFollow":
+                        navigation.navigate("UserFeature", {
+                            username: notification.item.info.follower
                         });
                         break;
                 }
