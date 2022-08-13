@@ -45,21 +45,23 @@ export const selectIsFollowing = (state) => state.userInfo.isFollowing;
 
 export default userSlice.reducer;
 
-export async function checkIsFollowing (dispatch, getState) {
-    const state = getState();
-    axios.post("https://trywhistle.app/api/user/checkisfollowing", {
-        targetUsername: state.userInfo.username
-    }, {
-        headers: {
-            "x-access-token": state.userAuth.accessToken
-        }
-    })
-    .then(resp => {
-        dispatch(setIsFollowing(resp.data.isFollowing));
-    })
-    .catch(err => {
-        console.log(err);
-    });
+export function checkIsFollowing(targetUsername) {
+    return async function checkIsFollowingThunk(dispatch, getState) {
+        const state = getState();
+        axios.post("https://trywhistle.app/api/user/checkisfollowing", {
+            targetUsername: targetUsername
+        }, {
+            headers: {
+                "x-access-token": state.userAuth.accessToken
+            }
+        })
+        .then(resp => {
+            dispatch(setIsFollowing(resp.data.isFollowing));
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
 }
 
 export async function setFollowerFollowing(dispatch, getState) {
@@ -77,6 +79,8 @@ export async function setFollowerFollowing(dispatch, getState) {
         dispatch(resetUserInfo());
         dispatch(setFollowers(newFollowers));
         dispatch(setFollowing(newFollowing));
+        const checkIsFollowingThunk = checkIsFollowing(state.userInfo.username);
+        dispatch(checkIsFollowingThunk);
     })
     .catch(err => {
         console.log(err);

@@ -48,8 +48,8 @@ const UserDisplay = (props) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         wait(1000).then(() => setRefreshing(false));
+        dispatch(setUsername(username));
         getWhistles();
-        dispatch(checkIsFollowing);
         dispatch(setFollowerFollowing);
     }, []);
 
@@ -57,7 +57,6 @@ const UserDisplay = (props) => {
         dispatch(resetUserInfo());
         dispatch(setUsername(username));
         getWhistles();
-        dispatch(checkIsFollowing);
         dispatch(setFollowerFollowing);
     }, []);
 
@@ -375,7 +374,7 @@ const styles = StyleSheet.create({
         width: 117,
         height: 32,
         borderRadius: 6,
-        backgroundColor: 'red',
+        backgroundColor: '#db0404',
         alignItems: 'center',
         justifyContent: 'center',
     },

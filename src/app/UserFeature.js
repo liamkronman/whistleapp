@@ -2,12 +2,13 @@ import React from 'react';
 import { ChevronLeft } from "react-native-feather";
 import { StyleSheet, View, Dimensions, Pressable } from "react-native";
 import { useDispatch } from 'react-redux';
-import { setUsername } from '../redux/slices/userSlice';
+import { setFollowerFollowing, setUsername } from '../redux/slices/userSlice';
 import UserDisplay from '../components/UserDisplay';
 
 const UserFeature = ({ route, navigation }) => {
     const { username } = route.params;
     const dispatch = useDispatch();
+    dispatch(setFollowerFollowing);
     dispatch(setUsername(username));
 
     return (
