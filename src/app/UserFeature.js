@@ -1,10 +1,14 @@
 import React from 'react';
 import { ChevronLeft } from "react-native-feather";
 import { StyleSheet, View, Dimensions, Pressable } from "react-native";
+import { useDispatch } from 'react-redux';
+import { setUsername } from '../redux/slices/userSlice';
 import UserDisplay from '../components/UserDisplay';
 
 const UserFeature = ({ route, navigation }) => {
     const { username } = route.params;
+    const dispatch = useDispatch();
+    dispatch(setUsername(username));
 
     return (
         <View style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height - 170, backgroundColor: '#ECEEFF' }}>

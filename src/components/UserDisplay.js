@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
-import { selectFollowers, selectFollowing, setFollowerFollowing, setUsername, setFollowers, setFollowing, resetUserInfo } from '../redux/slices/userSlice';
+import { selectFollowers, selectFollowing, setFollowerFollowing, setUsername, resetUserInfo, checkIsFollowing, selectIsFollowing, setIsFollowing } from '../redux/slices/userSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
@@ -28,6 +28,7 @@ const UserDisplay = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
     const followers = useSelector(selectFollowers);
     const following = useSelector(selectFollowing);
+    const isFollowing = useSelector(selectIsFollowing);
 
     function getWhistles() {
         axios.post("https://trywhistle.app/api/user/getuserwhistles", {
@@ -48,7 +49,7 @@ const UserDisplay = (props) => {
         setRefreshing(true);
         wait(1000).then(() => setRefreshing(false));
         getWhistles();
-        dispatch(setUsername(username));
+        dispatch(checkIsFollowing);
         dispatch(setFollowerFollowing);
     }, []);
 
@@ -56,6 +57,7 @@ const UserDisplay = (props) => {
         dispatch(resetUserInfo());
         dispatch(setUsername(username));
         getWhistles();
+        dispatch(checkIsFollowing);
         dispatch(setFollowerFollowing);
     }, []);
 
@@ -178,6 +180,38 @@ const UserDisplay = (props) => {
         }
     }
 
+    function handleFollowPress() {
+        if (isFollowing) {
+            axios.post("https://trywhistle.app/api/user/unfollowuser", {
+                username: username
+            }, {
+                headers: {
+                    "x-access-token": accessToken
+                }
+            })
+            .then(res => {
+                dispatch(setIsFollowing(false));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        } else {
+            axios.post("https://trywhistle.app/api/user/followuser", {
+                username: username
+            }, {
+                headers: {
+                    "x-access-token": accessToken
+                }
+            })
+            .then(res => {
+                dispatch(setIsFollowing(true));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
+    }
+
     const renderWhistle = ( whistle ) => {
         const keys = Object.keys(whistle.item.options);
         let votes = 0;
@@ -242,11 +276,15 @@ const UserDisplay = (props) => {
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             { 
                                 isOwner 
-                                ? <TouchableOpacity onPress={logoutAlert} style={styles.btn}>
-                                    <Text style={styles.btnText}>Log Out</Text>
+                                ? <TouchableOpacity onPress={logoutAlert} style={styles.logoutBtn}>
+                                    <Text style={styles.logoutBtnText}>Log Out</Text>
                                 </TouchableOpacity>
-                                : <TouchableOpacity style={styles.btn}>
-                                    <Text style={styles.btnText}>Follow</Text>
+                                : isFollowing
+                                ? <TouchableOpacity style={styles.unfollowBtn} onPress={() => handleFollowPress()}>
+                                    <Text style={styles.unfollowBtnText}>Unfollow</Text>
+                                </TouchableOpacity>
+                                : <TouchableOpacity style={styles.followBtn} onPress={() => handleFollowPress()}>
+                                    <Text style={styles.followBtnText}>Follow</Text>
                                 </TouchableOpacity>
                             }
                         </View>
@@ -305,7 +343,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#7E7E7E',
     },
-    btn: {
+    followBtn: {
         width: 117,
         height: 32,
         borderRadius: 6,
@@ -313,7 +351,35 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    btnText: {
+    followBtnText: {
+        color: 'white',
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 18
+    },
+    unfollowBtn: {
+        width: 117,
+        height: 32,
+        borderRadius: 6,
+        backgroundColor: 'white', 
+        borderWidth: 1, 
+        borderColor: '#5B57FA',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    unfollowBtnText: {
+        color: '#5B57FA',
+        fontFamily: 'WorkSans-SemiBold',
+        fontSize: 18
+    },
+    logoutBtn: {
+        width: 117,
+        height: 32,
+        borderRadius: 6,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    logoutBtnText: {
         color: 'white',
         fontFamily: 'WorkSans-SemiBold',
         fontSize: 18
