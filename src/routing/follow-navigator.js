@@ -7,20 +7,20 @@ import FollowDisplay from '../components/FollowDisplay';
 const FollowTabs = createMaterialTopTabNavigator();
 
 function FollowNavigator({route, navigation}) {
-    const { isFollowersSelected} = route.params;
-    const [initialRoute, setInitialRoute] = React.useState(isFollowersSelected ? 'Followers' : 'Following');
+    const { isFollowersSelected, username } = route.params;
+    let initialRoute = isFollowersSelected ? 'Followers' : 'Following';
     
     return (
         <View style={{ backgroundColor: '#ECEEFF', height: Dimensions.get('window').height - 170 }}>
-            <FollowTabs.Navigator initialRouteName={initialRoute} tabBarOptions={{
-                activeTintColor: '#5B57FA',
-                inactiveTintColor: '#9B9B9B',
-                labelStyle: {
+            <FollowTabs.Navigator initialRouteName={initialRoute} screenOptions={{
+                tabBarActiveTintColor: '#5B57FA',
+                tabBarInactiveTintColor: '#9B9B9B',
+                tabBarLabelStyle: {
                     fontSize: 18,
                     textTransform: 'none',
                     fontFamily: 'WorkSans-Bold',
                 },
-                style: {
+                tabBarStyle: {
                     backgroundColor: '#ECEEFF',
                     height: 50,
                 },
@@ -29,8 +29,8 @@ function FollowNavigator({route, navigation}) {
                     height: 2,
                 },
             }}>
-                <FollowTabs.Screen name="Followers" children={() => <FollowDisplay isFollower={true} navigation={navigation} />} />
-                <FollowTabs.Screen name="Following" children={() => <FollowDisplay isFollower={false} navigation={navigation}/>} />
+                <FollowTabs.Screen name="Followers" children={() => <FollowDisplay isFollower={true} username={username} navigation={navigation} />} />
+                <FollowTabs.Screen name="Following" children={() => <FollowDisplay isFollower={false} username={username} navigation={navigation}/>} />
             </FollowTabs.Navigator>
         </View>
     );

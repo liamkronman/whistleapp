@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, ImageBackground, Text, RefreshControl, Alert, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignOut, selectProfilePic, selectAccessToken, updateProfilePic } from '../redux/slices/authSlice';
-import { selectFollowers, selectFollowing, setFollowers, setFollowing, resetUserInfo } from '../redux/slices/userSlice';
+import { selectFollowers, selectFollowing, setFollowerFollowing, setUsername, setFollowers, setFollowing, resetUserInfo } from '../redux/slices/userSlice';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import { User } from "react-native-feather";
@@ -44,38 +44,19 @@ const UserDisplay = (props) => {
         })
     }
 
-    function getFollowerFollowing() {
-        axios.post("https://trywhistle.app/api/user/getuserfollowerfollowing", {
-            "username": username
-        }, {
-            headers: {
-                "x-access-token": accessToken
-            }
-        })
-        .then(resp => {
-            const newFollowers = resp.data.followers;
-            const newFollowing = resp.data.following;
-            console.log(resp)
-            console.log(newFollowers)
-            dispatch(setFollowers(newFollowers));
-            dispatch(setFollowing(newFollowing));
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    }
-
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         wait(1000).then(() => setRefreshing(false));
         getWhistles();
-        getFollowerFollowing();
+        dispatch(setUsername(username));
+        dispatch(setFollowerFollowing);
     }, []);
 
     React.useEffect(() => {
         dispatch(resetUserInfo());
+        dispatch(setUsername(username));
         getWhistles();
-        getFollowerFollowing();
+        dispatch(setFollowerFollowing);
     }, []);
 
     const getMoreWhistles = () => {
@@ -241,7 +222,7 @@ const UserDisplay = (props) => {
                             <Text style={styles.lastActive}>Active</Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', width: 280 }}>
-                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: true})}>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: true, username: username})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
                                     <Text style={styles.followCount}>{followers ? followers.length : 0}</Text>
                                 </View>
@@ -249,7 +230,7 @@ const UserDisplay = (props) => {
                                     <Text style={styles.followText}>followers</Text>
                                 </View>
                             </Pressable>
-                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: false})}>
+                            <Pressable style={{ flex: 1, alignItems: 'center', flexDirection: 'column' }} onPress={() => navigation.navigate('FollowNavigator', {isFollowersSelected: false, username: username})}>
                                 <View style={{ flex: 2, justifyContent: 'flex-end' }}>
                                     <Text style={styles.followCount}>{following ? following.length : 0}</Text>
                                 </View>

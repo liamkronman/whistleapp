@@ -1,16 +1,29 @@
-import * as React from 'react';
-import { StyleSheet, View, FlatList, Text, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, Dimensions, Pressable, RefreshControl } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAccessToken } from '../redux/slices/authSlice';
-import { selectFollowers, selectFollowing, setFollowers, setFollowing } from '../redux/slices/userSlice';
+import { selectFollowers, selectFollowing, setFollowers, setFollowing, resetUserInfo, setUsername, setFollowerFollowing } from '../redux/slices/userSlice';
 import axios from 'axios';
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const FollowDisplay = (props) => {
     const isFollower = props.isFollower;
     const navigation = props.navigation;
+    const username = props.username;
+    const [refreshing, setRefreshing] = React.useState(false);
     const accessToken = useSelector(selectAccessToken);
     const users = useSelector(isFollower ? selectFollowers : selectFollowing);
     const dispatch = useDispatch();
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(1000).then(() => setRefreshing(false));
+        dispatch(setUsername(username));
+        dispatch(setFollowerFollowing);
+    }, []);
 
     const handleFollowPress = (follow) => {
         const isFollowing = follow.isFollowing;
@@ -38,30 +51,30 @@ const FollowDisplay = (props) => {
                 console.log(err);
             });
         } else {
-            axios.post("https://trywhistle.app/api/user/followuser", {
-                username: username
-            }, {
-                headers: {
-                    "x-access-token": accessToken
-                }
-            })
-            .then(res => {
-                let newUsers = users;
-                for (let i = 0; i < newUsers.length; i++) {
-                    if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
-                        newUsers[i].isFollowing = true;
-                        break;
-                    }
-                }
-                dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
-                if (isFollower) {
-                    let following = useSelector(selectFollowing);
-                    following.append(res);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+            // axios.post("https://trywhistle.app/api/user/followuser", {
+            //     username: username
+            // }, {
+            //     headers: {
+            //         "x-access-token": accessToken
+            //     }
+            // })
+            // .then(res => {
+            //     let newUsers = users;
+            //     for (let i = 0; i < newUsers.length; i++) {
+            //         if (newUsers[i][isFollower ? "follower" : "followed"] === username) {
+            //             newUsers[i].isFollowing = true;
+            //             break;
+            //         }
+            //     }
+            //     dispatch(isFollower ? setFollowers(newUsers) : setFollowing(newUsers));
+            //     if (isFollower) {
+            //         let following = useSelector(selectFollowing);
+            //         following.append(res);
+            //     }
+            // })
+            // .catch(err => {
+            //     console.log(err);
+            // });
         }
     }
 
@@ -83,6 +96,13 @@ const FollowDisplay = (props) => {
                         }
                     </View>
                 )}
+                refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#2C65F6"
+                    />
+                }
             />
         </View>
     )
